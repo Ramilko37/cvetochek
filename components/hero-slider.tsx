@@ -4,10 +4,11 @@ import { useState, useEffect, useCallback } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { getImagePath } from "@/lib/utils"
 
 const slides = [
   {
-    image: "/images/hero-peonies.jpg",
+    image: getImagePath("/images/hero-peonies.jpg"),
     label: "Новая коллекция",
     title: "Зимние",
     titleAccent: "букеты",
@@ -16,7 +17,7 @@ const slides = [
     buttonHref: "#bouquets",
   },
   {
-    image: "/images/bouquet-week.jpg",
+    image: getImagePath("/images/bouquet-week.jpg"),
     label: "Акция недели",
     title: "Скидка",
     titleAccent: "20%",
@@ -25,7 +26,7 @@ const slides = [
     buttonHref: "#products",
   },
   {
-    image: "/images/christmas-branches.jpg",
+    image: getImagePath("/images/christmas-branches.jpg"),
     label: "Новогоднее настроение",
     title: "Еловые",
     titleAccent: "композиции",

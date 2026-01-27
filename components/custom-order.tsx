@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { getImagePath } from "@/lib/utils"
 
 export function CustomOrder() {
   return (
@@ -35,7 +36,7 @@ export function CustomOrder() {
           {/* Image */}
           <div className="relative h-64 md:h-auto min-h-[300px]">
             <Image
-              src="/images/cat-compositions.jpg"
+              src={getImagePath("/images/cat-compositions.jpg")}
               alt="Индивидуальный заказ"
               fill
               className="object-cover"

@@ -3,29 +3,30 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { getImagePath } from "@/lib/utils"
 
 const articles = [
   {
     id: 1,
-    image: "/images/product-5.jpg",
+    image: getImagePath("/images/product-5.jpg"),
     title: "Пионы: королевы весеннего сезона",
     excerpt: "Всё о выборе, уходе и сочетании пионов в букетах",
   },
   {
     id: 2,
-    image: "/images/product-7.jpg",
+    image: getImagePath("/images/product-7.jpg"),
     title: "Как продлить жизнь букету",
     excerpt: "Простые советы по уходу за срезанными цветами",
   },
   {
     id: 3,
-    image: "/images/cat-bouquets.jpg",
+    image: getImagePath("/images/cat-bouquets.jpg"),
     title: "Тренды флористики 2026",
     excerpt: "Актуальные цветовые сочетания и формы букетов",
   },
   {
     id: 4,
-    image: "/images/christmas-branches.jpg",
+    image: getImagePath("/images/christmas-branches.jpg"),
     title: "Новогодние композиции",
     excerpt: "Идеи праздничного декора с еловыми ветвями",
   },

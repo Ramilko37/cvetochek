@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Mail, Phone, MessageCircle, Send, ArrowRight } from "lucide-react"
+import { getImagePath } from "@/lib/utils"
 
 export function ContactBlocks() {
   return (
@@ -64,7 +65,7 @@ export function ContactBlocks() {
         <Link href="#" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
-              src="/images/cat-compositions.jpg"
+              src={getImagePath("/images/cat-compositions.jpg")}
               alt="Индивидуальный заказ"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -88,7 +89,7 @@ export function ContactBlocks() {
         <Link href="#" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
-              src="/images/cat-baskets.jpg"
+              src={getImagePath("/images/cat-baskets.jpg")}
               alt="Корпоративным клиентам"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"

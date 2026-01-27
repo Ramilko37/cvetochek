@@ -4,24 +4,25 @@ import { useState, useEffect, useCallback } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { getImagePath } from "@/lib/utils"
 
 const slides = [
   {
-    image: "/images/hero-peonies.jpg",
+    image: getImagePath("/images/hero-peonies.jpg"),
     label: "Новая коллекция",
     title: "Зимние",
     titleEm: "Букеты",
     buttonText: "Смотреть",
   },
   {
-    image: "/images/bouquet-week.jpg",
+    image: getImagePath("/images/bouquet-week.jpg"),
     label: "Акция недели",
     title: "Скидка",
     titleEm: "20%",
     buttonText: "Выбрать букет",
   },
   {
-    image: "/images/christmas-branches.jpg",
+    image: getImagePath("/images/christmas-branches.jpg"),
     label: "Новогоднее настроение",
     title: "Еловые",
     titleEm: "Композиции",
@@ -126,7 +127,7 @@ export function HeroBento() {
         {/* Букет недели */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#e8d4d4]">
           <Image
-            src="/images/bouquet-week.jpg"
+            src={getImagePath("/images/bouquet-week.jpg")}
             alt="Букет недели"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -145,7 +146,7 @@ export function HeroBento() {
         {/* Корзины с цветами */}
         <div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden group bg-[#f0e6dc]">
           <Image
-            src="/images/cat-baskets.jpg"
+            src={getImagePath("/images/cat-baskets.jpg")}
             alt="Корзины с цветами"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -177,7 +178,7 @@ export function HeroBento() {
         {/* Новогоднее */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#dde4e8]">
           <Image
-            src="/images/christmas-branches.jpg"
+            src={getImagePath("/images/christmas-branches.jpg")}
             alt="Новогодние композиции"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -196,7 +197,7 @@ export function HeroBento() {
         {/* Подписка */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#e8dcd4]">
           <Image
-            src="/images/subscription.jpg"
+            src={getImagePath("/images/subscription.jpg")}
             alt="Подписка на цветы"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"

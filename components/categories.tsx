@@ -4,16 +4,17 @@ import { useRef } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getImagePath } from "@/lib/utils"
 
 const categories = [
-  { name: "Пионы", image: "/images/cat-peonies.jpg" },
-  { name: "Розы", image: "/images/cat-roses.jpg" },
-  { name: "Букеты", image: "/images/cat-bouquets.jpg" },
-  { name: "Композиции", image: "/images/cat-compositions.jpg" },
-  { name: "Корзины", image: "/images/cat-baskets.jpg" },
-  { name: "Моно", image: "/images/cat-mono.jpg" },
-  { name: "Еловые ветви", image: "/images/christmas-branches.jpg" },
-  { name: "Новый год", image: "/images/cat-newyear.jpg" },
+  { name: "Пионы", image: getImagePath("/images/cat-peonies.jpg") },
+  { name: "Розы", image: getImagePath("/images/cat-roses.jpg") },
+  { name: "Букеты", image: getImagePath("/images/cat-bouquets.jpg") },
+  { name: "Композиции", image: getImagePath("/images/cat-compositions.jpg") },
+  { name: "Корзины", image: getImagePath("/images/cat-baskets.jpg") },
+  { name: "Моно", image: getImagePath("/images/cat-mono.jpg") },
+  { name: "Еловые ветви", image: getImagePath("/images/christmas-branches.jpg") },
+  { name: "Новый год", image: getImagePath("/images/cat-newyear.jpg") },
 ]
 
 export function Categories() {

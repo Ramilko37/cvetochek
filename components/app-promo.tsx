@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { getImagePath } from "@/lib/utils"
 
 export function AppPromo() {
   return (
@@ -54,7 +55,7 @@ export function AppPromo() {
               <div className="absolute inset-4 bg-foreground rounded-[2.5rem] shadow-2xl overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-foreground rounded-b-xl" />
                 <Image
-                  src="/images/hero-peonies.jpg"
+                  src={getImagePath("/images/hero-peonies.jpg")}
                   alt="App screenshot"
                   fill
                   className="object-cover rounded-[2rem] p-1"

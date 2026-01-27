@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ProductCard } from "@/components/product-card"
-import { cn } from "@/lib/utils"
+import { cn, getImagePath } from "@/lib/utils"
 
 const tabs = ["Со скидкой", "Популярное", "Новинки"]
 
@@ -13,7 +13,7 @@ const products = {
       name: "Букет 027",
       price: 6790,
       originalPrice: 7988,
-      image: "/images/product-1.jpg",
+      image: getImagePath("/images/product-1.jpg"),
       tag: "sale" as const,
       flowers: "Кустовая роза, Гвоздика, Роза, Эустома, Пион",
     },
@@ -21,7 +21,7 @@ const products = {
       name: "Бокс 051",
       price: 8090,
       originalPrice: 9518,
-      image: "/images/product-2.jpg",
+      image: getImagePath("/images/product-2.jpg"),
       tag: "sale" as const,
       flowers: "Кустовая роза, Гвоздика, Роза, Хлопок, Эустома",
     },
@@ -29,7 +29,7 @@ const products = {
       name: "Моно 019",
       price: 6690,
       originalPrice: 7871,
-      image: "/images/product-3.jpg",
+      image: getImagePath("/images/product-3.jpg"),
       tag: "sale" as const,
       flowers: "Кустовая роза",
     },
@@ -37,7 +37,7 @@ const products = {
       name: "Моно 030",
       price: 14990,
       originalPrice: 17635,
-      image: "/images/product-4.jpg",
+      image: getImagePath("/images/product-4.jpg"),
       tag: "sale" as const,
       flowers: "Гортензия",
     },
@@ -46,28 +46,28 @@ const products = {
     {
       name: "Моно 056",
       price: 9190,
-      image: "/images/product-5.jpg",
+      image: getImagePath("/images/product-5.jpg"),
       tag: "hit" as const,
       flowers: "Пион",
     },
     {
       name: "Моно 026",
       price: 14290,
-      image: "/images/product-6.jpg",
+      image: getImagePath("/images/product-6.jpg"),
       tag: "hit" as const,
       flowers: "Пион",
     },
     {
       name: "Букет 089",
       price: 12490,
-      image: "/images/product-7.jpg",
+      image: getImagePath("/images/product-7.jpg"),
       tag: "hit" as const,
       flowers: "Роза, Ранункулюс, Эвкалипт",
     },
     {
       name: "Композиция 012",
       price: 18990,
-      image: "/images/product-8.jpg",
+      image: getImagePath("/images/product-8.jpg"),
       tag: "hit" as const,
       flowers: "Сезонные цветы",
     },
@@ -76,28 +76,28 @@ const products = {
     {
       name: "Букет 102",
       price: 7890,
-      image: "/images/product-9.jpg",
+      image: getImagePath("/images/product-9.jpg"),
       tag: "new" as const,
       flowers: "Садовая роза, Астильба, Зелень",
     },
     {
       name: "Бокс 067",
       price: 11290,
-      image: "/images/product-10.jpg",
+      image: getImagePath("/images/product-10.jpg"),
       tag: "new" as const,
       flowers: "Пион, Кустовая роза, Маттиола",
     },
     {
       name: "Моно 078",
       price: 5490,
-      image: "/images/product-11.jpg",
+      image: getImagePath("/images/product-11.jpg"),
       tag: "new" as const,
       flowers: "Тюльпан",
     },
     {
       name: "Корзина 023",
       price: 21990,
-      image: "/images/product-12.jpg",
+      image: getImagePath("/images/product-12.jpg"),
       tag: "new" as const,
       flowers: "Премиум цветы микс",
     },
