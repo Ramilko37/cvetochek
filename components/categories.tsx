@@ -1,0 +1,85 @@
+"use client"
+
+import { useRef } from "react"
+import Image from "next/image"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+const categories = [
+  { name: "Пионы", image: "/images/cat-peonies.jpg" },
+  { name: "Розы", image: "/images/cat-roses.jpg" },
+  { name: "Букеты", image: "/images/cat-bouquets.jpg" },
+  { name: "Композиции", image: "/images/cat-compositions.jpg" },
+  { name: "Корзины", image: "/images/cat-baskets.jpg" },
+  { name: "Моно", image: "/images/cat-mono.jpg" },
+  { name: "Еловые ветви", image: "/images/christmas-branches.jpg" },
+  { name: "Новый год", image: "/images/cat-newyear.jpg" },
+]
+
+export function Categories() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 200
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      })
+    }
+  }
+
+  return (
+    <section className="py-12 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+          Категории
+        </h2>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full h-9 w-9 bg-transparent"
+            onClick={() => scroll("left")}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full h-9 w-9 bg-transparent"
+            onClick={() => scroll("right")}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      <div
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {categories.map((category) => (
+          <button
+            key={category.name}
+            type="button"
+            className="flex-shrink-0 group cursor-pointer text-left"
+          >
+            <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-muted">
+              <Image
+                src={category.image || "/placeholder.svg"}
+                alt={category.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+            <p className="mt-3 text-sm text-center text-foreground group-hover:text-primary transition-colors">
+              {category.name}
+            </p>
+          </button>
+        ))}
+      </div>
+    </section>
+  )
+}
