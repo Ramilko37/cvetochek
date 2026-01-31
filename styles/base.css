@@ -11,4 +11,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* cursor-pointer на все интерактивные элементы */
+  button,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="submit"],
+  input[type="button"],
+  select,
+  label[for],
+  a[href] {
+    cursor: pointer;
+  }
 }
