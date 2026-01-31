@@ -1,0 +1,96 @@
+/**
+ * CSS Variables — Цветочек в Горшочек
+ * Палитра из AGENTS.md (пастельные тона, без зелёного)
+ */
+
+:root {
+  /* Основные цвета (Light Mode) */
+  --background: #faf8f6;
+  --foreground: #3d3733;
+  --card: #ffffff;
+  --card-foreground: #3d3733;
+  --popover: #ffffff;
+  --popover-foreground: #3d3733;
+  --primary: #c9a992;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f0ec;
+  --secondary-foreground: #6b5d52;
+  --muted: #f8f5f2;
+  --muted-foreground: #8a7e75;
+  --accent: #ebe4dd;
+  --accent-foreground: #5c524a;
+  --destructive: #d4a5a5;
+  --destructive-foreground: #ffffff;
+  --border: #e8e2dc;
+  --input: #e8e2dc;
+  --ring: #c9a992;
+
+  /* Chart (для графиков, совместимость с shadcn) */
+  --chart-1: #d4b8a5;
+  --chart-2: #e8d4c4;
+  --chart-3: #c9b8a8;
+  --chart-4: #b8a594;
+  --chart-5: #a89485;
+
+  /* Sidebar */
+  --sidebar: #f8f5f2;
+  --sidebar-foreground: #3d3733;
+  --sidebar-primary: #c9a992;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ebe4dd;
+  --sidebar-accent-foreground: #5c524a;
+  --sidebar-border: #e8e2dc;
+  --sidebar-ring: #c9a992;
+
+  /* Радиусы */
+  --radius: 0.75rem;
+
+  /* Тени (мягкие, пастельные) */
+  --shadow-x: 0px;
+  --shadow-y: 4px;
+  --shadow-blur: 16px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.08;
+  --shadow-color: #c9a992;
+}
+
+.dark {
+  --background: #171717;
+  --foreground: #e5e5e5;
+  --card: #262626;
+  --card-foreground: #e5e5e5;
+  --popover: #262626;
+  --popover-foreground: #e5e5e5;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #262626;
+  --secondary-foreground: #e5e5e5;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #1e3a8a;
+  --accent-foreground: #bfdbfe;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #404040;
+  --input: #404040;
+  --ring: #3b82f6;
+  --chart-1: #60a5fa;
+  --chart-2: #3b82f6;
+  --chart-3: #2563eb;
+  --chart-4: #1d4ed8;
+  --chart-5: #1e40af;
+  --sidebar: #171717;
+  --sidebar-foreground: #e5e5e5;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e3a8a;
+  --sidebar-accent-foreground: #bfdbfe;
+  --sidebar-border: #404040;
+  --sidebar-ring: #3b82f6;
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 2px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.05;
+  --shadow-color: #000000;
+}

@@ -1,0 +1,14 @@
+/**
+ * Base styles — reset и глобальные элементы
+ * AGENTS.md: body — bg-background, text-foreground
+ */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
