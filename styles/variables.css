@@ -5,20 +5,20 @@
 
 :root {
   /* Основные цвета (Light Mode) */
-  --background: #fcfbfa;
-  --foreground: #3d3733;
+  --background: #ffffff;
+  --foreground: #000000;
   --card: #ffffff;
-  --card-foreground: #3d3733;
+  --card-foreground: #000000;
   --popover: #ffffff;
-  --popover-foreground: #3d3733;
+  --popover-foreground: #000000;
   --primary: #c9a992;
   --primary-foreground: #ffffff;
   --secondary: #f5f0ec;
-  --secondary-foreground: #6b5d52;
+  --secondary-foreground: #444444;
   --muted: #f8f5f2;
-  --muted-foreground: #8a7e75;
+  --muted-foreground: #555555;
   --accent: #ebe4dd;
-  --accent-foreground: #5c524a;
+  --accent-foreground: #000000;
   --destructive: #d4a5a5;
   --destructive-foreground: #ffffff;
   --border: #e8e2dc;
@@ -34,11 +34,11 @@
 
   /* Sidebar */
   --sidebar: #f8f5f2;
-  --sidebar-foreground: #3d3733;
+  --sidebar-foreground: #000000;
   --sidebar-primary: #c9a992;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #ebe4dd;
-  --sidebar-accent-foreground: #5c524a;
+  --sidebar-accent-foreground: #000000;
   --sidebar-border: #e8e2dc;
   --sidebar-ring: #c9a992;
 
