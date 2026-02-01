@@ -67,28 +67,27 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-2">
-            {images.map((src, index) => (
-              <CarouselItem key={src} className="pl-2 basis-auto">
-                <button
-                  type="button"
-                  onClick={() => setMainIndex(index)}
-                  className={cn(
-                    "relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-secondary/30 ring-2 transition-all duration-200 hover:ring-primary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    mainIndex === index ? "ring-primary" : "ring-transparent",
-                  )}
-                >
-                  <Image
-                    src={src}
-                    alt={`${name} — миниатюра ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="80px"
-                  />
-                </button>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+          <div className="[mask-image:linear-gradient(to_right,transparent,black_20px,black_calc(100%-20px),transparent)]">
+            <CarouselContent className="-ml-2">
+              {images.map((src, index) => (
+                <CarouselItem key={src} className="pl-2 basis-auto">
+                  <button
+                    type="button"
+                    onClick={() => setMainIndex(index)}
+                    className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-secondary/30 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <Image
+                      src={src}
+                      alt={`${name} — миниатюра ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </button>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </div>
           <CarouselPrevious className="-left-4 size-8 rounded-full bg-background/80 backdrop-blur-sm border-none shadow-sm hover:bg-background/95 md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
           <CarouselNext className="-right-4 size-8 rounded-full bg-background/80 backdrop-blur-sm border-none shadow-sm hover:bg-background/95 md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
         </Carousel>

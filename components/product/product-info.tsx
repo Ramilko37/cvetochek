@@ -27,27 +27,13 @@ export function ProductInfo({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-foreground">
-            {product.name}
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Артикул: {product.sku}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsFavorite(!isFavorite)}
-          className={cn(
-            "p-2 rounded-full transition-colors cursor-pointer",
-            "text-muted-foreground hover:text-foreground hover:bg-muted",
-            isFavorite && "text-primary fill-primary",
-          )}
-          aria-label={isFavorite ? "Удалить из избранного" : "В избранное"}
-        >
-          <Heart className={cn("h-5 w-5", isFavorite && "fill-current")} />
-        </button>
+      <div>
+        <h1 className="font-serif text-2xl md:text-3xl text-foreground">
+          {product.name}
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Артикул: {product.sku}
+        </p>
       </div>
 
       {/* Stock status */}
