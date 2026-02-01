@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { Heart, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -12,6 +13,7 @@ interface ProductCardProps {
   image: string
   tag?: "hit" | "new" | "sale"
   flowers?: string
+  href?: string
 }
 
 export function ProductCard({
@@ -21,9 +23,10 @@ export function ProductCard({
   image,
   tag,
   flowers,
+  href,
 }: ProductCardProps) {
-  return (
-    <div className="group">
+  const content = (
+    <>
       <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted">
         <Image
           src={image || "/placeholder.svg"}
@@ -89,6 +92,16 @@ export function ProductCard({
           )}
         </div>
       </div>
-    </div>
+    </>
   )
+
+  if (href) {
+    return (
+      <Link href={href} className="group block">
+        {content}
+      </Link>
+    )
+  }
+
+  return <div className="group">{content}</div>
 }

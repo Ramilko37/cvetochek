@@ -137,10 +137,10 @@ export function ProductsSection() {
         </Link>
       </div>
 
-      {/* Products grid */}
+      {/* Products grid — пока все ведут на демо-карточку */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {products[activeTab as keyof typeof products].map((product) => (
-          <ProductCard key={product.name} {...product} />
+          <ProductCard key={product.name} {...product} href="/item/20242688_mono_155" />
         ))}
       </div>
     </section>
