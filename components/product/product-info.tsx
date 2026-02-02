@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Heart, ShoppingBag, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { QuickOrderDialog } from "@/components/quick-order-dialog"
 import { cn } from "@/lib/utils"
 import type { Product, ProductSize } from "@/types/product"
 
@@ -21,6 +22,7 @@ export function ProductInfo({
     product.sizes?.[0] ?? null,
   )
   const [isFavorite, setIsFavorite] = useState(false)
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false)
 
   const displayPrice = selectedSize?.price ?? product.price
 
@@ -116,13 +118,27 @@ export function ProductInfo({
       </div>
 
       <Button
+        type="button"
         variant="outline"
         className="w-full rounded-full h-11"
-        onClick={() => onQuickOrder?.(product.id)}
+        onClick={() => {
+          onQuickOrder?.(product.id)
+          setQuickOrderOpen(true)
+        }}
       >
         <Zap className="h-4 w-4 mr-2" />
-        Заказать в 1 клик
+        Быстрый заказ
       </Button>
+
+      <QuickOrderDialog
+        open={quickOrderOpen}
+        onOpenChange={setQuickOrderOpen}
+        product={{
+          name: product.name,
+          price: displayPrice,
+          image: product.images?.[0] ?? "/placeholder.svg",
+        }}
+      />
 
       <p className="text-xs text-muted-foreground">
         Бесплатная доставка по Москве при заказе от 4 500 ₽

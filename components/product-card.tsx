@@ -2,9 +2,15 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Heart, ShoppingBag } from "lucide-react"
+import { Heart, ShoppingBag, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+
+export interface ProductCardQuickOrderPayload {
+  name: string
+  price: number
+  image: string
+}
 
 interface ProductCardProps {
   name: string
@@ -14,6 +20,7 @@ interface ProductCardProps {
   tag?: "hit" | "new" | "sale"
   flowers?: string
   href?: string
+  onQuickOrder?: (payload: ProductCardQuickOrderPayload) => void
 }
 
 export function ProductCard({
@@ -24,17 +31,18 @@ export function ProductCard({
   tag,
   flowers,
   href,
+  onQuickOrder,
 }: ProductCardProps) {
   const content = (
     <>
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted">
+      <div className="relative aspect-3/4 rounded-2xl overflow-hidden bg-muted">
         <Image
           src={image || "/placeholder.svg"}
           alt={name}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        
+
         {/* Tag */}
         {tag && (
           <span
@@ -51,22 +59,41 @@ export function ProductCard({
 
         {/* Quick actions overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-        
-        {/* Action buttons */}
-        <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+
+        {/* Action buttons — клик не проваливается в Link */}
+        <div
+          className="absolute bottom-3 left-3 right-3 flex flex-col gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+        >
+          <div className="flex gap-2">
+            <Button
+              variant="secondary"
+              className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
+            >
+              <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
+              В корзину
+            </Button>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="bg-white/95 hover:bg-white text-foreground rounded-full h-9 w-9"
+            >
+              <Heart className="h-4 w-4" />
+            </Button>
+          </div>
           <Button
+            type="button"
             variant="secondary"
-            className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
+            className="w-full bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9 border border-border/50"
+            onClick={() =>
+              onQuickOrder?.({ name, price, image })
+            }
           >
-            <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
-            Add to Cart
-          </Button>
-          <Button
-            variant="secondary"
-            size="icon"
-            className="bg-white/95 hover:bg-white text-foreground rounded-full h-9 w-9"
-          >
-            <Heart className="h-4 w-4" />
+            <Zap className="h-3.5 w-3.5 mr-1.5" />
+            Быстрый заказ
           </Button>
         </div>
       </div>

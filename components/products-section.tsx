@@ -3,6 +3,10 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ProductCard } from "@/components/product-card"
+import {
+  QuickOrderDialog,
+  type QuickOrderProduct,
+} from "@/components/quick-order-dialog"
 import { cn, getImagePath } from "@/lib/utils"
 
 const tabs = ["Со скидкой", "Популярное", "Новинки"]
@@ -106,6 +110,14 @@ const products = {
 
 export function ProductsSection() {
   const [activeTab, setActiveTab] = useState(tabs[0])
+  const [quickOrderProduct, setQuickOrderProduct] =
+    useState<QuickOrderProduct | null>(null)
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false)
+
+  const handleQuickOrder = (product: QuickOrderProduct) => {
+    setQuickOrderProduct(product)
+    setQuickOrderOpen(true)
+  }
 
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -140,9 +152,20 @@ export function ProductsSection() {
       {/* Products grid — пока все ведут на демо-карточку */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {products[activeTab as keyof typeof products].map((product) => (
-          <ProductCard key={product.name} {...product} href="/item/20242688_mono_155" />
+          <ProductCard
+            key={product.name}
+            {...product}
+            href="/item/20242688_mono_155"
+            onQuickOrder={handleQuickOrder}
+          />
         ))}
       </div>
+
+      <QuickOrderDialog
+        open={quickOrderOpen}
+        onOpenChange={setQuickOrderOpen}
+        product={quickOrderProduct}
+      />
     </section>
   )
 }
