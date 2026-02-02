@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Menu, Search, ShoppingBag, User, X, MapPin, Phone, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CartDrawer } from "@/components/cart-drawer"
+import { AuthModal } from "@/components/auth/auth-modal"
 import { useCart } from "@/store/cart-store"
 import { cn } from "@/lib/utils"
 
@@ -26,6 +27,7 @@ const catalogItems = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [catalogOpen, setCatalogOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
   const { totalItems, openCart } = useCart()
 
   return (
@@ -35,7 +37,7 @@ export function Header() {
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <div className="flex items-center justify-between h-12">
             {/* Address */}
-            <button 
+            <button
               type="button"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -51,14 +53,21 @@ export function Header() {
 
             {/* Right actions */}
             <div className="flex items-center gap-4">
-              <Link 
-                href="tel:+74951207722" 
+              <Link
+                href="tel:+74951207722"
                 className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 <span>8 (495) 120-77-22</span>
               </Link>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-foreground h-9 w-9"
+                onClick={() => setAuthModalOpen(true)}
+                aria-label="Войти"
+              >
                 <User className="h-5 w-5" />
               </Button>
               <Button
@@ -108,7 +117,7 @@ export function Header() {
                 Каталог
                 <ChevronDown className={cn("h-4 w-4 transition-transform", catalogOpen && "rotate-180")} />
               </button>
-              
+
               {catalogOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setCatalogOpen(false)} />
@@ -168,7 +177,7 @@ export function Header() {
               <X className="h-5 w-5" />
             </Button>
           </div>
-          
+
           <div className="mt-8">
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Каталог</p>
             <div className="space-y-3 mb-8">
@@ -183,7 +192,7 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            
+
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Меню</p>
             <div className="space-y-3">
               {navigation.map((item) => (
@@ -197,11 +206,24 @@ export function Header() {
                 </Link>
               ))}
             </div>
+
+            <div className="mt-6 pt-6 border-t border-border">
+              <button
+                type="button"
+                className="block w-full text-left text-lg font-medium text-foreground hover:text-primary transition-colors"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setAuthModalOpen(true)
+                }}
+              >
+                Войти
+              </button>
+            </div>
           </div>
 
           <div className="absolute bottom-8 left-6 right-6">
-            <Link 
-              href="tel:+74951207722" 
+            <Link
+              href="tel:+74951207722"
               className="flex items-center gap-2 text-foreground"
             >
               <Phone className="h-4 w-4" />
@@ -212,6 +234,7 @@ export function Header() {
       </div>
 
       <CartDrawer />
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
     </header>
   )
 }
