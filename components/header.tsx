@@ -6,6 +6,7 @@ import { Menu, Search, ShoppingBag, User, X, MapPin, Phone, ChevronDown } from "
 import { Button } from "@/components/ui/button"
 import { CartDrawer } from "@/components/cart-drawer"
 import { AuthModal } from "@/components/auth/auth-modal"
+import { SearchModal } from "@/components/search-modal"
 import { useCart } from "@/store/cart-store"
 import { cn } from "@/lib/utils"
 
@@ -28,6 +29,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const { totalItems, openCart } = useCart()
 
   return (
@@ -150,7 +152,14 @@ export function Header() {
 
           {/* Search */}
           <div className="hidden lg:flex lg:items-center">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Поиск"
+              onClick={() => setSearchOpen(true)}
+            >
               <Search className="h-5 w-5" />
             </Button>
           </div>
@@ -219,6 +228,20 @@ export function Header() {
                 Войти
               </button>
             </div>
+
+            <div className="mt-3">
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 text-left text-lg font-medium text-foreground hover:text-primary transition-colors"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setSearchOpen(true)
+                }}
+              >
+                <Search className="h-5 w-5" />
+                Поиск
+              </button>
+            </div>
           </div>
 
           <div className="absolute bottom-8 left-6 right-6">
@@ -235,6 +258,7 @@ export function Header() {
 
       <CartDrawer />
       <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
+      <SearchModal open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   )
 }
