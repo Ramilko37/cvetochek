@@ -12,6 +12,13 @@ export interface ProductCardQuickOrderPayload {
   image: string
 }
 
+export interface ProductCardAddToCartPayload {
+  slug: string
+  name: string
+  price: number
+  image: string
+}
+
 interface ProductCardProps {
   name: string
   price: number
@@ -20,6 +27,8 @@ interface ProductCardProps {
   tag?: "hit" | "new" | "sale"
   flowers?: string
   href?: string
+  slug?: string
+  onAddToCart?: (payload: ProductCardAddToCartPayload) => void
   onQuickOrder?: (payload: ProductCardQuickOrderPayload) => void
 }
 
@@ -31,6 +40,8 @@ export function ProductCard({
   tag,
   flowers,
   href,
+  slug,
+  onAddToCart,
   onQuickOrder,
 }: ProductCardProps) {
   const content = (
@@ -70,8 +81,12 @@ export function ProductCard({
         >
           <div className="flex gap-2">
             <Button
+              type="button"
               variant="secondary"
               className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
+              onClick={() =>
+                slug && onAddToCart?.({ slug, name, price, image })
+              }
             >
               <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
               В корзину

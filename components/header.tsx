@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Menu, Search, ShoppingBag, User, X, MapPin, Phone, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CartDrawer } from "@/components/cart-drawer"
+import { useCart } from "@/store/cart-store"
 import { cn } from "@/lib/utils"
 
 const navigation = [
@@ -25,6 +26,7 @@ const catalogItems = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [catalogOpen, setCatalogOpen] = useState(false)
+  const { totalItems, openCart } = useCart()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
@@ -59,11 +61,20 @@ export function Header() {
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <User className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-foreground relative"
+                onClick={openCart}
+                aria-label="Корзина"
+              >
                 <ShoppingBag className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                  0
-                </span>
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center min-w-4">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
               </Button>
             </div>
           </div>
@@ -199,6 +210,8 @@ export function Header() {
           </div>
         </div>
       </div>
+
+      <CartDrawer />
     </header>
   )
 }

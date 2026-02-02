@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer"
 import {
   ProductBreadcrumbs,
   ProductGallery,
-  ProductInfo,
+  ProductInfoWithCart,
   ProductOptions,
   ProductTabs,
 } from "@/components/product"
@@ -42,7 +42,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Info */}
             <div className="space-y-6">
-              <ProductInfo product={product} />
+              <ProductInfoWithCart product={product} />
               {product.options && product.options.length > 0 && (
                 <ProductOptions options={product.options} />
               )}

@@ -1,5 +1,6 @@
 export { ProductBreadcrumbs } from "./product-breadcrumbs"
 export { ProductGallery } from "./product-gallery"
 export { ProductInfo } from "./product-info"
+export { ProductInfoWithCart } from "./product-info-with-cart"
 export { ProductOptions } from "./product-options"
 export { ProductTabs } from "./product-tabs"
