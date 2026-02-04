@@ -125,11 +125,11 @@ export function ProductCard({
         </h3>
         <div className="flex items-center gap-2">
           <span className="text-foreground font-medium">
-            {price.toLocaleString()} ₽
+            {price.toLocaleString("ru-RU")} ₽
           </span>
           {originalPrice && (
             <span className="text-sm text-muted-foreground line-through">
-              {originalPrice.toLocaleString()} ₽
+              {originalPrice.toLocaleString("ru-RU")} ₽
             </span>
           )}
         </div>

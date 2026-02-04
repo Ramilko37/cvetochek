@@ -8,118 +8,27 @@ import {
   type QuickOrderProduct,
 } from "@/components/quick-order-dialog"
 import { useCart } from "@/store/cart-store"
-import { cn, getImagePath } from "@/lib/utils"
+import { cn } from "@/lib/utils"
+import { mockProducts } from "@/lib/mock-products"
 
 const tabs = ["Со скидкой", "Популярное", "Новинки"]
 
-const products = {
-  "Со скидкой": [
-    {
-      slug: "20242688_mono_155",
-      name: "Букет 027",
-      price: 6790,
-      originalPrice: 7988,
-      image: getImagePath("/images/product-1.jpg"),
-      tag: "sale" as const,
-      flowers: "Кустовая роза, Гвоздика, Роза, Эустома, Пион",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Бокс 051",
-      price: 8090,
-      originalPrice: 9518,
-      image: getImagePath("/images/product-2.jpg"),
-      tag: "sale" as const,
-      flowers: "Кустовая роза, Гвоздика, Роза, Хлопок, Эустома",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Моно 019",
-      price: 6690,
-      originalPrice: 7871,
-      image: getImagePath("/images/product-3.jpg"),
-      tag: "sale" as const,
-      flowers: "Кустовая роза",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Моно 030",
-      price: 14990,
-      originalPrice: 17635,
-      image: getImagePath("/images/product-4.jpg"),
-      tag: "sale" as const,
-      flowers: "Гортензия",
-    },
-  ],
-  "Популярное": [
-    {
-      slug: "20242688_mono_155",
-      name: "Моно 056",
-      price: 9190,
-      image: getImagePath("/images/product-5.jpg"),
-      tag: "hit" as const,
-      flowers: "Пион",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Моно 026",
-      price: 14290,
-      image: getImagePath("/images/product-6.jpg"),
-      tag: "hit" as const,
-      flowers: "Пион",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Букет 089",
-      price: 12490,
-      image: getImagePath("/images/product-7.jpg"),
-      tag: "hit" as const,
-      flowers: "Роза, Ранункулюс, Эвкалипт",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Композиция 012",
-      price: 18990,
-      image: getImagePath("/images/product-8.jpg"),
-      tag: "hit" as const,
-      flowers: "Сезонные цветы",
-    },
-  ],
-  "Новинки": [
-    {
-      slug: "20242688_mono_155",
-      name: "Букет 102",
-      price: 7890,
-      image: getImagePath("/images/product-9.jpg"),
-      tag: "new" as const,
-      flowers: "Садовая роза, Астильба, Зелень",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Бокс 067",
-      price: 11290,
-      image: getImagePath("/images/product-10.jpg"),
-      tag: "new" as const,
-      flowers: "Пион, Кустовая роза, Маттиола",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Моно 078",
-      price: 5490,
-      image: getImagePath("/images/product-11.jpg"),
-      tag: "new" as const,
-      flowers: "Тюльпан",
-    },
-    {
-      slug: "20242688_mono_155",
-      name: "Корзина 023",
-      price: 21990,
-      image: getImagePath("/images/product-12.jpg"),
-      tag: "new" as const,
-      flowers: "Премиум цветы микс",
-    },
-  ],
-}
+const byTab = {
+  "Со скидкой": () => {
+    const discounted = mockProducts.filter(
+      (p) => typeof p.originalPrice === "number" && p.originalPrice > p.price,
+    )
+    return (discounted.length > 0 ? discounted : mockProducts).slice(0, 4)
+  },
+  "Популярное": () => mockProducts.slice(4, 8),
+  "Новинки": () => mockProducts.slice(8, 12),
+} satisfies Record<(typeof tabs)[number], () => typeof mockProducts>
+
+const tagByTab = {
+  "Со скидкой": "sale",
+  "Популярное": "hit",
+  "Новинки": "new",
+} as const satisfies Record<(typeof tabs)[number], "sale" | "hit" | "new">
 
 export function ProductsSection() {
   const [activeTab, setActiveTab] = useState(tabs[0])
@@ -127,6 +36,7 @@ export function ProductsSection() {
     useState<QuickOrderProduct | null>(null)
   const [quickOrderOpen, setQuickOrderOpen] = useState(false)
   const { addItem } = useCart()
+  const products = byTab[activeTab as keyof typeof byTab]()
 
   const handleQuickOrder = (product: QuickOrderProduct) => {
     setQuickOrderProduct(product)
@@ -170,7 +80,7 @@ export function ProductsSection() {
         </div>
 
         <Link
-          href="#"
+          href="/catalog"
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           Смотреть все →
@@ -179,10 +89,16 @@ export function ProductsSection() {
 
       {/* Products grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {products[activeTab as keyof typeof products].map((product) => (
+        {products.map((product) => (
           <ProductCard
-            key={product.name}
-            {...product}
+            key={product.id}
+            slug={product.slug}
+            name={product.name}
+            price={product.price}
+            originalPrice={product.originalPrice}
+            image={product.images[0] ?? "/placeholder.svg"}
+            flowers={product.composition.flowers.join(", ")}
+            tag={tagByTab[activeTab as keyof typeof tagByTab]}
             href={`/item/${product.slug}`}
             onAddToCart={handleAddToCart}
             onQuickOrder={handleQuickOrder}

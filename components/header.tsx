@@ -2,35 +2,111 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, User, X, MapPin, Phone, ChevronDown } from "lucide-react"
+import Image from "next/image"
+import { Menu, Search, ShoppingBag, User, MapPin, Phone, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CartDrawer } from "@/components/cart-drawer"
-import { AuthModal } from "@/components/auth/auth-modal"
-import { SearchModal } from "@/components/search-modal"
-import { useCart } from "@/store/cart-store"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 
 const navigation = [
-  { name: "Все товары", href: "#products" },
+  { name: "Все товары", href: "/catalog" },
   { name: "Новинки", href: "#new" },
   { name: "Индив. заказ", href: "#custom" },
   { name: "Подписка", href: "#subscription" },
 ]
 
-const catalogItems = [
-  { name: "Букеты", href: "#bouquets" },
-  { name: "Композиции", href: "#compositions" },
-  { name: "Корзины", href: "#baskets" },
-  { name: "Моно-букеты", href: "#mono" },
-  { name: "Новый год", href: "#newyear" },
+type MegaLink = {
+  title: string
+  href: string
+  description?: string
+}
+
+const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
+  {
+    title: "Цветы",
+    items: [
+      { title: "Букеты", href: "#bouquets", description: "Авторские и сезонные композиции" },
+      { title: "Моно-букеты", href: "#mono", description: "Один сорт — идеальный акцент" },
+      { title: "Композиции", href: "#compositions", description: "В коробках и декоративных формах" },
+      { title: "Корзины", href: "#baskets", description: "Пышно, торжественно, на особый случай" },
+      { title: "Весенние", href: "#spring", description: "Тюльпаны и первоцветы для настроения" },
+    ],
+  },
+  {
+    title: "Подборки",
+    items: [
+      { title: "Со скидкой", href: "#products", description: "Лучшие предложения недели" },
+      { title: "Популярное", href: "#products", description: "Часто выбирают для подарка" },
+      { title: "Новинки", href: "#new", description: "Свежие поступления и коллекции" },
+      { title: "Быстрая доставка", href: "#products", description: "Поможем выбрать и собрать оперативно" },
+      { title: "До 5 000 ₽", href: "#products", description: "Нежные варианты в комфортном бюджете" },
+    ],
+  },
+  {
+    title: "Подарки",
+    items: [
+      { title: "Конфеты", href: "#products", description: "Маленькое дополнение к букету" },
+      { title: "Свечи", href: "#products", description: "Ароматы для уютного вечера" },
+      { title: "Подарочный сертификат", href: "#products", description: "Когда хочется дать свободу выбора" },
+      { title: "Индивидуальный заказ", href: "#custom", description: "Соберём по вашим пожеланиям" },
+      { title: "Подписка на цветы", href: "#subscription", description: "Регулярные доставки и приятные поводы" },
+    ],
+  },
 ]
+
+const megaPromo = [
+  {
+    label: "Акция недели",
+    title: "Букет недели",
+    href: "#products",
+    image: "/images/bouquet-week.jpg",
+    tone: "bg-[#e8d4d4]",
+  },
+  {
+    label: "Особый повод",
+    title: "Индивидуальный заказ",
+    href: "#custom",
+    image: "/images/cat-compositions.jpg",
+    tone: "bg-[#dde4e8]",
+  },
+] as const
+
+function MegaMenuLink({ title, href, description }: MegaLink) {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          href={href}
+          className={cn(
+            "group flex h-[88px] flex-col justify-center rounded-xl px-4 transition-colors",
+            "hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+          )}
+        >
+          <span className="text-base font-medium text-foreground group-hover:text-foreground">
+            {title}
+          </span>
+          {description ? (
+            <span className="mt-1 line-clamp-2 text-sm text-muted-foreground leading-snug">
+              {description}
+            </span>
+          ) : null}
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  )
+}
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [catalogOpen, setCatalogOpen] = useState(false)
-  const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const { totalItems, openCart } = useCart()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
@@ -39,13 +115,13 @@ export function Header() {
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <div className="flex items-center justify-between h-12">
             {/* Address */}
-            <button
+            <button 
               type="button"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <MapPin className="h-4 w-4" />
               <span>Москва</span>
-              <ChevronDown className="h-3 w-3" />
+              <span className="text-xs">▾</span>
             </button>
 
             {/* Logo center */}
@@ -55,37 +131,21 @@ export function Header() {
 
             {/* Right actions */}
             <div className="flex items-center gap-4">
-              <Link
-                href="tel:+74951207722"
+              <Link 
+                href="tel:+74951207722" 
                 className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Phone className="h-4 w-4" />
                 <span>8 (495) 120-77-22</span>
               </Link>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground h-9 w-9"
-                onClick={() => setAuthModalOpen(true)}
-                aria-label="Войти"
-              >
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <User className="h-5 w-5" />
               </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground relative"
-                onClick={openCart}
-                aria-label="Корзина"
-              >
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
                 <ShoppingBag className="h-5 w-5" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center min-w-4">
-                    {totalItems > 99 ? "99+" : totalItems}
-                  </span>
-                )}
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                  0
+                </span>
               </Button>
             </div>
           </div>
@@ -97,47 +157,192 @@ export function Header() {
         <div className="flex items-center justify-between h-14">
           {/* Mobile menu button */}
           <div className="flex lg:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setMobileMenuOpen(true)}
-              className="text-foreground"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-foreground">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="w-full max-w-sm p-0 gap-0"
+              >
+                <SheetHeader className="border-b border-border/50 p-6">
+                  <SheetTitle className="font-serif text-lg">
+                    Цветочек в Горшочек
+                  </SheetTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Выберите раздел — и мы поможем найти идеальный букет.
+                  </p>
+                </SheetHeader>
+
+                <div className="p-6">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
+                    Каталог
+                  </p>
+
+                  <Accordion type="multiple" className="w-full">
+                    {megaCatalog.map((section) => (
+                      <AccordionItem key={section.title} value={section.title}>
+                        <AccordionTrigger className="py-3 text-base no-underline hover:no-underline">
+                          {section.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-3">
+                          <div className="space-y-1">
+                            {section.items.map((item) => (
+                              <Link
+                                key={item.title}
+                                href={item.href}
+                                className="block rounded-xl px-3 py-2 text-base text-foreground hover:bg-secondary transition-colors"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <div className="font-medium">{item.title}</div>
+                                {item.description ? (
+                                  <div className="text-sm text-muted-foreground mt-0.5">
+                                    {item.description}
+                                  </div>
+                                ) : null}
+                              </Link>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+
+                  <div className="mt-8">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
+                      Меню
+                    </p>
+                    <div className="space-y-2">
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="block rounded-xl px-3 py-2 text-base text-foreground hover:bg-secondary transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-auto border-t border-border/50 p-6">
+                  <Link
+                    href="tel:+74951207722"
+                    className="flex items-center gap-2 text-foreground"
+                  >
+                    <Phone className="h-4 w-4" />
+                    <span>8 (495) 120-77-22</span>
+                  </Link>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
 
           {/* Desktop navigation */}
           <div className="hidden lg:flex lg:items-center lg:gap-8">
-            {/* Catalog dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setCatalogOpen(!catalogOpen)}
-                className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition-colors"
-              >
-                Каталог
-                <ChevronDown className={cn("h-4 w-4 transition-transform", catalogOpen && "rotate-180")} />
-              </button>
+            {/* Catalog mega menu */}
+            <NavigationMenu
+              viewport={false}
+              className="z-50 w-full max-w-none justify-start"
+            >
+              <NavigationMenuList className="gap-2 justify-start">
+                <NavigationMenuItem
+                  onPointerMove={(event) => event.preventDefault()}
+                  onPointerLeave={(event) => event.preventDefault()}
+                >
+                  <NavigationMenuTrigger
+                    className={cn(
+                      "h-9 rounded-full bg-transparent px-3 py-2 text-sm font-medium",
+                      "hover:bg-secondary/60 hover:text-foreground",
+                      "data-[state=open]:bg-secondary/70 data-[state=open]:text-foreground",
+                      "focus-visible:ring-2 focus-visible:ring-ring/40",
+                    )}
+                    onPointerMove={(event) => event.preventDefault()}
+                    onPointerLeave={(event) => event.preventDefault()}
+                  >
+                    Каталог
+                  </NavigationMenuTrigger>
 
-              {catalogOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setCatalogOpen(false)} />
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-background rounded-xl shadow-lg border border-border py-2 z-20">
-                    {catalogItems.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                        onClick={() => setCatalogOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+                  <NavigationMenuContent
+                    className={cn(
+                      "w-[1100px] max-w-[calc(100vw-2rem)] md:w-[1100px]",
+                      "!w-[1100px] !max-w-[calc(100vw-2rem)]",
+                      "rounded-2xl border border-border/60 bg-background/95 backdrop-blur-md shadow-xl",
+                      "p-0 overflow-hidden mt-3",
+                    )}
+                    onPointerMove={(event) => event.preventDefault()}
+                    onPointerLeave={(event) => event.preventDefault()}
+                  >
+                    <div className="grid grid-cols-4 gap-6 p-6">
+                      {megaCatalog.map((section) => (
+                        <div key={section.title} className="min-w-0">
+                          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 pl-3">
+                            {section.title}
+                          </p>
+                          <ul className="space-y-1">
+                            {section.items.map((item) => (
+                              <MegaMenuLink key={item.title} {...item} />
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 pl-1">
+                          Рекомендуем
+                        </p>
+                        <div className="space-y-4">
+                          {megaPromo.map((card) => (
+                            <Link
+                              key={card.title}
+                              href={card.href}
+                              className={cn(
+                                "group block rounded-2xl overflow-hidden border border-border/50 bg-card",
+                                "transition-transform duration-300 hover:scale-[1.01] hover:shadow-sm",
+                              )}
+                            >
+                              <div className="relative h-28 overflow-hidden">
+                                <Image
+                                  src={card.image}
+                                  alt={card.title}
+                                  fill
+                                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                                <div className="absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-foreground">
+                                  {card.label}
+                                </div>
+                              </div>
+                              <div className="px-4 py-3">
+                                <p className="font-serif text-base text-foreground leading-snug">
+                                  {card.title}
+                                </p>
+                                <div className="mt-3 flex items-center text-sm font-medium text-muted-foreground transition-colors group-hover:text-primary">
+                                  Смотреть
+                                  <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-border/40 bg-muted/40 px-6 py-4 flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        Нужен совет? Подскажем состав, упаковку и доставку.
+                      </p>
+                      <Button asChild className="rounded-full h-10 px-6">
+                        <a href="#custom">Оформить индивидуальный заказ</a>
+                      </Button>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
 
             {navigation.map((item) => (
               <Link
@@ -152,113 +357,12 @@ export function Header() {
 
           {/* Search */}
           <div className="hidden lg:flex lg:items-center">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="text-muted-foreground hover:text-foreground"
-              aria-label="Поиск"
-              onClick={() => setSearchOpen(true)}
-            >
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Search className="h-5 w-5" />
             </Button>
           </div>
         </div>
       </nav>
-
-      {/* Mobile menu */}
-      <div
-        className={cn(
-          "lg:hidden fixed inset-0 z-50 transition-opacity duration-300",
-          mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-      >
-        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-        <div
-          className={cn(
-            "fixed inset-y-0 left-0 w-full max-w-sm bg-background px-6 py-6 shadow-xl transition-transform duration-300",
-            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          )}
-        >
-          <div className="flex items-center justify-between">
-            <span className="font-serif text-lg text-foreground">Цветочек в Горшочек</span>
-            <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-
-          <div className="mt-8">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Каталог</p>
-            <div className="space-y-3 mb-8">
-              {catalogItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block text-lg text-foreground hover:text-primary transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Меню</p>
-            <div className="space-y-3">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block text-lg text-foreground hover:text-primary transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-border">
-              <button
-                type="button"
-                className="block w-full text-left text-lg font-medium text-foreground hover:text-primary transition-colors"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  setAuthModalOpen(true)
-                }}
-              >
-                Войти
-              </button>
-            </div>
-
-            <div className="mt-3">
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 text-left text-lg font-medium text-foreground hover:text-primary transition-colors"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  setSearchOpen(true)
-                }}
-              >
-                <Search className="h-5 w-5" />
-                Поиск
-              </button>
-            </div>
-          </div>
-
-          <div className="absolute bottom-8 left-6 right-6">
-            <Link
-              href="tel:+74951207722"
-              className="flex items-center gap-2 text-foreground"
-            >
-              <Phone className="h-4 w-4" />
-              <span>8 (495) 120-77-22</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <CartDrawer />
-      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
-      <SearchModal open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   )
 }
