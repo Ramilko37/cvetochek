@@ -4,7 +4,7 @@ import { mockProducts } from "@/lib/mock-products"
 export default function CatalogPage() {
   return (
     <main className="min-h-screen bg-background">
-      <section className="pt-24 pb-16 md:pt-28 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Заголовок */}
         <div className="mb-10">
           <h1 className="font-serif text-3xl md:text-4xl text-foreground text-balance">

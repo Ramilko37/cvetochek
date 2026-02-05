@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import {
   ProductBreadcrumbs,
   ProductGallery,
@@ -27,7 +25,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main className="min-h-screen bg-background">
-      <Header />
       <div className="pt-[104px]">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
           {/* Breadcrumbs */}
@@ -55,7 +52,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
       </div>
-      <Footer />
     </main>
   )
 }

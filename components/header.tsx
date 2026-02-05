@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
+import { cn, getImagePath } from "@/lib/utils"
 
 const navigation = [
   { name: "Все товары", href: "/catalog" },
@@ -68,14 +68,14 @@ const megaPromo = [
     label: "Акция недели",
     title: "Букет недели",
     href: "#products",
-    image: "/images/bouquet-week.jpg",
+    image: getImagePath("/images/bouquet-week.jpg"),
     tone: "bg-[#e8d4d4]",
   },
   {
     label: "Особый повод",
     title: "Индивидуальный заказ",
     href: "#custom",
-    image: "/images/cat-compositions.jpg",
+    image: getImagePath("/images/cat-compositions.jpg"),
     tone: "bg-[#dde4e8]",
   },
 ] as const
