@@ -82,6 +82,8 @@ function extractFacets(products: Product[]) {
 
 interface CatalogContentProps {
   products: Product[]
+  /** Заголовок страницы (например для /catalog/[slug]). Если не передан — выводится из фильтров или «Все товары». */
+  pageTitle?: string
 }
 
 function getValidCategorySlugsFromUrl(
@@ -92,7 +94,7 @@ function getValidCategorySlugsFromUrl(
   return slugs.filter((slug) => categories.some((c) => c.slug === slug))
 }
 
-export function CatalogContent({ products }: CatalogContentProps) {
+export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
   const searchParams = useSearchParams()
   const isMobile = useIsMobile()
   const [search, setSearch] = useState("")
@@ -181,9 +183,10 @@ export function CatalogContent({ products }: CatalogContentProps) {
       {/* Заголовок */}
       <div className="mb-8">
         <h1 className="font-serif text-3xl md:text-4xl text-foreground text-balance">
-          {filters.categorySlugs.length === 1
-            ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
-            : "Все товары"}
+          {pageTitle ??
+            (filters.categorySlugs.length === 1
+              ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
+              : "Все товары")}
         </h1>
         <p className="mt-2 text-muted-foreground text-sm md:text-base">
           {filtered.length} {filtered.length === 1 ? "позиция" : "позиций"} в каталоге
