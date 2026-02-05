@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { Filter, Search, X } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import {
@@ -83,15 +84,38 @@ interface CatalogContentProps {
   products: Product[]
 }
 
+function getValidCategorySlugsFromUrl(
+  searchParams: ReturnType<typeof useSearchParams>,
+  categories: { slug: string }[]
+): string[] {
+  const slugs = searchParams.getAll("category")
+  return slugs.filter((slug) => categories.some((c) => c.slug === slug))
+}
+
 export function CatalogContent({ products }: CatalogContentProps) {
+  const searchParams = useSearchParams()
   const isMobile = useIsMobile()
   const [search, setSearch] = useState("")
   const [sort, setSort] = useState<string>("default")
   const [page, setPage] = useState(1)
   const facets = useMemo(() => extractFacets(products), [products])
-  const [filters, setFilters] = useState<CatalogFiltersState>(() =>
-    defaultFilters(extractFacets(products))
+  const categorySlugsFromUrl = useMemo(
+    () => getValidCategorySlugsFromUrl(searchParams, facets.categories),
+    [searchParams, facets.categories]
   )
+  const [filters, setFilters] = useState<CatalogFiltersState>(() => {
+    const f = extractFacets(products)
+    const base = defaultFilters(f)
+    const valid = getValidCategorySlugsFromUrl(searchParams, f.categories)
+    if (valid.length > 0) return { ...base, categorySlugs: valid }
+    return base
+  })
+
+  // Синхронизация фильтра категорий при изменении URL (клиентская навигация)
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, categorySlugs: categorySlugsFromUrl }))
+    setPage(1)
+  }, [categorySlugsFromUrl.join(",")])
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
@@ -157,7 +181,9 @@ export function CatalogContent({ products }: CatalogContentProps) {
       {/* Заголовок */}
       <div className="mb-8">
         <h1 className="font-serif text-3xl md:text-4xl text-foreground text-balance">
-          Все товары
+          {filters.categorySlugs.length === 1
+            ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
+            : "Все товары"}
         </h1>
         <p className="mt-2 text-muted-foreground text-sm md:text-base">
           {filtered.length} {filtered.length === 1 ? "позиция" : "позиций"} в каталоге
