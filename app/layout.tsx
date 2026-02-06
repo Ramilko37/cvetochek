@@ -22,17 +22,20 @@ const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant'
 });
 
+// basePath для GitHub Pages (ramilko37.github.io/cvetochek)
+const basePath = process.env.NODE_ENV === 'production' ? '/cvetochek' : ''
+
 export const metadata: Metadata = {
   title: 'Цветочек в Горшочек | Доставка цветов в Москве',
   description: 'Изысканные букеты и цветочные композиции с доставкой по Москве. Создаём с любовью.',
   generator: 'v0.app',
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: `${basePath}/favicon.ico`, sizes: 'any' },
+      { url: `${basePath}/favicon-32x32.png`, sizes: '32x32', type: 'image/png' },
+      { url: `${basePath}/favicon-16x16.png`, sizes: '16x16', type: 'image/png' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: `${basePath}/apple-touch-icon.png`,
   },
 }
 
