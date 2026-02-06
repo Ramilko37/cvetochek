@@ -196,91 +196,13 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
               ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
               : "Все товары")}
         </h1>
-        <p className="mt-2 text-muted-foreground text-sm md:text-base">
-          {filtered.length} {filtered.length === 1 ? "позиция" : "позиций"} в каталоге
-        </p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Сайдбар фильтров — десктоп: активные фильтры + панель */}
+        {/* Сайдбар фильтров — десктоп: только панель (чипсы вынесены в контент) */}
         {!isMobile && (
           <aside className="lg:w-64 shrink-0">
             <div className="sticky top-28 rounded-2xl bg-card p-4 shadow-sm border border-border">
-              {hasActiveFilters && (
-                <div className="mb-4 pb-4 border-b border-border">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    Активные фильтры
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {filters.categorySlugs.map((slug) => {
-                      const cat = facets.categories.find((c) => c.slug === slug)
-                      return (
-                        <span
-                          key={slug}
-                          className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm"
-                        >
-                          {cat?.name ?? slug}
-                          <button
-                            type="button"
-                            aria-label="Убрать фильтр"
-                            onClick={() =>
-                              setFilters((prev) => ({
-                                ...prev,
-                                categorySlugs: prev.categorySlugs.filter((s) => s !== slug),
-                              }))
-                            }
-                            className="hover:text-foreground"
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        </span>
-                      )
-                    })}
-                    {filters.flowerNames.map((name) => (
-                      <span
-                        key={name}
-                        className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm"
-                      >
-                        {name}
-                        <button
-                          type="button"
-                          aria-label="Убрать фильтр"
-                          onClick={() =>
-                            setFilters((prev) => ({
-                              ...prev,
-                              flowerNames: prev.flowerNames.filter((f) => f !== name),
-                            }))
-                          }
-                          className="hover:text-foreground"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </span>
-                    ))}
-                    {hasPriceFilter && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm">
-                        {filters.priceMin.toLocaleString("ru-RU")} – {filters.priceMax.toLocaleString("ru-RU")} ₽
-                        <button
-                          type="button"
-                          aria-label="Убрать фильтр по цене"
-                          onClick={resetPriceFilter}
-                          className="hover:text-foreground"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-2 rounded-full text-muted-foreground hover:text-foreground"
-                    onClick={resetFilters}
-                  >
-                    Сбросить все
-                  </Button>
-                </div>
-              )}
               <h2 className="font-serif text-lg text-foreground mb-4">Фильтры</h2>
               {filtersPanel}
             </div>
@@ -331,79 +253,100 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
             </div>
           </div>
 
-          {/* Активные фильтры — только на мобиле: одна строка с горизонтальным скроллом */}
-          {isMobile && hasActiveFilters && (
-            <div className="h-10 mb-4 flex items-center overflow-x-auto overflow-y-hidden -mx-1 px-1">
-              <div className="flex gap-2 flex-nowrap items-center pr-4">
-                {filters.categorySlugs.map((slug) => {
-                    const cat = facets.categories.find((c) => c.slug === slug)
-                    return (
-                      <span
-                        key={slug}
-                        className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-sm shrink-0"
-                      >
-                        {cat?.name ?? slug}
-                        <button
-                          type="button"
-                          aria-label="Убрать фильтр"
-                          onClick={() =>
-                            setFilters((prev) => ({
-                              ...prev,
-                              categorySlugs: prev.categorySlugs.filter((s) => s !== slug),
-                            }))
-                          }
-                          className="hover:text-foreground"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </span>
-                    )
-                  })}
-                  {filters.flowerNames.map((name) => (
-                    <span
-                      key={name}
-                      className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-sm shrink-0"
+          {/* Статус-бар: Счётчик + Активные фильтры (всегда занимает место, чтобы не прыгало) */}
+          <div
+            className={cn(
+              "mb-6 flex gap-2 items-center min-h-[2.5rem]",
+              isMobile
+                ? "overflow-x-auto overflow-y-hidden -mx-1 px-1 scrollbar-hide"
+                : "flex-wrap"
+            )}
+          >
+            <span className="text-sm text-muted-foreground shrink-0 mr-2">
+              Найдено: {filtered.length}
+            </span>
+
+            {/* Разделитель (вертикальная черта), если есть фильтры */}
+            {hasActiveFilters && (
+              <div className="w-px h-4 bg-border shrink-0 mx-1 hidden sm:block" />
+            )}
+
+            <div
+              className={cn(
+                "flex gap-2 items-center",
+                isMobile ? "flex-nowrap" : "flex-wrap"
+              )}
+            >
+              {filters.categorySlugs.map((slug) => {
+                const cat = facets.categories.find((c) => c.slug === slug)
+                return (
+                  <span
+                    key={slug}
+                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                  >
+                    {cat?.name ?? slug}
+                    <button
+                      type="button"
+                      aria-label="Убрать фильтр"
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          categorySlugs: prev.categorySlugs.filter((s) => s !== slug),
+                        }))
+                      }
+                      className="hover:text-foreground"
                     >
-                      {name}
-                      <button
-                        type="button"
-                        aria-label="Убрать фильтр"
-                        onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            flowerNames: prev.flowerNames.filter((f) => f !== name),
-                          }))
-                        }
-                        className="hover:text-foreground"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    </span>
-                  ))}
-                  {hasPriceFilter && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-sm shrink-0">
-                      {filters.priceMin.toLocaleString("ru-RU")} – {filters.priceMax.toLocaleString("ru-RU")} ₽
-                      <button
-                        type="button"
-                        aria-label="Убрать фильтр по цене"
-                        onClick={resetPriceFilter}
-                        className="hover:text-foreground"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    </span>
-                  )}
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </span>
+                )
+              })}
+              {filters.flowerNames.map((name) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                >
+                  {name}
+                  <button
+                    type="button"
+                    aria-label="Убрать фильтр"
+                    onClick={() =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        flowerNames: prev.flowerNames.filter((f) => f !== name),
+                      }))
+                    }
+                    className="hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </span>
+              ))}
+              {hasPriceFilter && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0">
+                  {filters.priceMin.toLocaleString("ru-RU")} – {filters.priceMax.toLocaleString("ru-RU")} ₽
+                  <button
+                    type="button"
+                    aria-label="Убрать фильтр по цене"
+                    onClick={resetPriceFilter}
+                    className="hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </span>
+              )}
+              {hasActiveFilters && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="rounded-full text-muted-foreground hover:text-foreground shrink-0"
+                  className="rounded-full text-muted-foreground hover:text-foreground shrink-0 h-7 px-3"
                   onClick={resetFilters}
                 >
                   Сбросить все
                 </Button>
-              </div>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Сетка или пустое состояние */}
           {paginated.length === 0 ? (
