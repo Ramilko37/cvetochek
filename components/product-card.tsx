@@ -44,6 +44,12 @@ export function ProductCard({
   onAddToCart,
   onQuickOrder,
 }: ProductCardProps) {
+  const tagLabels: Record<"hit" | "new" | "sale", string> = {
+    hit: "Хит",
+    new: "Новинка",
+    sale: "Скидка",
+  }
+
   const content = (
     <>
       <div className="relative aspect-3/4 rounded-2xl overflow-hidden bg-muted">
@@ -60,11 +66,11 @@ export function ProductCard({
             className={cn(
               "absolute top-3 left-3 px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-full font-medium",
               tag === "hit" && "bg-primary text-primary-foreground",
-              tag === "new" && "bg-foreground text-background",
+              tag === "new" && "bg-[#f0e6dc] text-foreground border border-border/60",
               tag === "sale" && "bg-[#c9a9a9] text-white"
             )}
           >
-            {tag}
+            {tagLabels[tag]}
           </span>
         )}
 

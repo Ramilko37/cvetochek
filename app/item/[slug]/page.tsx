@@ -3,7 +3,6 @@ import {
   ProductBreadcrumbs,
   ProductGallery,
   ProductInfoWithCart,
-  ProductOptions,
   ProductTabs,
 } from "@/components/product"
 import { getProductBySlug } from "@/lib/mock-products"
@@ -40,9 +39,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Info */}
             <div className="space-y-6">
               <ProductInfoWithCart product={product} />
-              {product.options && product.options.length > 0 && (
-                <ProductOptions options={product.options} />
-              )}
             </div>
           </div>
 

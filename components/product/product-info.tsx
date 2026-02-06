@@ -9,12 +9,15 @@ import type { Product, ProductSize } from "@/types/product"
 
 interface ProductInfoProps {
   product: Product
-  onAddToCart?: (productId: string, sizeId?: string) => void
+  /** Выбранные опции (id) — участвуют в итоговой цене */
+  selectedOptionIds?: string[]
+  onAddToCart?: (productId: string, sizeId?: string, selectedOptionIds?: string[]) => void
   onQuickOrder?: (productId: string) => void
 }
 
 export function ProductInfo({
   product,
+  selectedOptionIds = [],
   onAddToCart,
   onQuickOrder,
 }: ProductInfoProps) {
@@ -24,7 +27,10 @@ export function ProductInfo({
   const [isFavorite, setIsFavorite] = useState(false)
   const [quickOrderOpen, setQuickOrderOpen] = useState(false)
 
-  const displayPrice = selectedSize?.price ?? product.price
+  const basePrice = selectedSize?.price ?? product.price
+  const optionsTotal =
+    product.options?.filter((o) => selectedOptionIds.includes(o.id)).reduce((sum, o) => sum + o.price, 0) ?? 0
+  const displayPrice = basePrice + optionsTotal
 
   return (
     <div className="space-y-6">
@@ -98,8 +104,9 @@ export function ProductInfo({
       {/* CTA buttons */}
       <div className="flex flex-col sm:flex-row gap-3">
         <Button
+          type="button"
           className="rounded-full flex-1 h-12"
-          onClick={() => onAddToCart?.(product.id, selectedSize?.id)}
+          onClick={() => onAddToCart?.(product.id, selectedSize?.id, selectedOptionIds)}
         >
           <ShoppingBag className="h-4 w-4 mr-2" />
           В корзину

@@ -13,11 +13,11 @@ export default function Home() {
       <div className="pt-[104px]">
         <HeroSlider />
         <Categories />
+        <Benefits />
         <ProductsSection />
         <CustomOrder />
         <BlogSection />
         {/* <AppPromo /> */}
-        <Benefits />
         <ContactBlocks />
         <FaqSection />
       </div>

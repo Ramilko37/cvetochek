@@ -5,6 +5,10 @@ import { useSearchParams } from "next/navigation"
 import { Filter, Search, X } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import {
+  QuickOrderDialog,
+  type QuickOrderProduct,
+} from "@/components/quick-order-dialog"
+import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -31,6 +35,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useCart } from "@/store/cart-store"
 import type { Product } from "@/types/product"
 import { CatalogFilters } from "./catalog-filters"
 import { cn } from "@/lib/utils"
@@ -97,7 +102,10 @@ function getValidCategorySlugsFromUrl(
 export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
   const searchParams = useSearchParams()
   const isMobile = useIsMobile()
+  const { addItem, openCart } = useCart()
   const [search, setSearch] = useState("")
+  const [quickOrderProduct, setQuickOrderProduct] = useState<QuickOrderProduct | null>(null)
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false)
   const [sort, setSort] = useState<string>("default")
   const [page, setPage] = useState(1)
   const facets = useMemo(() => extractFacets(products), [products])
@@ -419,6 +427,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                 {paginated.map((product) => (
                   <ProductCard
                     key={product.id}
+                    slug={product.slug}
                     name={product.name}
                     price={product.price}
                     originalPrice={product.originalPrice}
@@ -430,6 +439,14 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                         : undefined
                     }
                     href={`/item/${product.slug}`}
+                    onAddToCart={({ slug, name, price, image }) => {
+                      addItem({ slug, name, price, image })
+                      openCart()
+                    }}
+                    onQuickOrder={(payload) => {
+                      setQuickOrderProduct(payload)
+                      setQuickOrderOpen(true)
+                    }}
                   />
                 ))}
               </div>
@@ -481,6 +498,12 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
           )}
         </div>
       </div>
+
+      <QuickOrderDialog
+        open={quickOrderOpen}
+        onOpenChange={setQuickOrderOpen}
+        product={quickOrderProduct}
+      />
     </div>
   )
 }

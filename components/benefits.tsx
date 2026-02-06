@@ -1,8 +1,8 @@
-import { Truck, Clock, CreditCard, Gift, Sparkles, Percent } from "lucide-react"
+import { Truck, Calendar, Flower2, Percent } from "lucide-react"
 
 const benefits = [
   {
-    icon: Sparkles,
+    icon: Flower2,
     title: "200+",
     description: "вариантов букетов",
   },
@@ -12,17 +12,7 @@ const benefits = [
     description: "доставки",
   },
   {
-    icon: Gift,
-    title: "Бесплатная",
-    description: "доставка по Москве",
-  },
-  {
-    icon: CreditCard,
-    title: "Безнал",
-    description: "для юр. лиц",
-  },
-  {
-    icon: Clock,
+    icon: Calendar,
     title: "Сезонные",
     description: "коллекции",
   },
@@ -35,26 +25,29 @@ const benefits = [
 
 export function Benefits() {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-      <h2 className="font-serif text-2xl md:text-3xl text-foreground text-center mb-12">
-        Преимущества Цветочек в Горшочек
-      </h2>
-      
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+    <section className="py-12 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+          Наши преимущества
+        </h2>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {benefits.map((benefit) => (
-          <div 
-            key={benefit.title} 
-            className="text-center p-4"
+          <div
+            key={benefit.title}
+            className="flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl bg-muted/50"
           >
-            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-secondary flex items-center justify-center">
-              <benefit.icon className="h-6 w-6 text-primary" />
+            <div className="shrink-0 w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+              <benefit.icon className="h-5 w-5 text-primary" />
             </div>
-            <p className="font-medium text-foreground mb-1">
-              {benefit.title}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {benefit.description}
-            </p>
+            <div>
+              <p className="font-medium text-foreground text-sm md:text-base">
+                {benefit.title}
+              </p>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                {benefit.description}
+              </p>
+            </div>
           </div>
         ))}
       </div>

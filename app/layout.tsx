@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { CartDrawer } from '@/components/cart-drawer'
 import '@/styles/globals.css'
 
 import { Cormorant_Garamond, Inter, Inter as V0_Font_Inter, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <CartDrawer />
         <Toaster />
         <Analytics />
       </body>

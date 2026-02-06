@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, Search, ShoppingBag, User, MapPin, Phone, ArrowRight } from "lucide-react"
+import { Menu, ShoppingBag, User, Phone, MapPin, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { SearchDropdown } from "@/components/search-dropdown"
+import { useCart } from "@/store/cart-store"
 import { cn, getImagePath } from "@/lib/utils"
 
 const navigation = [
@@ -108,30 +110,31 @@ function MegaMenuLink({ title, href, description }: MegaLink) {
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { totalItems, openCart } = useCart()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
       {/* Top bar */}
       <div className="border-b border-border/30">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex items-center justify-between h-12">
-            {/* Address */}
-            <button 
-              type="button"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <MapPin className="h-4 w-4" />
-              <span>Москва</span>
-              <span className="text-xs">▾</span>
-            </button>
+          <div className="flex items-center h-12 relative">
+            {/* Зона доставки */}
+            <div className="flex-1 flex items-center min-w-0">
+              <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4 shrink-0" />
+                <span>Доставка по Москве</span>
+              </span>
+            </div>
 
-            {/* Logo center */}
-            <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-              <span className="font-serif text-lg text-foreground">Цветочек в Горшочек</span>
+            <Link
+              href="/"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-lg text-foreground hover:text-foreground/90 transition-colors"
+            >
+              Цветочек в Горшочек
             </Link>
 
-            {/* Right actions */}
-            <div className="flex items-center gap-4">
+            {/* Телефон и иконки справа */}
+            <div className="flex-1 flex items-center justify-end gap-4 min-w-0">
               <Link 
                 href="tel:+74951207722" 
                 className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -142,10 +145,17 @@ export function Header() {
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <User className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-foreground relative"
+                onClick={openCart}
+                aria-label="Корзина"
+              >
                 <ShoppingBag className="h-5 w-5" />
                 <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                  0
+                  {totalItems > 99 ? "99+" : totalItems}
                 </span>
               </Button>
             </div>
@@ -356,11 +366,9 @@ export function Header() {
             ))}
           </div>
 
-          {/* Search */}
+          {/* Поиск — выпадашка с полосками карточек товаров */}
           <div className="hidden lg:flex lg:items-center">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Search className="h-5 w-5" />
-            </Button>
+            <SearchDropdown />
           </div>
         </div>
       </nav>
