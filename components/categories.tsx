@@ -1,20 +1,21 @@
 "use client"
 
 import { useRef } from "react"
+import Link from "next/link"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getImagePath } from "@/lib/utils"
 
 const categories = [
-  { name: "Пионы", image: getImagePath("/images/cat-peonies.jpg") },
-  { name: "Розы", image: getImagePath("/images/cat-roses.jpg") },
-  { name: "Букеты", image: getImagePath("/images/cat-bouquets.jpg") },
-  { name: "Композиции", image: getImagePath("/images/cat-compositions.jpg") },
-  { name: "Корзины", image: getImagePath("/images/cat-baskets.jpg") },
-  { name: "Моно", image: getImagePath("/images/cat-mono.jpg") },
-  { name: "Еловые ветви", image: getImagePath("/images/christmas-branches.jpg") },
-  { name: "Новый год", image: getImagePath("/images/cat-newyear.jpg") },
+  { name: "Пионы", image: getImagePath("/images/cat-peonies.jpg"), href: "/catalog" },
+  { name: "Розы", image: getImagePath("/images/cat-roses.jpg"), href: "/catalog" },
+  { name: "Букеты", image: getImagePath("/images/cat-bouquets.jpg"), href: "/catalog?category=bouquets" },
+  { name: "Композиции", image: getImagePath("/images/cat-compositions.jpg"), href: "/catalog?category=compositions" },
+  { name: "Корзины", image: getImagePath("/images/cat-baskets.jpg"), href: "/catalog?category=baskets" },
+  { name: "Моно", image: getImagePath("/images/cat-mono.jpg"), href: "/catalog?category=mono" },
+  { name: "Еловые ветви", image: getImagePath("/images/christmas-branches.jpg"), href: "/catalog?category=new-year" },
+  { name: "Новый год", image: getImagePath("/images/cat-newyear.jpg"), href: "/catalog?category=new-year" },
 ]
 
 export function Categories() {
@@ -62,10 +63,10 @@ export function Categories() {
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {categories.map((category) => (
-          <button
+          <Link
             key={category.name}
-            type="button"
-            className="flex-shrink-0 group cursor-pointer text-left"
+            href={category.href}
+            className="flex-shrink-0 group block text-left"
           >
             <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-muted">
               <Image
@@ -78,7 +79,7 @@ export function Categories() {
             <p className="mt-3 text-sm text-center text-foreground group-hover:text-primary transition-colors">
               {category.name}
             </p>
-          </button>
+          </Link>
         ))}
       </div>
     </section>

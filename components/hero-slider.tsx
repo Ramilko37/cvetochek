@@ -13,8 +13,7 @@ const slides = [
     title: "Зимние",
     titleAccent: "букеты",
     description: "Свежие цветы с доставкой по Москве",
-    buttonText: "Смотреть",
-    buttonHref: "#bouquets",
+    buttonHref: "/catalog",
   },
   {
     image: getImagePath("/images/bouquet-week.jpg"),
@@ -22,8 +21,7 @@ const slides = [
     title: "Скидка",
     titleAccent: "20%",
     description: "На все букеты из роз",
-    buttonText: "Выбрать букет",
-    buttonHref: "#products",
+    buttonHref: "/catalog",
   },
   {
     image: getImagePath("/images/cat-roses.jpg"),
@@ -31,8 +29,7 @@ const slides = [
     title: "День",
     titleAccent: "святого Валентина",
     description: "Букеты и композиции для самых близких",
-    buttonText: "Выбрать букет",
-    buttonHref: "#products",
+    buttonHref: "/catalog",
   },
 ]
 
@@ -71,27 +68,29 @@ export function HeroSlider() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
           
-          {/* Content */}
+          {/* Content — фиксированная высота блока текста, чтобы кнопка не скакала при смене слайда */}
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
               <div className="max-w-xl">
-                <p className="text-white/70 text-xs uppercase tracking-[0.2em] mb-4">
-                  {slide.label}
-                </p>
-                <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white mb-2 leading-tight">
-                  {slide.title}
-                </h1>
-                <p className="font-serif text-5xl md:text-6xl lg:text-7xl text-white/90 italic mb-6">
-                  {slide.titleAccent}
-                </p>
-                <p className="text-white/80 text-lg mb-8">
-                  {slide.description}
-                </p>
+                <div className="min-h-[220px] md:min-h-[260px]">
+                  <p className="text-white/70 text-xs uppercase tracking-[0.2em] mb-4">
+                    {slide.label}
+                  </p>
+                  <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white mb-2 leading-tight">
+                    {slide.title}
+                  </h1>
+                  <p className="font-serif text-5xl md:text-6xl lg:text-7xl text-white/90 italic mb-6">
+                    {slide.titleAccent}
+                  </p>
+                  <p className="text-white/80 text-lg mb-8">
+                    {slide.description}
+                  </p>
+                </div>
                 <Button 
                   asChild
-                  className="rounded-full px-8 py-6 text-base bg-white text-foreground hover:bg-white/90"
+                  className="rounded-full px-8 py-6 text-base bg-white text-foreground hover:bg-white/90 shrink-0"
                 >
-                  <a href={slide.buttonHref}>{slide.buttonText}</a>
+                  <a href={slide.buttonHref}>Выбрать букет</a>
                 </Button>
               </div>
             </div>

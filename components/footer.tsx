@@ -12,7 +12,7 @@ const footerLinks = {
   ],
   "О магазине": [
     { name: "Блог", href: "/blog" },
-    { name: "Q&A", href: "/faq" },
+    { name: "Вопросы и ответы", href: "/faq" },
     { name: "Карта сайта", href: "/sitemap" },
   ],
   "Доставка": [
