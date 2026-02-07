@@ -2,10 +2,14 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Heart, ShoppingBag, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
+
+const SCROLL_TO_PRODUCT_KEY = "scrollToProduct"
+const SCROLL_TO_PRODUCT_FROM_KEY = "scrollToProductFrom"
 
 export interface ProductCardQuickOrderPayload {
   name: string
@@ -46,6 +50,14 @@ export function ProductCard({
   onQuickOrder,
 }: ProductCardProps) {
   const isMobile = useIsMobile()
+  const pathname = usePathname()
+
+  const saveScrollTarget = () => {
+    if (slug && typeof window !== "undefined") {
+      sessionStorage.setItem(SCROLL_TO_PRODUCT_KEY, slug)
+      sessionStorage.setItem(SCROLL_TO_PRODUCT_FROM_KEY, pathname ?? "")
+    }
+  }
 
   const tagLabels: Record<"hit" | "new" | "sale", string> = {
     hit: "Хит",
@@ -151,11 +163,20 @@ export function ProductCard({
 
   if (href) {
     return (
-      <Link href={href} className="group block">
+      <Link
+        href={href}
+        className="group block"
+        data-product-slug={slug ?? undefined}
+        onClick={saveScrollTarget}
+      >
         {content}
       </Link>
     )
   }
 
-  return <div className="group">{content}</div>
+  return (
+    <div className="group" data-product-slug={slug ?? undefined}>
+      {content}
+    </div>
+  )
 }

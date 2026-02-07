@@ -6,10 +6,12 @@ import { BlogSection } from "@/components/blog-section"
 import { Benefits } from "@/components/benefits"
 import { ContactBlocks } from "@/components/contact-blocks"
 import { FaqSection } from "@/components/faq-section"
+import { ScrollToProduct } from "@/components/scroll-to-product"
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
+      <ScrollToProduct />
       <div className="pt-14 lg:pt-[104px]">
         <HeroSlider />
         <Categories />

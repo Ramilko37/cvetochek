@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import { CatalogContent } from "@/components/catalog/catalog-content"
+import { ScrollToProduct } from "@/components/scroll-to-product"
 import { mockProducts } from "@/lib/mock-products"
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ function CatalogFallback() {
 export default function CatalogPage() {
   return (
     <main className="min-h-screen bg-background">
+      <ScrollToProduct />
       <section className="pt-14 lg:pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <Suspense fallback={<CatalogFallback />}>
           <CatalogContent products={mockProducts} />

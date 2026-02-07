@@ -32,6 +32,13 @@ const mobileMenuExtra = [
   { name: "Блог", href: "/blog" },
 ]
 
+/** Контакты в разделе «О магазине» мобильного меню */
+const mobileMenuContacts = [
+  { name: "8 (495) 120-77-22", href: "tel:+74951207722" },
+  { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
+  { name: "Москва", href: "/contacts" },
+]
+
 type MegaLink = {
   title: string
   href: string
@@ -250,6 +257,19 @@ export function Header() {
                     </p>
                     <div className="space-y-2">
                       {mobileMenuExtra.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="block rounded-xl px-3 py-2 text-base text-foreground hover:bg-secondary transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                      <p className="text-xs uppercase tracking-wider text-muted-foreground mt-4 mb-2 pt-2 border-t border-border/50">
+                        Контакты
+                      </p>
+                      {mobileMenuContacts.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
