@@ -24,7 +24,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="pt-[104px]">
+      <div className="pt-14 lg:pt-[104px]">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
           {/* Breadcrumbs */}
           <ProductBreadcrumbs product={product} />

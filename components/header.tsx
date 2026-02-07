@@ -114,27 +114,25 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
-      {/* Top bar */}
-      <div className="border-b border-border/30">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex items-center h-12 relative">
-            {/* Зона доставки */}
-            <div className="flex-1 flex items-center min-w-0">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 shrink-0" />
-                <span>Доставка по Москве</span>
+      {/* Top bar — только на десктопе, на мобильном один ряд в nav */}
+      <div className="hidden lg:block border-b border-border/30">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center h-12 relative gap-2">
+            <div className="flex-1 flex items-center min-w-0 overflow-hidden">
+              <span className="flex items-center gap-2 text-sm text-muted-foreground min-w-0">
+                <MapPin className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="truncate">Доставка по Москве</span>
               </span>
             </div>
 
             <Link
               href="/"
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-lg text-foreground hover:text-foreground/90 transition-colors"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-lg text-foreground hover:text-foreground/90 transition-colors whitespace-nowrap z-10 px-2"
             >
               Цветочек в Горшочек
             </Link>
 
-            {/* Телефон и иконки справа */}
-            <div className="flex-1 flex items-center justify-end gap-4 min-w-0">
+            <div className="flex-1 flex items-center justify-end gap-2 sm:gap-4 min-w-0 shrink-0">
               <Link 
                 href="tel:+74951207722" 
                 className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -164,10 +162,10 @@ export function Header() {
       </div>
 
       {/* Main nav */}
-      <nav className="mx-auto max-w-7xl px-4 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 relative">
           {/* Mobile menu button */}
-          <div className="flex lg:hidden">
+          <div className="flex lg:hidden shrink-0 w-10 justify-start">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-foreground">
@@ -251,6 +249,34 @@ export function Header() {
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
+
+          {/* Логотип по центру на мобильном — баланс нав-бара */}
+          <Link
+            href="/"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-base sm:text-lg text-foreground hover:text-foreground/90 transition-colors lg:hidden z-10 text-center max-w-[70vw] leading-tight"
+          >
+            Цветочек в Горшочек
+          </Link>
+
+          {/* Иконки справа на мобильном: пользователь и корзина */}
+          <div className="flex lg:hidden items-center gap-1 shrink-0">
+            <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+              <User className="h-5 w-5" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 text-muted-foreground hover:text-foreground relative"
+              onClick={openCart}
+              aria-label="Корзина"
+            >
+              <ShoppingBag className="h-5 w-5" />
+              <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            </Button>
           </div>
 
           {/* Desktop navigation */}

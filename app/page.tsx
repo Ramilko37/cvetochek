@@ -10,7 +10,7 @@ import { FaqSection } from "@/components/faq-section"
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
-      <div className="pt-[104px]">
+      <div className="pt-14 lg:pt-[104px]">
         <HeroSlider />
         <Categories />
         <Benefits />
