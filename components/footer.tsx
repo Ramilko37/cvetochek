@@ -65,12 +65,9 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-6">
-            <span className="font-serif text-foreground">Цветочек в Горшочек</span>
-            <p className="text-sm text-muted-foreground">
-              © 2015-2026, Цветочек в Горшочек
-            </p>
-          </div>
+          <p className="text-sm text-muted-foreground">
+            © 2015-2026, Цветочек в Горшочек
+          </p>
 
           <div className="flex items-center gap-6">
             {/* Social links */}
