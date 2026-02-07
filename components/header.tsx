@@ -96,7 +96,7 @@ function MegaMenuLink({ title, href, description }: MegaLink) {
         <Link
           href={href}
           className={cn(
-            "group flex h-[88px] flex-col justify-center rounded-xl px-4 transition-colors",
+            "group flex min-h-[100px] flex-col justify-center rounded-xl px-4 py-3 transition-colors",
             "hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
           )}
         >
