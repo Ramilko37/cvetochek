@@ -36,59 +36,73 @@ const faqs = [
   },
 ]
 
-export function FaqSection() {
+type FaqSectionProps = {
+  /** На полной странице /faq — заголовок «Вопрос-ответ», без ссылки «Смотреть все» */
+  isFullPage?: boolean
+}
+
+export function FaqSection({ isFullPage }: FaqSectionProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const Heading = isFullPage ? "h1" : "h2"
 
   return (
     <section className="py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
-        <h2 className="font-serif text-2xl md:text-3xl text-foreground">
-          Флористика и уход
-        </h2>
-        <Link 
-          href="#" 
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-        >
-          Смотреть все
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+        <Heading className="font-serif text-2xl md:text-3xl text-foreground">
+          {isFullPage ? "Вопрос-ответ" : "Флористика и уход"}
+        </Heading>
+        {!isFullPage && (
+          <Link 
+            href="/faq" 
+            className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+          >
+            Смотреть все
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
       </div>
 
       {/* FAQ list */}
       <div className="space-y-2">
-        {faqs.map((faq, index) => (
-          <div 
-            key={faq.question}
-            className="border border-border rounded-2xl overflow-hidden"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full flex items-center justify-between p-5 text-left hover:bg-secondary/50 transition-colors"
-            >
-              <span className="font-medium text-foreground pr-4">
-                {faq.question}
-              </span>
-              <ChevronDown 
-                className={cn(
-                  "h-5 w-5 text-muted-foreground flex-shrink-0 transition-transform",
-                  openIndex === index && "rotate-180"
-                )} 
-              />
-            </button>
+        {faqs.map((faq, index) => {
+          const isOpen = openIndex === index
+          return (
             <div 
+              key={faq.question}
               className={cn(
-                "overflow-hidden transition-all duration-300",
-                openIndex === index ? "max-h-96" : "max-h-0"
+                "border border-border rounded-2xl overflow-hidden bg-secondary transition-colors duration-300",
+                isOpen && "ring-1 ring-primary/20"
               )}
             >
-              <div className="px-5 pb-5 text-muted-foreground">
-                {faq.answer}
+              <button
+                type="button"
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="w-full flex items-center justify-between p-5 text-left hover:bg-black/[0.03] transition-colors rounded-2xl"
+              >
+                <span className="font-medium text-foreground pr-4">
+                  {faq.question}
+                </span>
+                <ChevronDown 
+                  className={cn(
+                    "h-5 w-5 flex-shrink-0 transition-all duration-300",
+                    isOpen ? "rotate-180 text-primary" : "text-muted-foreground"
+                  )} 
+                />
+              </button>
+              <div 
+                className={cn(
+                  "overflow-hidden transition-all duration-300",
+                  isOpen ? "max-h-96" : "max-h-0"
+                )}
+              >
+                <div className="px-5 pb-5 text-muted-foreground">
+                  {faq.answer}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

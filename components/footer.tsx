@@ -8,25 +8,24 @@ const footerLinks = {
   "Контакты": [
     { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
     { name: "8 (495) 120-77-22", href: "tel:+74951207722" },
-    { name: "Москва", href: "#" },
+    { name: "Москва", href: "/contacts" },
   ],
   "О магазине": [
-    { name: "Блог", href: "#" },
-    { name: "Q&A", href: "#faq" },
-    { name: "Приложение", href: "#app" },
-    { name: "Карта сайта", href: "#" },
+    { name: "Блог", href: "/blog" },
+    { name: "Q&A", href: "/faq" },
+    { name: "Карта сайта", href: "/sitemap" },
   ],
   "Доставка": [
-    { name: "Оплата", href: "#" },
-    { name: "Программа лояльности", href: "#" },
-    { name: "Корпоративным клиентам", href: "#" },
-    { name: "Возврат", href: "#" },
+    { name: "Оплата", href: "/payment" },
+    { name: "Программа лояльности", href: "/loyalty" },
+    { name: "Корпоративным клиентам", href: "/corporate" },
+    { name: "Возврат", href: "/return" },
   ],
   "Флористика и уход": [
-    { name: "Инструкция по свежести", href: "#" },
-    { name: "Вакансии", href: "#" },
-    { name: "Юр. информация", href: "#" },
-    { name: "Публичная оферта", href: "#" },
+    { name: "Инструкция по свежести", href: "/care" },
+    { name: "Вакансии", href: "/jobs" },
+    { name: "Юр. информация", href: "/legal" },
+    { name: "Публичная оферта", href: "/offer" },
   ],
 }
 

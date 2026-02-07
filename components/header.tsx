@@ -21,9 +21,15 @@ import { cn, getImagePath } from "@/lib/utils"
 
 const navigation = [
   { name: "Все товары", href: "/catalog" },
-  { name: "Новинки", href: "#new" },
-  { name: "Индив. заказ", href: "#custom" },
-  { name: "Подписка", href: "#subscription" },
+  { name: "Новинки", href: "/new" },
+  { name: "Индив. заказ", href: "/custom-order" },
+  { name: "Подписка", href: "/subscription" },
+]
+
+/** Доп. пункты для мобильного меню (как в футере: О магазине и др.) */
+const mobileMenuExtra = [
+  { name: "Вопрос-ответ", href: "/faq" },
+  { name: "Блог", href: "/blog" },
 ]
 
 type MegaLink = {
@@ -60,8 +66,8 @@ const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
       { title: "Свечи", href: "/catalog", description: "Ароматы для уютного вечера" },
       { title: "Новый год", href: "/catalog?category=new-year", description: "Еловые ветви и праздничный декор" },
       { title: "Подарочный сертификат", href: "/catalog", description: "Когда хочется дать свободу выбора" },
-      { title: "Индивидуальный заказ", href: "#custom", description: "Соберём по вашим пожеланиям" },
-      { title: "Подписка на цветы", href: "#subscription", description: "Регулярные доставки и приятные поводы" },
+      { title: "Индивидуальный заказ", href: "/custom-order", description: "Соберём по вашим пожеланиям" },
+      { title: "Подписка на цветы", href: "/subscription", description: "Регулярные доставки и приятные поводы" },
     ],
   },
 ]
@@ -70,14 +76,14 @@ const megaPromo = [
   {
     label: "Акция недели",
     title: "Букет недели",
-    href: "#products",
+    href: "/catalog",
     image: getImagePath("/images/bouquet-week.jpg"),
     tone: "bg-[#e8d4d4]",
   },
   {
     label: "Особый повод",
     title: "Индивидуальный заказ",
-    href: "#custom",
+    href: "/custom-order",
     image: getImagePath("/images/cat-compositions.jpg"),
     tone: "bg-[#dde4e8]",
   },
@@ -237,6 +243,24 @@ export function Header() {
                       ))}
                     </div>
                   </div>
+
+                  <div className="mt-6">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
+                      О магазине
+                    </p>
+                    <div className="space-y-2">
+                      {mobileMenuExtra.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="block rounded-xl px-3 py-2 text-base text-foreground hover:bg-secondary transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 </div>
 
@@ -375,7 +399,7 @@ export function Header() {
                         Нужен совет? Подскажем состав, упаковку и доставку.
                       </p>
                       <Button asChild className="rounded-full h-10 px-6">
-                        <a href="#custom">Оформить индивидуальный заказ</a>
+                        <Link href="/custom-order">Оформить индивидуальный заказ</Link>
                       </Button>
                     </div>
                   </NavigationMenuContent>
