@@ -7,7 +7,7 @@ import { ArrowUp } from "lucide-react"
 const footerLinks = {
   "Контакты": [
     { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
-    { name: "8 (495) 120-77-22", href: "tel:+74951207722" },
+    { name: "+7 926 470 55 45", href: "tel:+79264705545" },
     { name: "Москва", href: "/contacts" },
   ],
   "О магазине": [

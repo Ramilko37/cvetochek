@@ -34,7 +34,7 @@ const mobileMenuExtra = [
 
 /** Контакты в разделе «О магазине» мобильного меню */
 const mobileMenuContacts = [
-  { name: "8 (495) 120-77-22", href: "tel:+74951207722" },
+  { name: "+7 926 470 55 45", href: "tel:+79264705545" },
   { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
   { name: "Москва", href: "/contacts" },
 ]
@@ -147,11 +147,11 @@ export function Header() {
 
             <div className="flex-1 flex items-center justify-end gap-2 sm:gap-4 min-w-0 shrink-0">
               <Link 
-                href="tel:+74951207722" 
+                href="tel:+79264705545" 
                 className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Phone className="h-4 w-4" />
-                <span>8 (495) 120-77-22</span>
+                <span>+7 926 470 55 45</span>
               </Link>
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <User className="h-5 w-5" />
@@ -286,11 +286,11 @@ export function Header() {
 
                 <div className="mt-auto shrink-0 border-t border-border/50 p-6">
                   <Link
-                    href="tel:+74951207722"
+                    href="tel:+79264705545"
                     className="flex items-center gap-2 text-foreground"
                   >
                     <Phone className="h-4 w-4" />
-                    <span>8 (495) 120-77-22</span>
+                    <span>+7 926 470 55 45</span>
                   </Link>
                 </div>
               </SheetContent>

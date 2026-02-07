@@ -30,13 +30,13 @@ export function ContactBlocks() {
             </Link>
             
             <Link 
-              href="tel:+74951207722" 
+              href="tel:+79264705545" 
               className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
                 <Phone className="h-4 w-4" />
               </div>
-              <span>8 (495) 120-77-22</span>
+              <span>+7 926 470 55 45</span>
             </Link>
             
             <Link 
