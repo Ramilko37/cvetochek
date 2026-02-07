@@ -26,13 +26,13 @@ const slides = [
     buttonHref: "#products",
   },
   {
-    image: getImagePath("/images/christmas-branches.jpg"),
-    label: "Новогоднее настроение",
-    title: "Еловые",
-    titleAccent: "композиции",
-    description: "Создайте праздничную атмосферу",
-    buttonText: "Подробнее",
-    buttonHref: "#newyear",
+    image: getImagePath("/images/cat-roses.jpg"),
+    label: "14 февраля",
+    title: "День",
+    titleAccent: "святого Валентина",
+    description: "Букеты и композиции для самых близких",
+    buttonText: "Выбрать букет",
+    buttonHref: "#products",
   },
 ]
 
