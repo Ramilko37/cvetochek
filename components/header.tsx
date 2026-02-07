@@ -174,9 +174,9 @@ export function Header() {
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-full max-w-sm p-0 gap-0"
+                className="w-full max-w-sm p-0 gap-0 flex flex-col h-full overflow-hidden"
               >
-                <SheetHeader className="border-b border-border/50 p-6">
+                <SheetHeader className="border-b border-border/50 p-6 shrink-0">
                   <SheetTitle className="font-serif text-lg">
                     Цветочек в Горшочек
                   </SheetTitle>
@@ -185,6 +185,7 @@ export function Header() {
                   </p>
                 </SheetHeader>
 
+                <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
                 <div className="p-6">
                   <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
                     Каталог
@@ -237,8 +238,9 @@ export function Header() {
                     </div>
                   </div>
                 </div>
+                </div>
 
-                <div className="mt-auto border-t border-border/50 p-6">
+                <div className="mt-auto shrink-0 border-t border-border/50 p-6">
                   <Link
                     href="tel:+74951207722"
                     className="flex items-center gap-2 text-foreground"
