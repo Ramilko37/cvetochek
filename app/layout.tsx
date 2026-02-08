@@ -22,8 +22,8 @@ const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant'
 });
 
-// basePath для GitHub Pages (ramilko37.github.io/cvetochek)
-const basePath = process.env.NODE_ENV === 'production' ? '/cvetochek' : ''
+// basePath: пусто = сайт в корне; NEXT_PUBLIC_BASE_PATH=/cvetochek = в подпапке
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export const metadata: Metadata = {
   title: 'Цветочек в Горшочек | Доставка цветов в Москве',

@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === 'production'
-
 const nextConfig = {
-  output: 'export',
-  basePath: isProd ? '/cvetochek' : '',
+  // SSR: без output: 'export' — сборка под Node.js (next start)
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
   },
 }
 
