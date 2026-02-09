@@ -30,17 +30,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: frontend
 
       - name: Build
         run: pnpm build
+        working-directory: frontend
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: frontend/out
 
   deploy:
     environment:
