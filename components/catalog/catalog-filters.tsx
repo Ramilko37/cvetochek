@@ -107,7 +107,7 @@ export function CatalogFilters({ facets, filters, onFiltersChange }: CatalogFilt
             Состав
             <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
           </CollapsibleTrigger>
-          <CollapsibleContent className="pt-2 space-y-2 max-h-48 overflow-y-auto">
+          <CollapsibleContent className="pt-2 space-y-2">
             {facets.flowers.map((name) => (
               <label
                 key={name}

@@ -46,4 +46,5 @@ export interface Product {
   delivery: DeliveryInfo
   careInstructions: string
   options?: ProductOption[]
+  occasions?: string[]
 }

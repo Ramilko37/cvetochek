@@ -202,7 +202,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
         {/* Сайдбар фильтров — десктоп: только панель (чипсы вынесены в контент) */}
         {!isMobile && (
           <aside className="lg:w-64 shrink-0">
-            <div className="sticky top-28 rounded-2xl bg-card p-4 shadow-sm border border-border">
+            <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl bg-card p-4 shadow-sm border border-border custom-scrollbar">
               <h2 className="font-serif text-lg text-foreground mb-4">Фильтры</h2>
               {filtersPanel}
             </div>

@@ -44,6 +44,26 @@ export function QuickOrderDialog({
     setIsSubmitting(false)
   }
 
+  /** Маска +7 (XXX) XXX-XX-XX */
+  const formatPhoneMask = (raw: string): string => {
+    let digits = raw.replace(/\D/g, "")
+    if (digits.startsWith("8")) digits = "7" + digits.slice(1)
+    else if (digits.length > 0 && digits[0] !== "7") digits = "7" + digits
+    digits = digits.slice(0, 11)
+    if (digits.length === 0) return ""
+    if (digits.length === 1) return "+7"
+    const rest = digits.slice(1)
+    let out = "+7 (" + rest.slice(0, 3)
+    if (rest.length > 3) out += ") " + rest.slice(3, 6)
+    if (rest.length > 6) out += "-" + rest.slice(6, 8)
+    if (rest.length > 8) out += "-" + rest.slice(8, 10)
+    return out
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(formatPhoneMask(e.target.value))
+  }
+
   useEffect(() => {
     if (!open) resetForm()
   }, [open])
@@ -51,6 +71,24 @@ export function QuickOrderDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!product) return
+
+    const trimmedName = name.trim()
+    if (trimmedName.length < 2) {
+      toast({
+        title: "Укажите имя",
+        description: "Введите имя не короче двух символов.",
+        variant: "destructive",
+      })
+      return
+    }
+    if (!/^[\p{L}\s\-]+$/u.test(trimmedName)) {
+      toast({
+        title: "Некорректное имя",
+        description: "Имя может содержать только буквы, пробелы и дефис.",
+        variant: "destructive",
+      })
+      return
+    }
 
     const trimmedPhone = phone.replace(/\D/g, "")
     if (trimmedPhone.length < 10) {
@@ -122,6 +160,8 @@ export function QuickOrderDialog({
               onChange={(e) => setName(e.target.value)}
               className="rounded-lg"
               required
+              minLength={2}
+              maxLength={100}
             />
           </div>
           <div className="space-y-2">
@@ -131,7 +171,7 @@ export function QuickOrderDialog({
               type="tel"
               placeholder="+7 (999) 123-45-67"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
               className="rounded-lg"
               required
             />
