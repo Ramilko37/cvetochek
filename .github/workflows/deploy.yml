@@ -41,6 +41,7 @@ jobs:
         working-directory: frontend
         env:
           NEXT_PUBLIC_BASE_PATH: /cvetochek
+          NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
