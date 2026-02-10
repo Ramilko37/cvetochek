@@ -22,6 +22,7 @@ interface CartState {
   addItem: (payload: AddToCartPayload, quantity?: number) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
+  clearCart: () => void
   openCart: () => void
   closeCart: () => void
 }
@@ -82,6 +83,8 @@ export const useCartStore = create<CartState>()(
           }
         }),
 
+      clearCart: () => set({ items: [] }),
+
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
     }),
@@ -107,5 +110,6 @@ export function useCart() {
     addItem: useCartStore((s) => s.addItem),
     removeItem: useCartStore((s) => s.removeItem),
     updateQuantity: useCartStore((s) => s.updateQuantity),
+    clearCart: useCartStore((s) => s.clearCart),
   }
 }

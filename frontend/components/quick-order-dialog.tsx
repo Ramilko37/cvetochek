@@ -18,6 +18,8 @@ export interface QuickOrderProduct {
   name: string
   price: number
   image: string
+  /** для отправки в API (если есть) */
+  slug?: string
 }
 
 interface QuickOrderDialogProps {
@@ -34,6 +36,7 @@ export function QuickOrderDialog({
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [comment, setComment] = useState("")
+  const [websiteHp, setWebsiteHp] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
@@ -41,6 +44,7 @@ export function QuickOrderDialog({
     setName("")
     setPhone("")
     setComment("")
+    setWebsiteHp("")
     setIsSubmitting(false)
   }
 
@@ -102,8 +106,37 @@ export function QuickOrderDialog({
 
     setIsSubmitting(true)
     try {
-      // Здесь можно отправить заявку на бэкенд
-      await new Promise((r) => setTimeout(r, 600))
+      const itemId = product.slug ?? `quick-${product.name.replace(/\s+/g, "-").toLowerCase()}`
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "quick",
+          items: [
+            {
+              id: itemId,
+              slug: itemId,
+              name: product.name,
+              price: product.price,
+              quantity: 1,
+            },
+          ],
+          totalPrice: product.price,
+          name: trimmedName,
+          phone: trimmedPhone,
+          comment: comment.trim() || undefined,
+          websiteHp: websiteHp || undefined,
+        }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        toast({
+          title: "Ошибка",
+          description: data.error ?? "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive",
+        })
+        return
+      }
       toast({
         title: "Заявка принята",
         description: `Мы перезвоним вам в ближайшее время по поводу «${product.name}».`,
@@ -184,6 +217,16 @@ export function QuickOrderDialog({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               className="rounded-lg"
+            />
+          </div>
+          <div className="absolute -left-[9999px] top-0" aria-hidden="true">
+            <label htmlFor="quick-order-hp">Не заполняйте</label>
+            <input
+              id="quick-order-hp"
+              tabIndex={-1}
+              autoComplete="off"
+              value={websiteHp}
+              onChange={(e) => setWebsiteHp(e.target.value)}
             />
           </div>
           <Button

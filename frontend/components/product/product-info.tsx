@@ -144,6 +144,7 @@ export function ProductInfo({
           name: product.name,
           price: displayPrice,
           image: product.images?.[0] ?? "/placeholder.svg",
+          slug: product.slug,
         }}
       />
 
