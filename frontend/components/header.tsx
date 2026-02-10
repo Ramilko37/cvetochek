@@ -1,10 +1,19 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, ShoppingBag, User, Phone, MapPin, ArrowRight } from "lucide-react"
+import { Menu, ShoppingBag, User, Phone, MapPin, ArrowRight, ExternalLink } from "lucide-react"
+import { ReviewsMarquee } from "@/components/reviews-marquee"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -79,6 +88,19 @@ const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
   },
 ]
 
+/** Ссылка на карту и отзывы магазина в Яндекс.Картах */
+const YANDEX_MAPS_STORE_URL = "https://yandex.ru/maps/-/CPQbn4-K"
+
+/** Карта магазина — только на клиенте (react-yandex-maps требует window) */
+const StoreMap = dynamic(() => import("@/components/store-map").then((m) => ({ default: m.StoreMap })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[240px] rounded-lg border border-border/50 bg-muted/30 animate-pulse flex items-center justify-center text-sm text-muted-foreground">
+      Загрузка карты…
+    </div>
+  ),
+})
+
 const megaPromo = [
   {
     label: "Акция недели",
@@ -123,6 +145,7 @@ function MegaMenuLink({ title, href, description }: MegaLink) {
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mapDialogOpen, setMapDialogOpen] = useState(false)
   const { totalItems, openCart } = useCart()
 
   return (
@@ -132,11 +155,62 @@ export function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-12 relative gap-2">
             <div className="flex-1 flex items-center min-w-0 overflow-hidden">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground min-w-0">
+              <button
+                type="button"
+                onClick={() => setMapDialogOpen(true)}
+                className="flex items-center gap-2 text-sm text-muted-foreground min-w-0 hover:text-foreground transition-colors cursor-pointer"
+                aria-label="Показать карту магазина и отзывы"
+              >
                 <MapPin className="h-4 w-4 shrink-0" aria-hidden />
                 <span className="truncate">Доставка по Москве</span>
-              </span>
+              </button>
             </div>
+
+            <Dialog open={mapDialogOpen} onOpenChange={setMapDialogOpen}>
+              <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+                <DialogHeader className="p-6 pb-4">
+                  <DialogTitle className="font-serif">Магазин на карте</DialogTitle>
+                  <DialogDescription>
+                    Локация магазина и отзывы на Яндекс.Картах — адрес, режим работы, маршрут и отзывы покупателей.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex-1 min-h-0 flex flex-col gap-4 px-6 pb-2">
+                  <div className="relative w-full rounded-lg overflow-hidden border border-border/50 bg-muted/30 aspect-[4/3] min-h-[240px]">
+                    <StoreMap />
+                  </div>
+                </div>
+
+                <div className="mt-2 pb-6">
+                  <div className="px-6 mb-2 flex items-center justify-between">
+                    <h4 className="text-sm font-medium text-muted-foreground">Отзывы покупателей</h4>
+                    <a
+                      href={YANDEX_MAPS_STORE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Читать все на Яндекс.Картах
+                    </a>
+                  </div>
+
+                  <ReviewsMarquee />
+
+                  <div className="px-6 mt-4">
+                    <Button asChild className="w-full">
+                      <a
+                        href={YANDEX_MAPS_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2"
+                      >
+                        Открыть в Яндекс.Картах
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             <Link
               href="/"
