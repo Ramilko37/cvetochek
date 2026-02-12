@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Контакты | Цветочек в Горшочек",
@@ -13,8 +14,73 @@ export default function ContactsPage() {
           Контакты
         </h1>
         <p className="mt-4 text-muted-foreground">
-          Раздел в разработке.
+          Свяжитесь с нами удобным способом.
         </p>
+
+        <div className="mt-12 grid gap-8 md:grid-cols-2 max-w-2xl">
+          <div>
+            <h2 className="font-medium text-foreground mb-2">Телефон</h2>
+            <a
+              href="tel:+79264705545"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              8 (926) 470 55 45
+            </a>
+          </div>
+          <div>
+            <h2 className="font-medium text-foreground mb-2">E-mail</h2>
+            <a
+              href="mailto:Cveto4ek_v_gorsho4ek@list.ru"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Cveto4ek_v_gorsho4ek@list.ru
+            </a>
+          </div>
+          <div>
+            <h2 className="font-medium text-foreground mb-2">Адрес</h2>
+            <p className="text-muted-foreground">
+              Москва, ул. Тайнинская, 15 к 1, 26
+            </p>
+          </div>
+          <div>
+            <h2 className="font-medium text-foreground mb-2">Мы в соцсетях</h2>
+            <div className="flex gap-3">
+              <a
+                href="https://instagram.com/cveto4ek_v_gorsho4ek"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://vk.com/club229462676"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                ВКонтакте
+              </a>
+              <a
+                href="https://t.me/cvetoc4ek_v_gorsho4ek"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Telegram
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12">
+          <Link
+            href="/custom-order"
+            className="text-primary hover:underline font-medium"
+          >
+            Оформить индивидуальный заказ
+          </Link>
+        </div>
       </section>
     </main>
   )

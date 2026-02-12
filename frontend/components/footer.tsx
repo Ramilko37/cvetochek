@@ -6,7 +6,7 @@ import { ArrowUp } from "lucide-react"
 
 const footerLinks = {
   "Контакты": [
-    { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
+    { name: "Cveto4ek_v_gorsho4ek@list.ru", href: "mailto:Cveto4ek_v_gorsho4ek@list.ru" },
     { name: "+7 926 470 55 45", href: "tel:+79264705545" },
     { name: "Москва", href: "/contacts" },
   ],
@@ -29,10 +29,10 @@ const footerLinks = {
   ],
 }
 
-const socialLinks = [
-  { name: "VK", href: "#" },
-  { name: "TG", href: "#" },
-  { name: "Inst", href: "#" },
+const socialLinks: { name: string; href: string; ariaLabel?: string }[] = [
+  { name: "VK", href: "https://vk.com/club229462676", ariaLabel: "ВКонтакте" },
+  { name: "Inst", href: "https://instagram.com/cveto4ek_v_gorsho4ek", ariaLabel: "Instagram" },
+  { name: "TG", href: "https://t.me/cvetoc4ek_v_gorsho4ek", ariaLabel: "Telegram" },
 ]
 
 export function Footer() {
@@ -76,6 +76,9 @@ export function Footer() {
                 <Link
                   key={social.name}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.ariaLabel || social.name}
                   className="w-9 h-9 rounded-full bg-foreground/10 flex items-center justify-center text-xs font-medium text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
                 >
                   {social.name}

@@ -7,28 +7,22 @@ import { getImagePath } from "@/lib/utils"
 
 const articles = [
   {
-    id: 1,
-    image: getImagePath("/images/product-5.webp"),
-    title: "Пионы: королевы весеннего сезона",
-    excerpt: "Всё о выборе, уходе и сочетании пионов в букетах",
+    id: "premium-roses",
+    image: getImagePath("/images/cat-roses.webp"),
+    title: "Премиальные розы: почему мы их так любим и какие сорта покоряют с первого взгляда?",
+    excerpt: "Red Monster, Country Blues, Вегги — наши любимчики в мастерской",
   },
   {
-    id: 2,
-    image: getImagePath("/images/product-7.webp"),
-    title: "Как продлить жизнь букету",
-    excerpt: "Простые советы по уходу за срезанными цветами",
+    id: "urban-jungle",
+    image: getImagePath("/images/cat-plants.webp"),
+    title: "Городские джунгли: стильные крупные растения, которые преобразят ваш дом",
+    excerpt: "Монстера, фикусы и другие фавориты интерьерных дизайнеров",
   },
   {
-    id: 3,
-    image: getImagePath("/images/cat-bouquets.webp"),
-    title: "Тренды флористики 2026",
-    excerpt: "Актуальные цветовые сочетания и формы букетов",
-  },
-  {
-    id: 4,
-    image: getImagePath("/images/christmas-branches.webp"),
-    title: "Новогодние композиции",
-    excerpt: "Идеи праздничного декора с еловыми ветвями",
+    id: "exotic-plants",
+    image: getImagePath("/images/plants.webp"),
+    title: "От райских птиц до средиземноморского уюта: необычные растения в горшках",
+    excerpt: "Стрелиция, мирт, сансевиерия — растения, которые удивят гостей",
   },
 ]
 
@@ -41,7 +35,7 @@ export function BlogSection() {
           Блог
         </h2>
         <Link 
-          href="#" 
+          href="/blog" 
           className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
         >
           Все материалы
@@ -50,11 +44,11 @@ export function BlogSection() {
       </div>
 
       {/* Articles grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {articles.map((article) => (
           <Link 
             key={article.id} 
-            href="#"
+            href={`/blog#${article.id}`}
             className="group"
           >
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden mb-4">

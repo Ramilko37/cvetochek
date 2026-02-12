@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { getImagePath } from "@/lib/utils"
@@ -13,22 +14,21 @@ export function CustomOrder() {
           {/* Content */}
           <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-2">
-              Заказ по
+              Создадим букет
             </h2>
             <p className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground/80 italic mb-6">
-              вашим пожеланиям
+              вашей мечты
             </p>
             <p className="text-muted-foreground text-lg mb-8 max-w-md">
-              Оформите <span className="text-foreground font-medium">индивидуальный</span> заказ. 
-              Опишите свои пожелания по составу и упаковке, и мы создадим 
-              уникальный букет специально для вас.
+              Не нашли подходящую композицию в каталоге? Есть референс или хотите передать определённое настроение? 
+              Наша мастерская соберёт уникальный букет или подберёт растение по вашим пожеланиям и бюджету.
             </p>
             <div>
-              <Button 
-                className="rounded-full px-8 py-6 text-base"
-              >
-                Заказать
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button asChild className="rounded-full px-8 py-6 text-base">
+                <Link href="/custom-order">
+                  Заказать
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>

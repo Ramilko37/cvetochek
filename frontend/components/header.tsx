@@ -45,7 +45,7 @@ const mobileMenuExtra = [
 /** Контакты в разделе «О магазине» мобильного меню */
 const mobileMenuContacts = [
   { name: "+7 926 470 55 45", href: "tel:+79264705545" },
-  { name: "info@cvetochek.ru", href: "mailto:info@cvetochek.ru" },
+  { name: "Cveto4ek_v_gorsho4ek@list.ru", href: "mailto:Cveto4ek_v_gorsho4ek@list.ru" },
   { name: "Москва", href: "/contacts" },
 ]
 
