@@ -224,7 +224,7 @@ export function CustomOrderForm() {
           id="custom-order-file"
         />
         {file ? (
-          <div className="flex items-center gap-3 p-3 rounded-xl border border-border bg-secondary/30">
+          <div className="flex items-center h-45 gap-3 p-3 rounded-xl border border-border bg-secondary/30">
             <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
             <span className="text-sm text-foreground truncate flex-1 min-w-0">{file.name}</span>
             <button
@@ -246,13 +246,13 @@ export function CustomOrderForm() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             className={cn(
-              "flex flex-col items-center justify-center w-full h-32 rounded-xl border-2 border-dashed cursor-pointer transition-colors",
+              "flex flex-col items-center justify-center w-full h-45 rounded-xl border-2 border-dashed cursor-pointer transition-colors",
               isDragging
                 ? "border-primary bg-primary/5"
                 : "border-muted-foreground/25 hover:border-muted-foreground/40 hover:bg-muted/30"
             )}
           >
-            <Upload className="h-8 w-8 text-muted-foreground/60 mb-2" />
+            <Upload className="h-10 w-8 text-muted-foreground/60 mb-2" />
             <span className="text-sm text-muted-foreground text-center px-4">
               Нажмите или перетащите фото сюда
             </span>

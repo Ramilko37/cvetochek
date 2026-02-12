@@ -63,28 +63,26 @@ export default function CustomOrderPage() {
       </section>
 
       {/* Текст под hero — 80vw ширины */}
-      <div className="w-[80vw] max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
-        <p className="text-muted-foreground text-lg leading-relaxed">
+      <div className="w-full max-w-6xl mx-auto px-4 md:px-6 pb-8">
+        <p className="w-full text-left text-muted-foreground text-lg leading-relaxed">
           Иногда для идеального подарка нужен особенный подход. Не нашли подходящую композицию в каталоге? Есть референс или хотите передать определённое настроение? Наша мастерская соберёт уникальный букет или подберёт растение по вашим пожеланиям и комфортному бюджету.
         </p>
       </div>
 
-      {/* Форма слева и буллеты справа — оба в рамках */}
+      {/* Единая карточка: форма слева (темнее фон), буллеты справа (светлее) */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-16 md:pb-24">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-          {/* Левая колонка — форма в рамке. На мобилке внизу (order-2) */}
-          <div className="order-2 lg:order-1">
-            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+          <div className="grid lg:grid-cols-2">
+            {/* Левая часть — форма, темнее фон. На мобилке внизу (order-2) */}
+            <div className="order-2 lg:order-1 p-6 md:p-8 bg-muted">
               <h2 className="font-serif text-xl md:text-2xl text-foreground mb-6">
                 Расскажите, что бы вы хотели?
               </h2>
               <CustomOrderForm />
             </div>
-          </div>
 
-          {/* Правая колонка — буллеты в рамке. На мобилке сверху (order-1) */}
-          <div className="min-w-0 order-1 lg:order-2">
-            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm">
+            {/* Правая часть — буллеты, светлее фон. На мобилке сверху (order-1) */}
+            <div className="min-w-0 order-1 lg:order-2 p-6 md:p-8 bg-background">
               <h2 className="font-serif text-xl md:text-2xl text-foreground mb-6">
                 Как мы работаем
               </h2>
@@ -109,14 +107,7 @@ export default function CustomOrderPage() {
                 </p>
               </div>
 
-              <div className="mt-10">
-                <Button variant="outline" asChild className="rounded-full">
-                  <Link href="/catalog">
-                    Смотреть каталог
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
+             
             </div>
           </div>
         </div>
