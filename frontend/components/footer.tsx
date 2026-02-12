@@ -23,7 +23,6 @@ const footerLinks = {
   ],
   "Флористика и уход": [
     { name: "Инструкция по свежести", href: "/care" },
-    { name: "Вакансии", href: "/jobs" },
     { name: "Юр. информация", href: "/legal" },
     { name: "Публичная оферта", href: "/offer" },
   ],

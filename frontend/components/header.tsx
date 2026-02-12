@@ -212,9 +212,17 @@ export function Header() {
 
             <Link
               href="/"
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-lg text-foreground hover:text-foreground/90 transition-colors whitespace-nowrap z-10 px-2"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 hover:opacity-90 transition-opacity"
+              aria-label="Цветочек в Горшочек — на главную"
             >
-              Цветочек в Горшочек
+              <Image
+                src="/logo.png"
+                alt="Цветочек в Горшочек"
+                width={240}
+                height={96}
+                className="h-[60px] w-auto object-contain"
+                priority
+              />
             </Link>
 
             <div className="flex-1 flex items-center justify-end gap-2 sm:gap-4 min-w-0 shrink-0">
@@ -248,7 +256,7 @@ export function Header() {
 
       {/* Main nav */}
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 relative">
+        <div className="flex items-center justify-between h-[84px] relative">
           {/* Mobile menu button */}
           <div className="flex lg:hidden shrink-0 w-10 justify-start">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -372,9 +380,17 @@ export function Header() {
           {/* Логотип по центру на мобильном — баланс нав-бара */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-base sm:text-lg text-foreground hover:text-foreground/90 transition-colors lg:hidden z-10 text-center max-w-[70vw] leading-tight"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center lg:hidden z-10 hover:opacity-90 transition-opacity"
+            aria-label="Цветочек в Горшочек — на главную"
           >
-            Цветочек в Горшочек
+            <Image
+              src="/logo.png"
+              alt="Цветочек в Горшочек"
+              width={210}
+              height={84}
+              className="h-[50px] sm:h-[56px] w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Иконки справа на мобильном: пользователь и корзина */}
