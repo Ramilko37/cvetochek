@@ -37,6 +37,7 @@ import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useCart } from "@/store/cart-store"
 import type { Product } from "@/types/product"
+import { getCurrentOccasions } from "@/lib/occasions"
 import { CatalogFilters } from "./catalog-filters"
 import { cn } from "@/lib/utils"
 
@@ -50,6 +51,7 @@ const SORT_OPTIONS = [
 
 export interface CatalogFiltersState {
   categorySlugs: string[]
+  occasionSlugs: string[]
   priceMin: number
   priceMax: number
   flowerNames: string[]
@@ -58,6 +60,7 @@ export interface CatalogFiltersState {
 function defaultFilters(facets: ReturnType<typeof extractFacets>): CatalogFiltersState {
   return {
     categorySlugs: [],
+    occasionSlugs: [],
     priceMin: facets.priceMin,
     priceMax: facets.priceMax,
     flowerNames: [],
@@ -79,6 +82,7 @@ function extractFacets(products: Product[]) {
   }
   return {
     categories: Array.from(categoriesMap.entries()).map(([slug, name]) => ({ slug, name })),
+    occasions: getCurrentOccasions().map((o) => ({ slug: o.slug, name: o.name })),
     flowers: Array.from(flowersSet).sort(),
     priceMin: priceMin === Infinity ? 0 : priceMin,
     priceMax: priceMax || 100000,
@@ -99,6 +103,14 @@ function getValidCategorySlugsFromUrl(
   return slugs.filter((slug) => categories.some((c) => c.slug === slug))
 }
 
+function getValidOccasionSlugsFromUrl(
+  searchParams: ReturnType<typeof useSearchParams>,
+  occasions: { slug: string }[]
+): string[] {
+  const slugs = searchParams.getAll("occasion")
+  return slugs.filter((slug) => occasions.some((o) => o.slug === slug))
+}
+
 export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
   const searchParams = useSearchParams()
   const isMobile = useIsMobile()
@@ -113,24 +125,41 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     () => getValidCategorySlugsFromUrl(searchParams, facets.categories),
     [searchParams, facets.categories]
   )
+  const occasionSlugsFromUrl = useMemo(
+    () => getValidOccasionSlugsFromUrl(searchParams, facets.occasions),
+    [searchParams, facets.occasions]
+  )
   const [filters, setFilters] = useState<CatalogFiltersState>(() => {
     const f = extractFacets(products)
     const base = defaultFilters(f)
-    const valid = getValidCategorySlugsFromUrl(searchParams, f.categories)
-    if (valid.length > 0) return { ...base, categorySlugs: valid }
-    return base
+    const catValid = getValidCategorySlugsFromUrl(searchParams, f.categories)
+    const occValid = getValidOccasionSlugsFromUrl(searchParams, f.occasions)
+    return {
+      ...base,
+      categorySlugs: catValid.length > 0 ? catValid : base.categorySlugs,
+      occasionSlugs: occValid.length > 0 ? occValid : base.occasionSlugs,
+    }
   })
 
-  // Синхронизация фильтра категорий при изменении URL (клиентская навигация)
+  // Синхронизация фильтров при изменении URL (клиентская навигация)
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, categorySlugs: categorySlugsFromUrl }))
+    setFilters((prev) => ({
+      ...prev,
+      categorySlugs: categorySlugsFromUrl,
+      occasionSlugs: occasionSlugsFromUrl,
+    }))
     setPage(1)
-  }, [categorySlugsFromUrl.join(",")])
+  }, [categorySlugsFromUrl.join(","), occasionSlugsFromUrl.join(",")])
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
       if (filters.categorySlugs.length && !filters.categorySlugs.includes(p.category.slug))
         return false
+      if (filters.occasionSlugs.length) {
+        const productOccasions = p.occasions ?? []
+        const hasOccasion = filters.occasionSlugs.some((slug) => productOccasions.includes(slug))
+        if (!hasOccasion) return false
+      }
       if (p.price < filters.priceMin || p.price > filters.priceMax) return false
       if (filters.flowerNames.length) {
         const hasFlower = p.composition.flowers.some((f) => filters.flowerNames.includes(f))
@@ -158,6 +187,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
 
   const hasActiveFilters =
     filters.categorySlugs.length > 0 ||
+    filters.occasionSlugs.length > 0 ||
     filters.flowerNames.length > 0 ||
     filters.priceMin !== facets.priceMin ||
     filters.priceMax !== facets.priceMax
@@ -192,9 +222,11 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
       <div className="mb-8">
         <h1 className="font-serif text-3xl md:text-4xl text-foreground text-balance">
           {pageTitle ??
-            (filters.categorySlugs.length === 1
-              ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
-              : "Все товары")}
+            (filters.occasionSlugs.length === 1
+              ? facets.occasions.find((o) => o.slug === filters.occasionSlugs[0])?.name ?? "Каталог"
+              : filters.categorySlugs.length === 1
+                ? facets.categories.find((c) => c.slug === filters.categorySlugs[0])?.name ?? "Каталог"
+                : "Все товары")}
         </h1>
       </div>
 
@@ -281,7 +313,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                 const cat = facets.categories.find((c) => c.slug === slug)
                 return (
                   <span
-                    key={slug}
+                    key={`cat-${slug}`}
                     className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
                   >
                     {cat?.name ?? slug}
@@ -292,6 +324,30 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                         setFilters((prev) => ({
                           ...prev,
                           categorySlugs: prev.categorySlugs.filter((s) => s !== slug),
+                        }))
+                      }
+                      className="hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </span>
+                )
+              })}
+              {filters.occasionSlugs.map((slug) => {
+                const occ = facets.occasions.find((o) => o.slug === slug)
+                return (
+                  <span
+                    key={`occ-${slug}`}
+                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                  >
+                    {occ?.name ?? slug}
+                    <button
+                      type="button"
+                      aria-label="Убрать фильтр"
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          occasionSlugs: prev.occasionSlugs.filter((s) => s !== slug),
                         }))
                       }
                       className="hover:text-foreground"

@@ -12,6 +12,7 @@ import type { CatalogFiltersState } from "./catalog-content"
 
 export interface CatalogFacets {
   categories: { slug: string; name: string }[]
+  occasions: { slug: string; name: string }[]
   flowers: string[]
   priceMin: number
   priceMax: number
@@ -30,6 +31,15 @@ export function CatalogFilters({ facets, filters, onFiltersChange }: CatalogFilt
       categorySlugs: filters.categorySlugs.includes(slug)
         ? filters.categorySlugs.filter((s) => s !== slug)
         : [...filters.categorySlugs, slug],
+    })
+  }
+
+  const toggleOccasion = (slug: string) => {
+    onFiltersChange({
+      ...filters,
+      occasionSlugs: filters.occasionSlugs.includes(slug)
+        ? filters.occasionSlugs.filter((s) => s !== slug)
+        : [...filters.occasionSlugs, slug],
     })
   }
 
@@ -70,6 +80,30 @@ export function CatalogFilters({ facets, filters, onFiltersChange }: CatalogFilt
                 <Checkbox
                   checked={filters.categorySlugs.includes(slug)}
                   onCheckedChange={() => toggleCategory(slug)}
+                />
+                {name}
+              </label>
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+      )}
+
+      {/* Повод */}
+      {facets.occasions.length > 0 && (
+        <Collapsible defaultOpen>
+          <CollapsibleTrigger className="flex w-full items-center justify-between py-1 text-sm font-medium text-foreground hover:text-foreground/90">
+            Повод
+            <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-2 space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+            {facets.occasions.map(({ slug, name }) => (
+              <label
+                key={slug}
+                className="flex items-center gap-2 cursor-pointer text-sm text-muted-foreground hover:text-foreground"
+              >
+                <Checkbox
+                  checked={filters.occasionSlugs.includes(slug)}
+                  onCheckedChange={() => toggleOccasion(slug)}
                 />
                 {name}
               </label>

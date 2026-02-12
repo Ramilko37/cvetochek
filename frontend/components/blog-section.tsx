@@ -8,25 +8,25 @@ import { getImagePath } from "@/lib/utils"
 const articles = [
   {
     id: 1,
-    image: getImagePath("/images/product-5.jpg"),
+    image: getImagePath("/images/product-5.webp"),
     title: "Пионы: королевы весеннего сезона",
     excerpt: "Всё о выборе, уходе и сочетании пионов в букетах",
   },
   {
     id: 2,
-    image: getImagePath("/images/product-7.jpg"),
+    image: getImagePath("/images/product-7.webp"),
     title: "Как продлить жизнь букету",
     excerpt: "Простые советы по уходу за срезанными цветами",
   },
   {
     id: 3,
-    image: getImagePath("/images/cat-bouquets.jpg"),
+    image: getImagePath("/images/cat-bouquets.webp"),
     title: "Тренды флористики 2026",
     excerpt: "Актуальные цветовые сочетания и формы букетов",
   },
   {
     id: 4,
-    image: getImagePath("/images/christmas-branches.jpg"),
+    image: getImagePath("/images/christmas-branches.webp"),
     title: "Новогодние композиции",
     excerpt: "Идеи праздничного декора с еловыми ветвями",
   },

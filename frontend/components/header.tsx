@@ -26,6 +26,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { SearchDropdown } from "@/components/search-dropdown"
 import { useCart } from "@/store/cart-store"
+import { getCurrentOccasions } from "@/lib/occasions"
 import { cn, getImagePath } from "@/lib/utils"
 
 const navigation = [
@@ -66,6 +67,14 @@ const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
     ],
   },
   {
+    title: "Поводы",
+    items: getCurrentOccasions().map((o) => ({
+      title: o.name,
+      href: o.href,
+      description: o.description,
+    })),
+  },
+  {
     title: "Подборки",
     items: [
       { title: "Со скидкой", href: "/catalog", description: "Лучшие предложения недели" },
@@ -73,17 +82,6 @@ const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
       { title: "Новинки", href: "/catalog", description: "Свежие поступления и коллекции" },
       { title: "Быстрая доставка", href: "/catalog", description: "Поможем выбрать и собрать оперативно" },
       { title: "До 5 000 ₽", href: "/catalog", description: "Нежные варианты в комфортном бюджете" },
-    ],
-  },
-  {
-    title: "Подарки",
-    items: [
-      { title: "Конфеты", href: "/catalog", description: "Маленькое дополнение к букету" },
-      { title: "Свечи", href: "/catalog", description: "Ароматы для уютного вечера" },
-      { title: "Новый год", href: "/catalog?category=new-year", description: "Еловые ветви и праздничный декор" },
-      { title: "Подарочный сертификат", href: "/catalog", description: "Когда хочется дать свободу выбора" },
-      { title: "Индивидуальный заказ", href: "/custom-order", description: "Соберём по вашим пожеланиям" },
-      { title: "Подписка на цветы", href: "/subscription", description: "Регулярные доставки и приятные поводы" },
     ],
   },
 ]
@@ -106,14 +104,14 @@ const megaPromo = [
     label: "Акция недели",
     title: "Букет недели",
     href: "/catalog",
-    image: getImagePath("/images/bouquet-week.jpg"),
+    image: getImagePath("/images/bouquet-week.webp"),
     tone: "bg-[#e8d4d4]",
   },
   {
     label: "Особый повод",
     title: "Индивидуальный заказ",
     href: "/custom-order",
-    image: getImagePath("/images/cat-compositions.jpg"),
+    image: getImagePath("/images/cat-compositions.webp"),
     tone: "bg-[#dde4e8]",
   },
 ] as const
@@ -450,7 +448,7 @@ export function Header() {
 
                       <div className="min-w-0">
                         <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 pl-1">
-                          Рекомендуем
+                          Рекомендуемое
                         </p>
                         <div className="space-y-4">
                           {megaPromo.map((card) => (

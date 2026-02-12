@@ -36,7 +36,7 @@ export function CustomOrder() {
           {/* Image */}
           <div className="relative h-64 md:h-auto min-h-[300px]">
             <Image
-              src={getImagePath("/images/cat-compositions.jpg")}
+              src={getImagePath("/images/cat-compositions.webp")}
               alt="Индивидуальный заказ"
               fill
               className="object-cover"

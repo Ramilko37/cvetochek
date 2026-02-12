@@ -65,7 +65,7 @@ export function ContactBlocks() {
         <Link href="#" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
-              src={getImagePath("/images/cat-compositions.jpg")}
+              src={getImagePath("/images/cat-compositions.webp")}
               alt="Индивидуальный заказ"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -89,7 +89,7 @@ export function ContactBlocks() {
         <Link href="#" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
-              src={getImagePath("/images/cat-baskets.jpg")}
+              src={getImagePath("/images/cat-baskets.webp")}
               alt="Корпоративным клиентам"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -8,21 +8,21 @@ import { getImagePath } from "@/lib/utils"
 
 const slides = [
   {
-    image: getImagePath("/images/hero-peonies.jpg"),
+    image: getImagePath("/images/hero-peonies.webp"),
     label: "Новая коллекция",
     title: "Зимние",
     titleEm: "Букеты",
     buttonText: "Смотреть",
   },
   {
-    image: getImagePath("/images/bouquet-week.jpg"),
+    image: getImagePath("/images/bouquet-week.webp"),
     label: "Акция недели",
     title: "Скидка",
     titleEm: "20%",
     buttonText: "Выбрать букет",
   },
   {
-    image: getImagePath("/images/christmas-branches.jpg"),
+    image: getImagePath("/images/christmas-branches.webp"),
     label: "Новогоднее настроение",
     title: "Еловые",
     titleEm: "Композиции",
@@ -127,7 +127,7 @@ export function HeroBento() {
         {/* Букет недели */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#e8d4d4]">
           <Image
-            src={getImagePath("/images/bouquet-week.jpg")}
+            src={getImagePath("/images/bouquet-week.webp")}
             alt="Букет недели"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -146,7 +146,7 @@ export function HeroBento() {
         {/* Корзины с цветами */}
         <div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden group bg-[#f0e6dc]">
           <Image
-            src={getImagePath("/images/cat-baskets.jpg")}
+            src={getImagePath("/images/cat-baskets.webp")}
             alt="Корзины с цветами"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -178,7 +178,7 @@ export function HeroBento() {
         {/* Новогоднее */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#dde4e8]">
           <Image
-            src={getImagePath("/images/christmas-branches.jpg")}
+            src={getImagePath("/images/christmas-branches.webp")}
             alt="Новогодние композиции"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -197,7 +197,7 @@ export function HeroBento() {
         {/* Подписка */}
         <div className="col-span-1 row-span-1 relative rounded-2xl overflow-hidden group bg-[#e8dcd4]">
           <Image
-            src={getImagePath("/images/subscription.jpg")}
+            src={getImagePath("/images/subscription.webp")}
             alt="Подписка на цветы"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"

@@ -8,7 +8,7 @@ import { getImagePath } from "@/lib/utils"
 
 const slides = [
   {
-    image: getImagePath("/images/hero-peonies.jpg"),
+    image: getImagePath("/images/hero-peonies.webp"),
     label: "Новая коллекция",
     title: "Зимние",
     titleAccent: "букеты",
@@ -16,7 +16,7 @@ const slides = [
     buttonHref: "/catalog",
   },
   {
-    image: getImagePath("/images/bouquet-week.jpg"),
+    image: getImagePath("/images/bouquet-week.webp"),
     label: "Акция недели",
     title: "Скидка",
     titleAccent: "20%",
@@ -24,7 +24,7 @@ const slides = [
     buttonHref: "/catalog",
   },
   {
-    image: getImagePath("/images/cat-roses.jpg"),
+    image: getImagePath("/images/cat-roses.webp"),
     label: "14 февраля",
     title: "День",
     titleAccent: "святого Валентина",
@@ -102,7 +102,7 @@ export function HeroSlider() {
       <button
         type="button"
         onClick={prevSlide}
-        className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
         aria-label="Предыдущий слайд"
       >
         <ChevronLeft className="h-6 w-6" />
@@ -110,7 +110,7 @@ export function HeroSlider() {
       <button
         type="button"
         onClick={nextSlide}
-        className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
         aria-label="Следующий слайд"
       >
         <ChevronRight className="h-6 w-6" />

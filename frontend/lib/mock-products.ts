@@ -79,7 +79,42 @@ const DEFAULT_COMPOSITION: Product["composition"] = {
   diameter: "около 25 см",
 }
 
-export const mockProducts: Product[] = [
+/** Распределение букетов по поводам (черновое, потом заменить на точные данные) */
+function assignOccasions(p: Omit<Product, "occasions">): Product {
+  const cat = p.category.slug
+  const name = p.name.toLowerCase()
+  const desc = (p.description ?? "").toLowerCase()
+  const flowers = p.composition.flowers.join(" ").toLowerCase()
+  const occasions: string[] = []
+  // Универсальные поводы — большинство букетов
+  occasions.push("birthday", "just-because")
+  // Красные розы, романтика → День влюблённых
+  if (flowers.includes("роза") && (flowers.includes("красн") || desc.includes("алый") || name.includes("красн") || name.includes("алое")))
+    occasions.push("valentines-day")
+  // Розовые, нежные → 8 марта, День матери
+  if (flowers.includes("пион") || flowers.includes("роза") || flowers.includes("тюльпан") || desc.includes("нежн"))
+    occasions.push("march-8", "mothers-day")
+  // Весенние, тюльпаны → 8 марта, Пасха
+  if (flowers.includes("тюльпан") || desc.includes("весен"))
+    occasions.push("march-8", "easter")
+  // Белые, элегантные → свадьба
+  if (desc.includes("белоснеж") || desc.includes("белый") || name.includes("белоснеж") || name.includes("классика"))
+    occasions.push("wedding")
+  // Композиции, корзины → дом, выпускной
+  if (cat === "compositions" || cat === "baskets")
+    occasions.push("home", "graduation")
+  // Новый год
+  if (cat === "new-year") occasions.push("new-year")
+  // Семья (тёплые, уютные)
+  if (desc.includes("уют") || desc.includes("тёпл") || desc.includes("семь"))
+    occasions.push("family-day")
+  // Скромные, простые → 1 сентября
+  if (flowers.includes("танацетум") || flowers.includes("ромаш") || name.includes("шёпот"))
+    occasions.push("september-1")
+  return { ...p, occasions: [...new Set(occasions)] }
+}
+
+const rawProducts: Omit<Product, "occasions">[] = [
   {
     id: "20242688",
     slug: "20242688_mono_155",
@@ -88,14 +123,14 @@ export const mockProducts: Product[] = [
     price: 7_990,
     inStock: true,
     images: [
-      IMG("/images/photo_2026-01-31_18-58-06.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-08.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-10.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-11.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-13.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-14.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-16.jpg"),
-      IMG("/images/photo_2026-01-31_18-58-46.jpg"),
+      IMG("/images/photo_2026-01-31_18-58-06.webp"),
+      IMG("/images/photo_2026-01-31_18-58-08.webp"),
+      IMG("/images/photo_2026-01-31_18-58-10.webp"),
+      IMG("/images/photo_2026-01-31_18-58-11.webp"),
+      IMG("/images/photo_2026-01-31_18-58-13.webp"),
+      IMG("/images/photo_2026-01-31_18-58-14.webp"),
+      IMG("/images/photo_2026-01-31_18-58-16.webp"),
+      IMG("/images/photo_2026-01-31_18-58-46.webp"),
     ],
     sizes: [
       { id: "d12", label: "d12", price: 6_490, available: true },
@@ -965,6 +1000,8 @@ export const mockProducts: Product[] = [
     careInstructions: DEFAULT_CARE,
   },
 ]
+
+export const mockProducts: Product[] = rawProducts.map(assignOccasions)
 
 export function getProductBySlug(slug: string): Product | undefined {
   return mockProducts.find((p) => p.slug === slug)
