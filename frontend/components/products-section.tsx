@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import { ProductCard } from "@/components/product-card"
 import {
@@ -8,21 +8,10 @@ import {
   type QuickOrderProduct,
 } from "@/components/quick-order-dialog"
 import { useCart } from "@/store/cart-store"
+import { useProductsContext } from "@/components/products-provider"
 import { cn } from "@/lib/utils"
-import { mockProducts } from "@/lib/mock-products"
 
 const tabs = ["Со скидкой", "Популярное", "Новинки"]
-
-const byTab = {
-  "Со скидкой": () => {
-    const discounted = mockProducts.filter(
-      (p) => typeof p.originalPrice === "number" && p.originalPrice > p.price,
-    )
-    return (discounted.length > 0 ? discounted : mockProducts).slice(0, 4)
-  },
-  "Популярное": () => mockProducts.slice(4, 8),
-  "Новинки": () => mockProducts.slice(8, 12),
-} satisfies Record<(typeof tabs)[number], () => typeof mockProducts>
 
 const tagByTab = {
   "Со скидкой": "sale",
@@ -36,7 +25,18 @@ export function ProductsSection() {
     useState<QuickOrderProduct | null>(null)
   const [quickOrderOpen, setQuickOrderOpen] = useState(false)
   const { addItem } = useCart()
-  const products = byTab[activeTab as keyof typeof byTab]()
+  const { products: allProducts } = useProductsContext()
+
+  const products = useMemo(() => {
+    if (activeTab === "Со скидкой") {
+      const discounted = allProducts.filter(
+        (p) => typeof p.originalPrice === "number" && p.originalPrice > p.price,
+      )
+      return (discounted.length > 0 ? discounted : allProducts).slice(0, 4)
+    }
+    if (activeTab === "Популярное") return allProducts.slice(4, 8)
+    return allProducts.slice(8, 12)
+  }, [allProducts, activeTab])
 
   const handleQuickOrder = (product: QuickOrderProduct) => {
     setQuickOrderProduct(product)

@@ -12,7 +12,7 @@ export interface Occasion {
 
 /** Поводы для подарка — используются в каталоге, фильтрах, на главной */
 export const OCCASIONS: Occasion[] = [
-  { slug: "valentines-day", name: "День всех влюблённых", description: "Розы и романтика для двоих", href: "/catalog?occasion=valentines-day", image: getImagePath("/images/cat-roses.webp"), relevantMonths: [2] },
+  { slug: "valentines-day", name: "День всех влюблённых", description: "Розы и романтика для двоих", href: "/valentines-day", image: getImagePath("/images/cat-roses.webp"), relevantMonths: [2] },
   { slug: "family-day", name: "День семьи, любви и верности", description: "Тёплые букеты для близких", href: "/catalog?occasion=family-day", image: getImagePath("/images/cat-bouquets.webp"), relevantMonths: [7] },
   { slug: "mothers-day", name: "День матери", description: "Нежные букеты для мамы", href: "/catalog?occasion=mothers-day", image: getImagePath("/images/cat-peonies.webp"), relevantMonths: [11] },
   { slug: "march-8", name: "8 марта", description: "Весенние букеты и тюльпаны", href: "/catalog?occasion=march-8", image: getImagePath("/images/cat-peonies.webp"), relevantMonths: [3] },

@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { mockProducts } from "@/lib/mock-products"
+import { useProductsContext } from "@/components/products-provider"
 
 const RECENTS_KEY = "cvetochek-recent-searches"
 
@@ -66,10 +66,11 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   }, [open])
 
   const normalized = query.trim().toLowerCase()
+  const { products } = useProductsContext()
 
   const results = useMemo(() => {
     if (!normalized) return []
-    return mockProducts
+    return products
       .filter((p) => p.name.toLowerCase().includes(normalized))
       .slice(0, 6)
       .map((p) => ({
@@ -79,7 +80,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
         price: p.price,
         category: p.category?.name,
       }))
-  }, [normalized])
+  }, [normalized, products])
 
   const commitQuery = (value: string) => {
     const v = value.trim()

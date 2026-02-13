@@ -1,0 +1,251 @@
+[
+  {
+    "images": ["/images/telegram-products/product_4_0.jpg", "/images/telegram-products/product_3_0.jpg", "/images/telegram-products/product_2_0.jpg", "/images/telegram-products/product_1_0.jpg", "/images/telegram-products/product_0_0.jpg"],
+    "description": "Нежный и утончённый букет. Роза Кения розового оттенка, символизирующей любовь, заботу и теплоту. Минималистичная упаковка нежно-розового цвета подчёркивает красоту цветка, делая его идеальным подарком для дорогого человека. Этот букет дарит мгновение радости и наполняет день светом и нежностью.",
+    "type": "Букет",
+    "composition": "Роза Кения 19",
+    "packaging": "упаковка, лента",
+    "name": "Букет из роз Кения",
+    "size": "35*50",
+    "price": 6800
+  },
+  {
+    "images": ["/images/telegram-products/product_8_0.jpg", "/images/telegram-products/product_7_0.jpg", "/images/telegram-products/product_6_0.jpg", "/images/telegram-products/product_5_0.jpg"],
+    "description": "Сборный букет в мягкой и гармоничной цветовой гамме. Пионовидная кустовая роза создаёт выразительный центр, лизиантус и диантус добавляют лёгкость и воздушность, а писташ и эвкалипт оживляют композицию зелёными акцентами. Матовая упаковка и аккуратная лента делают букет стильным, современным и идеально подходящим для знака внимания или подарка без повода.",
+    "type": "Букет",
+    "composition": "Лизиантус 6, писташ 2, эвкалипт 2, диантус 6, Роза кустовая пионовидная",
+    "packaging": "упаковка, лента",
+    "name": "Легкое очарование",
+    "size": "50*50",
+    "price": 13100
+  },
+  {
+    "images": ["/images/telegram-products/product_13_0.jpg", "/images/telegram-products/product_12_0.jpg", "/images/telegram-products/product_11_0.jpg", "/images/telegram-products/product_10_0.jpg", "/images/telegram-products/product_9_0.jpg"],
+    "description": "Минималистичный и свежий букет с танацетумом и хризантемой «Алтай». Матовая прозрачная упаковка и аккуратная лента подчёркивают воздушность и естественную красоту композиции. Идеальный вариант для лёгкого комплимента или светлого подарка без повода.",
+    "type": "Букет",
+    "composition": "Танацетум 7, хризантема Алтай 3",
+    "packaging": "упаковка, лента",
+    "name": "«Лёгкая свежесть»",
+    "size": "35*45",
+    "price": 4800
+  },
+  {
+    "images": ["/images/telegram-products/product_16_0.jpg", "/images/telegram-products/product_15_0.jpg", "/images/telegram-products/product_14_0.jpg"],
+    "description": "Нежный букет с розовыми тюльпанами и ларгусом, оформленный в белую бумагу с розовой тишью. Лёгкость и свежесть композиции подчёркивает аккуратная розовая лента, делая букет утончённым и гармоничным. Идеальный подарок для романтического жеста, тёплого комплимента или светлого праздничного момента.",
+    "type": "Букет",
+    "composition": "Тюльпан 25, Ларгус 15",
+    "packaging": "Упаковка 1",
+    "name": "Современная романтика",
+    "size": "40*35",
+    "price": 9900
+  },
+  {
+    "images": ["/images/telegram-products/product_22_0.jpg", "/images/telegram-products/product_21_0.jpg", "/images/telegram-products/product_20_0.jpg", "/images/telegram-products/product_19_0.jpg", "/images/telegram-products/product_18_0.jpg", "/images/telegram-products/product_17_0.jpg"],
+    "description": "Минималистичный букет с пышной пионовидной кустовой розой и свежим эвкалиптом. Дизайнерская упаковка подчёркивает естественную красоту цветов, создавая утончённый и стильный подарок. Идеальный выбор для романтического жеста, элегантного комплимента или особенного момента.",
+    "type": "Букет",
+    "composition": "Эвкалипт 2, Роза кустовая пионовидная 7",
+    "packaging": "упаковка, лента",
+    "name": "Простая нежность",
+    "size": "35*40",
+    "price": 7400
+  },
+  {
+    "images": ["/images/telegram-products/product_26_0.jpg", "/images/telegram-products/product_25_0.jpg", "/images/telegram-products/product_24_0.jpg", "/images/telegram-products/product_23_0.jpg"],
+    "description": "Классический букет из 15 красных эквадорских роз, перевязанный лентой. Насыщенный цвет и крупные бутоны подчёркивают силу чувств и делают этот букет идеальным выбором для признания в любви, особого события или яркого жеста внимания.",
+    "type": "Букет",
+    "composition": "Роза Эквадор 15",
+    "packaging": "Лента 1",
+    "name": "Яркое признание",
+    "size": "70*20",
+    "price": 9100
+  },
+  {
+    "images": ["/images/telegram-products/product_30_0.jpg", "/images/telegram-products/product_29_0.jpg", "/images/telegram-products/product_28_0.jpg", "/images/telegram-products/product_27_0.jpg"],
+    "description": "Элегантный букет с пионовидной кустовой розой и розой Эквадор, дополненный свежим эвкалиптом. Матовая зелёная упаковка и лента подчёркивают естественность и гармонию композиции. Идеальный выбор для романтического подарка или утончённого знака внимания.",
+    "type": "Букет",
+    "composition": "Роза кустовая пионовидная 2, Роза Эквадор 7, Эвкалипт 2",
+    "packaging": "Упаковка",
+    "name": "Нежный объем",
+    "size": "30*45",
+    "price": 5800
+  },
+  {
+    "images": ["/images/telegram-products/product_33_0.jpg", "/images/telegram-products/product_32_0.jpg", "/images/telegram-products/product_31_0.jpg"],
+    "description": "Объёмная и текстурная композиция в коробке на оазисе. В букете гармонично сочетаются кустовые и одноголовые хризантемы, астранция, сантини, альстромерия, диантус и декоративные зелёные акценты — рускус, сафари и ларгус. Разнообразие форм и фактур создаёт живой, естественный образ, а аккуратная упаковка с лентой подчёркивает премиальный характер композиции. Идеально для подарка, который впечатляет своим размахом и вниманием к деталям.",
+    "type": "Композиция",
+    "composition": "Хризантема кустовая 1, Сантини 1, Альстромерия 1, Диантус зеленый 1, Хризантема одноголовая 1, Астранция 2, Рускус 2, Сафари 1, Ларгус 9",
+    "packaging": "Коробка 1, Оазис 1",
+    "name": "Естественная симфония",
+    "size": "25*25",
+    "price": 5800
+  },
+  {
+    "images": ["/images/telegram-products/product_36_0.jpg", "/images/telegram-products/product_35_0.jpg", "/images/telegram-products/product_34_0.jpg"],
+    "description": "Светлый и утончённый букет в бело-розовой палитре. Белые розы, астранция и одноголовые хризантемы создают ощущение чистоты и спокойствия, а розовые кустовые розы и альстромерия добавляют мягкого тепла и романтики. Ромашковые сантинии придают композиции лёгкость и естественность. Матовая розовая упаковка с лентой подчёркивает нежный характер букета.",
+    "type": "Букет",
+    "composition": "Альстромерия 2, Роза кустовая 1, хризантема кустовая 2, Роза белая 1, сантини 2, астранция 2",
+    "packaging": "упаковка, лента",
+    "name": "Чистая любовь",
+    "size": "40*40",
+    "price": 5800
+  },
+  {
+    "images": ["/images/telegram-products/product_40_0.jpg", "/images/telegram-products/product_39_0.jpg", "/images/telegram-products/product_38_0.jpg", "/images/telegram-products/product_37_0.jpg"],
+    "description": "Воздушный букет в мягкой бело-розовой палитре с освежающим голубым акцентом. Белые розы, астранция и хризантемы создают ощущение чистоты и лёгкости, розовые кустовые розы добавляют нежное тепло, а оксипеталум придаёт композиции свежий, почти небесный оттенок. Матовая нежно-лимонная упаковка с лентой подчёркивает солнечный характер букета и делает его особенно тёплым и жизнерадостным.",
+    "type": "Букет",
+    "composition": "Альстромерия 2, Роза кустовая 1, хризантема кустовая 1, сантини 2, хризантема одноголовая 1, оксипеталум 3, астранция 2",
+    "name": "«Светлая радость»",
+    "size": "40*40",
+    "price": 5900
+  },
+  {
+    "images": ["/images/telegram-products/product_44_0.jpg", "/images/telegram-products/product_43_0.jpg", "/images/telegram-products/product_42_0.jpg", "/images/telegram-products/product_41_0.jpg"],
+    "description": "Воздушный букет в пудрово-розовой палитре с нежным голубым акцентом. Ранункулус и кустовые розы создают мягкий объём, астранция и сантинии добавляют лёгкость, а белый лизиантус и оксипеталум наполняют композицию свежестью. Прозрачная матовая упаковка подчёркивает естественную красоту цветов и делает букет особенно изящным.",
+    "type": "Букет",
+    "composition": "Альстромерия 1, лизиантус 1, Роза кустовая 1, сантини 3, оксипеталум 1, астранция 2",
+    "packaging": "упаковка, лента",
+    "name": "Нежность в деталях",
+    "size": "30*40",
+    "price": 5900
+  },
+  {
+    "images": ["/images/telegram-products/product_48_0.jpg", "/images/telegram-products/product_47_0.jpg", "/images/telegram-products/product_46_0.jpg", "/images/telegram-products/product_45_0.jpg"],
+    "description": "Нежный букет в светлой палитре с тонким сиреневым акцентом. Белые розы и альстромерия создают ощущение чистоты, астранция и сантинии добавляют лёгкость, а матиола — мягкий весенний аромат. Матовая нежно-салатовая упаковка подчёркивает свежесть композиции.",
+    "type": "Букет",
+    "composition": "Альстромерия 2, маттиола 1, Роза белая 1, сантини 2, астранция 2",
+    "packaging": "упаковка, лента",
+    "name": "Лунный сад",
+    "size": "30*40",
+    "price": 4200
+  },
+  {
+    "images": ["/images/telegram-products/product_53_0.jpg", "/images/telegram-products/product_52_0.jpg", "/images/telegram-products/product_51_0.jpg", "/images/telegram-products/product_50_0.jpg", "/images/telegram-products/product_49_0.jpg"],
+    "description": "Минималистичный букет, в котором белая роза и астранция звучат чисто и изящно. Лёгкий, воздушный образ без лишних деталей — про вкус, спокойствие и утончённость. Белая бумажная упаковка и лента подчёркивают естественную красоту цветов.",
+    "type": "Букет",
+    "composition": "Роза белая 5, астранция 4",
+    "packaging": "упаковка, лента",
+    "name": "Белый шелк",
+    "size": "25*45",
+    "price": 4800
+  },
+  {
+    "images": ["/images/telegram-products/product_55_0.jpg", "/images/telegram-products/product_54_0.jpg"],
+    "description": "Воздушный и многослойный букет, собранный в мягкой розово-белой гамме. Ромашковая кустовая хризантема придаёт композиции лёгкость и свежесть, розовая кустовая роза и ранункулус — романтичное настроение, альстромерия и лизиантус добавляют утончённости, а оксипеталум и розовый хамелациум создают эффект изящных акцентов. Белая упаковка и лента подчёркивают чистоту и нежность образа. Идеальный выбор для трогательного подарка, свидания или искреннего знака внимания.",
+    "type": "Букет",
+    "composition": "Альстрмоерия 2, лизиантус 1, Роза кустовая 1, хризантема кустовая 2, сантинии 1, ранункулус 1, оксипеталум 1, хамелациум розовый 1",
+    "packaging": "упаковка, лента",
+    "name": "Первое свидание",
+    "size": "35*10",
+    "price": 5500
+  },
+  {
+    "images": ["/images/telegram-products/product_60_0.jpg", "/images/telegram-products/product_59_0.jpg", "/images/telegram-products/product_58_0.jpg", "/images/telegram-products/product_57_0.jpg", "/images/telegram-products/product_56_0.jpg"],
+    "description": "Очаровательная композиция в сумке с ручками на оазисе из ромашковых хризантем, кустового диантуса, ларгуса и солидаго. Лёгкая, свежая палитра создаёт настроение радости, уюта и тёплого внимания. Идеальный вариант для приятного сюрприза, комплимента или небольшого подарка без повода.",
+    "type": "Букет",
+    "composition": "Роза кустовая 1, хризантема одноголовая белая 1, зеленая хризантема одноголовая 1, альстромерия розовая 1, оксипеталум голубой 1, сантинии ромашковые 1, ларгус желтый 6",
+    "packaging": "упаковка",
+    "name": "«Солнечный комплимент»",
+    "size": "35*40",
+    "price": 3260
+  },
+  {
+    "images": ["/images/telegram-products/product_65_0.jpg", "/images/telegram-products/product_64_0.jpg", "/images/telegram-products/product_63_0.jpg", "/images/telegram-products/product_62_0.jpg", "/images/telegram-products/product_61_0.jpg"],
+    "description": "Элегантный букет из 4 пионовидных роз кустовых и 4 кустовых хризантем с добавлением эвкалипта, оформленный в стильную упаковку. Сочетание мягких оттенков и свежей зелени создаёт утончённый, гармоничный образ. Идеальный подарок для комплимента, небольшого праздника или стильного интерьерного акцента.",
+    "type": "Букет",
+    "composition": "Хризантема кустовая 3, эвкалипт 2, Роза куст пионовидная 4",
+    "packaging": "упаковка, лента",
+    "name": "Пионовая гармония",
+    "size": "30*45",
+    "price": 6300
+  },
+  {
+    "images": ["/images/telegram-products/product_71_0.jpg", "/images/telegram-products/product_70_0.jpg", "/images/telegram-products/product_69_0.jpg", "/images/telegram-products/product_68_0.jpg", "/images/telegram-products/product_67_0.jpg", "/images/telegram-products/product_66_0.jpg"],
+    "description": "Воздушная композиция в белой шляпной коробке с лентой и транспортировочной упаковкой. Белый лизиантус и альстромерия в сочетании с рускусом создают лёгкий, свежий и элегантный образ. Идеальный подарок для деликатного комплимента, поздравления или стильного интерьерного акцента.",
+    "type": "Композиция",
+    "composition": "лизиантус белый 5, альстромерия 5, рускус 3",
+    "packaging": "Коробка шляпная, оазис, лента, транспортировочная упаковка",
+    "name": "«Белое облако»",
+    "size": "25*25",
+    "price": 6800
+  },
+  {
+    "images": ["/images/telegram-products/product_75_0.jpg", "/images/telegram-products/product_74_0.jpg", "/images/telegram-products/product_73_0.jpg", "/images/telegram-products/product_72_0.jpg"],
+    "description": "Объёмная композиция в шляпной коробке с лентой, собранная на оазисе. Антуриум, роза монстер и диантус создают экзотический акцент, лизиантус и гиперикум добавляют нежности, а писташ и питоспорум придают свежесть и объём. Элегантная коробка подчёркивает премиальный характер подарка и делает его эффектным для любого торжественного случая.",
+    "type": "Композиция",
+    "composition": "Антуриум 1, лизиантус 1, писташ 1, питтоспорум 3, роща эквадор 5",
+    "packaging": "коробка шляпная, упаковка, лента",
+    "name": "Экзотическая гармония",
+    "size": "30*30",
+    "price": 9600,
+    "tag": "#14февраля"
+  },
+  {
+    "images": ["/images/telegram-products/product_78_0.jpg", "/images/telegram-products/product_77_0.jpg", "/images/telegram-products/product_76_0.jpg"],
+    "description": "Изысканный букет из 15 белых роз, собранный с минималистичной лентой. Чистота оттенков и элегантная форма делают этот букет универсальным подарком для романтического жеста, юбилея или любого особого события. Идеальный выбор для ценителей утончённой красоты.",
+    "type": "Букет",
+    "composition": "Роза белая 15",
+    "packaging": "лента",
+    "name": "«Чистая классика»",
+    "size": "60*25",
+    "price": 7700,
+    "tag": "#14февраля"
+  },
+  {
+    "images": ["/images/telegram-products/product_83_0.jpg", "/images/telegram-products/product_82_0.jpg", "/images/telegram-products/product_81_0.jpg", "/images/telegram-products/product_80_0.jpg", "/images/telegram-products/product_79_0.jpg"],
+    "description": "Очаровательный букет из 7 белых французских роз и 2 веточек эвкалипта, оформленный в красную и белую бумагу с сердечками и лентой. Идеальный выбор для признания в любви, романтического комплимента или особого повода. Элегантность белых роз в сочетании с яркой упаковкой создаёт атмосферу нежности и тепла.",
+    "type": "Букет",
+    "composition": "Французская Роза белая 7, эвкалипт 2",
+    "packaging": "Упаковка",
+    "name": "«Сердечная нежность»",
+    "size": "35*50",
+    "price": 4100,
+    "tag": "#14февраля"
+  },
+  {
+    "images": ["/images/telegram-products/product_87_0.jpg", "/images/telegram-products/product_86_0.jpg", "/images/telegram-products/product_85_0.jpg", "/images/telegram-products/product_84_0.jpg"],
+    "description": "Красивый микс из 6 малиновых и 5 белых роз с акцентом на свежий писташ, оформленный в белую бумагу с сердцами и матовую прозрачную упаковку с лентой. Контраст цветов создаёт насыщенный и романтичный образ. Идеальный подарок для признания в любви, юбилея или особого случая, когда хочется подчеркнуть эмоции и чувства.",
+    "type": "Букет",
+    "composition": "Роза малиновая 6, Роза белая 5, писташ 2",
+    "packaging": "упаковка бумага белая с сердцами, матовая прозрачная упаковка, лента",
+    "name": "«Малиново-белая страсть»",
+    "size": "35*50",
+    "price": 4650,
+    "tag": "#14февраля"
+  },
+  {
+    "images": ["/images/telegram-products/product_91_0.jpg", "/images/telegram-products/product_90_0.jpg", "/images/telegram-products/product_89_0.jpg", "/images/telegram-products/product_88_0.jpg", "/images/telegram-products/product_95_0.jpg", "/images/telegram-products/product_94_0.jpg", "/images/telegram-products/product_93_0.jpg", "/images/telegram-products/product_92_0.jpg", "/images/telegram-products/product_103_0.jpg", "/images/telegram-products/product_102_0.jpg", "/images/telegram-products/product_101_0.jpg", "/images/telegram-products/product_100_0.jpg", "/images/telegram-products/product_99_0.jpg", "/images/telegram-products/product_98_0.jpg", "/images/telegram-products/product_97_0.jpg", "/images/telegram-products/product_96_0.jpg", "/images/telegram-products/product_109_0.jpg", "/images/telegram-products/product_108_0.jpg", "/images/telegram-products/product_107_0.jpg", "/images/telegram-products/product_106_0.jpg", "/images/telegram-products/product_114_0.jpg", "/images/telegram-products/product_113_0.jpg", "/images/telegram-products/product_112_0.jpg", "/images/telegram-products/product_111_0.jpg"],
+    "description": "Очаровательный букет из роз сорта «Кантриблюз», собранный с элегантной лентой. Нежные оттенки и лаконичная форма создают романтичный и утончённый образ. Идеальный подарок для комплимента, признания в чувствах или небольшого знака внимания.",
+    "type": "Букет",
+    "composition": "Роза кантри блюз",
+    "packaging": "Лента",
+    "name": "Розовая мелодия",
+    "variants": [
+      { "size": "15*60", "price": 4950, "flowers": 7 },
+      { "size": "15*60", "price": 6700, "flowers": 9 },
+      { "size": "20*60", "price": 7800, "flowers": 11 },
+      { "size": "30*60", "price": 10500, "flowers": 15 },
+      { "size": "30*60", "price": 14500, "flowers": 21 }
+    ]
+  },
+  {
+    "images": ["/images/telegram-products/product_110_0.jpg"],
+    "description": "Букет из пионовидных кустовых роз с добавлением эвкалипта — про естественную нежность и утончённый стиль. Крафтовая упаковка подчёркивает природную красоту цветов, а лента аккуратно завершает образ. Идеальный выбор для искреннего подарка, который говорит о чувствах без лишних слов.",
+    "type": "Букет",
+    "composition": "Эвкалипт 2, Роза кустовая пионовидная 15",
+    "packaging": "упаковка, лента",
+    "name": "Нежное настроение",
+    "size": "45*50",
+    "price": 13950
+  },
+  {
+    "images": ["/images/telegram-products/product_118_0.jpg", "/images/telegram-products/product_117_0.jpg", "/images/telegram-products/product_116_0.jpg"],
+    "description": "Роскошный букет из 21 розы сорта Red Monster, собранный с лаконичной лентой. Глубокий насыщенный оттенок и крупные бутоны создают яркий, страстный и премиальный образ. Идеальный выбор для признания в любви, эффектного комплимента и особых моментов, которые хочется подчеркнуть.",
+    "type": "Букет",
+    "composition": "Роза red monster 21",
+    "packaging": "Упаковка, лента",
+    "name": "Красный бархат",
+    "size": "30*60",
+    "price": 14500,
+    "tag": "#14февраля"
+  }
+]

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { mockProducts } from "@/lib/mock-products"
+import { useProductsContext } from "@/components/products-provider"
 
 const RECENTS_KEY = "cvetochek-recent-searches"
 
@@ -62,9 +62,11 @@ export function SearchDropdown() {
 
   const normalized = query.trim().toLowerCase()
 
+  const { products } = useProductsContext()
+
   const results = useMemo(() => {
     if (!normalized) return []
-    return mockProducts
+    return products
       .filter((p) => p.name.toLowerCase().includes(normalized))
       .slice(0, 12)
       .map((p) => ({
@@ -75,7 +77,7 @@ export function SearchDropdown() {
         originalPrice: p.originalPrice,
         category: p.category?.name,
       }))
-  }, [normalized])
+  }, [normalized, products])
 
   const commitQuery = (value: string) => {
     const v = value.trim()
