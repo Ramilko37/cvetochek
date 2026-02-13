@@ -119,21 +119,22 @@ async function main() {
     console.log(`TELEGRAM_SESSION=${session}\n`)
   }
 
-  // Сегодня с 19:15 (локальное время)
+  // Сегодня с 21:40 до 22:10 (локальное время)
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const cutoff = new Date(today.getTime() + 19 * 60 * 60 * 1000 + 15 * 60 * 1000)
+  const cutoff = new Date(today.getTime() + 21 * 60 * 60 * 1000 + 40 * 60 * 1000)
+  const maxCutoff = new Date(today.getTime() + 22 * 60 * 60 * 1000 + 10 * 60 * 1000)
   const cutoffTs = Math.floor(cutoff.getTime() / 1000)
-  const maxTs = Math.floor(now.getTime() / 1000)
+  const maxCutoffTs = Math.floor(maxCutoff.getTime() / 1000)
 
-  console.log(`Получение сообщений с фото (сегодня с 19:15 до сейчас)...`)
+  console.log(`Получение сообщений с фото (сегодня с 21:40 до 22:10)...`)
   const messages = []
   for await (const msg of client.iterMessages(entity, {
     filter: Api.InputMessagesFilterPhotos,
   })) {
     const ts = msg.date || 0
     if (ts < cutoffTs) break
-    if (ts <= maxTs && msg.media) messages.push(msg)
+    if (ts <= maxCutoffTs && msg.media) messages.push(msg)
   }
 
   // Группируем по grouped_id (альбомы из нескольких фото)
