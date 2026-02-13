@@ -7,7 +7,7 @@ import type { QuickOrderProduct } from "@/components/quick-order-dialog"
 import type { TelegramProduct } from "@/lib/telegram-products"
 
 interface ValentinesDayGridProps {
-  products: TelegramProduct[]
+  products: { product: TelegramProduct; index: number }[]
 }
 
 export function ValentinesDayGrid({ products }: ValentinesDayGridProps) {
@@ -22,7 +22,7 @@ export function ValentinesDayGrid({ products }: ValentinesDayGridProps) {
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {products.map((product, index) => (
+        {products.map(({ product, index }) => (
           <ValentineProductCard
             key={index}
             product={product}

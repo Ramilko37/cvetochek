@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { Filter, Search, X } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import {
@@ -111,8 +111,18 @@ function getValidOccasionSlugsFromUrl(
   return slugs.filter((slug) => occasions.some((o) => o.slug === slug))
 }
 
+function buildCatalogSearchParams(filters: CatalogFiltersState): string {
+  const params = new URLSearchParams()
+  filters.categorySlugs.forEach((s) => params.append("category", s))
+  filters.occasionSlugs.forEach((s) => params.append("occasion", s))
+  const q = params.toString()
+  return q ? `?${q}` : ""
+}
+
 export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const isMobile = useIsMobile()
   const { addItem, openCart } = useCart()
   const [search, setSearch] = useState("")
@@ -200,9 +210,16 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     setPage(1)
   }
 
+  const syncFiltersToUrl = (next: CatalogFiltersState) => {
+    const query = buildCatalogSearchParams(next)
+    router.replace(`${pathname}${query}`)
+  }
+
   const resetFilters = () => {
-    setFilters(defaultFilters(facets))
+    const next = defaultFilters(facets)
+    setFilters(next)
     setPage(1)
+    syncFiltersToUrl(next)
   }
 
   const filtersPanel = (
@@ -212,6 +229,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
       onFiltersChange={(next: CatalogFiltersState) => {
         setFilters(next)
         setPage(1)
+        syncFiltersToUrl(next)
       }}
     />
   )
@@ -320,12 +338,15 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     <button
                       type="button"
                       aria-label="Убрать фильтр"
-                      onClick={() =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          categorySlugs: prev.categorySlugs.filter((s) => s !== slug),
-                        }))
-                      }
+                      onClick={() => {
+                        const next = {
+                          ...filters,
+                          categorySlugs: filters.categorySlugs.filter((s) => s !== slug),
+                        }
+                        setFilters(next)
+                        setPage(1)
+                        syncFiltersToUrl(next)
+                      }}
                       className="hover:text-foreground"
                     >
                       <X className="h-3.5 w-3.5" />
@@ -344,12 +365,15 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     <button
                       type="button"
                       aria-label="Убрать фильтр"
-                      onClick={() =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          occasionSlugs: prev.occasionSlugs.filter((s) => s !== slug),
-                        }))
-                      }
+                      onClick={() => {
+                        const next = {
+                          ...filters,
+                          occasionSlugs: filters.occasionSlugs.filter((s) => s !== slug),
+                        }
+                        setFilters(next)
+                        setPage(1)
+                        syncFiltersToUrl(next)
+                      }}
                       className="hover:text-foreground"
                     >
                       <X className="h-3.5 w-3.5" />

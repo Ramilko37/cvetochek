@@ -15,6 +15,8 @@ export interface RawProduct {
   price?: number
   /** Варианты (объединённые букеты с разным кол-вом цветов) */
   variants?: RawProductVariant[]
+  /** Тег (напр. #14февраля) для категорий и фильтров */
+  tag?: string
 }
 
 export interface TelegramProductSize {
@@ -33,6 +35,8 @@ export interface TelegramProduct {
   price?: number
   /** Варианты размера (кол-во роз и т.п.) */
   sizes?: TelegramProductSize[]
+  /** Тег (напр. #14февраля) для категорий и фильтров */
+  tag?: string
 }
 
 /** Извлекает цену из текста (первое число в диапазоне 1000–200000) */
@@ -85,6 +89,7 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
           name: item.name ?? parseName(description),
           price: Math.min(...sizes.map((s) => s.price)),
           sizes,
+          ...(item.tag && { tag: item.tag }),
         }
       }
 
@@ -95,6 +100,7 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
           description,
           name: item.name ?? parseName(description),
           price: item.price,
+          ...(item.tag && { tag: item.tag }),
         }
       }
 
@@ -106,6 +112,7 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
         description,
         name,
         price,
+        ...(item.tag && { tag: item.tag }),
       }
     })
   } catch {

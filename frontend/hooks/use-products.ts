@@ -72,6 +72,8 @@ const DEFAULT_CATEGORY = { name: "Букеты", slug: "bouquets" }
 function telegramToProduct(tg: TelegramProduct, index: number): Product {
   const slug = `tg-${index}`
   const price = tg.sizes?.[0]?.price ?? tg.price ?? 0
+  const occasions: string[] = ["birthday", "just-because"]
+  if (tg.tag === "#14февраля") occasions.push("valentines-day")
   return {
     id: slug,
     slug,
@@ -91,7 +93,7 @@ function telegramToProduct(tg: TelegramProduct, index: number): Product {
     composition: DEFAULT_COMPOSITION,
     delivery: DEFAULT_DELIVERY,
     careInstructions: DEFAULT_CARE,
-    occasions: ["valentines-day", "birthday", "just-because"],
+    occasions,
   }
 }
 

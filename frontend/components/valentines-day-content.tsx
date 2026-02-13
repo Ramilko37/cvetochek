@@ -21,7 +21,11 @@ export function ValentinesDayContent() {
     )
   }
 
-  if (error || products.length === 0) {
+  const valentinesProducts = products
+    .map((p, index) => ({ product: p, index }))
+    .filter(({ product }) => product.tag === "#14февраля")
+
+  if (error || valentinesProducts.length === 0) {
     return (
       <div className="py-16 text-center text-muted-foreground">
         <p>Товары скоро появятся. Следите за обновлениями в нашем Telegram.</p>
@@ -32,5 +36,5 @@ export function ValentinesDayContent() {
     )
   }
 
-  return <ValentinesDayGrid products={products} />
+  return <ValentinesDayGrid products={valentinesProducts} />
 }
