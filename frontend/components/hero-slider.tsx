@@ -98,11 +98,11 @@ export function HeroSlider() {
         </div>
       ))}
 
-      {/* Navigation arrows */}
+      {/* Navigation arrows — на мобилке внизу, над точками, чтобы не перекрывать контент */}
       <button
         type="button"
         onClick={prevSlide}
-        className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+        className="absolute left-6 bottom-8 md:bottom-auto md:top-1/2 md:-translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
         aria-label="Предыдущий слайд"
       >
         <ChevronLeft className="h-6 w-6" />
@@ -110,7 +110,7 @@ export function HeroSlider() {
       <button
         type="button"
         onClick={nextSlide}
-        className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+        className="absolute right-6 bottom-8 md:bottom-auto md:top-1/2 md:-translate-y-1/2 w-12 h-12 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/10 transition-colors"
         aria-label="Следующий слайд"
       >
         <ChevronRight className="h-6 w-6" />
