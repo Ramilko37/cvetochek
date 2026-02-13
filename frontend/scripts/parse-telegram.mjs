@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Выгружает товары (фото + описание) из Telegram-чата или канала.
- * Берёт сообщения с фото за сегодня, начиная с 19:10.
+ * Берёт сообщения с фото за сегодня, начиная с 19:15.
+ * ДОПОЛНЯЕТ существующие данные — не перезатирает.
  *
  * Требуется:
  * 1. API ключи с https://my.telegram.org (API development tools)
@@ -57,6 +58,25 @@ const hasEntity = chatIdRaw || channel
 
 const outputDir = path.join(root, "public", "images", "telegram-products")
 const productsPath = path.join(outputDir, "products.json")
+function loadExistingProducts() {
+  try {
+    const raw = fs.readFileSync(productsPath, "utf8")
+    return JSON.parse(raw)
+  } catch {
+    return []
+  }
+}
+
+function getMaxProductIndex(products) {
+  let max = -1
+  for (const p of products) {
+    for (const img of p.images || []) {
+      const m = img.match(/product_(\d+)_\d+\.jpg/)
+      if (m) max = Math.max(max, parseInt(m[1], 10))
+    }
+  }
+  return max
+}
 
 if (!apiId || !apiHash || !hasEntity) {
   console.error(`
@@ -99,14 +119,14 @@ async function main() {
     console.log(`TELEGRAM_SESSION=${session}\n`)
   }
 
-  // Сегодня с 19:10 (локальное время)
+  // Сегодня с 19:15 (локальное время)
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const cutoff = new Date(today.getTime() + 19 * 60 * 60 * 1000 + 10 * 60 * 1000)
+  const cutoff = new Date(today.getTime() + 19 * 60 * 60 * 1000 + 15 * 60 * 1000)
   const cutoffTs = Math.floor(cutoff.getTime() / 1000)
   const maxTs = Math.floor(now.getTime() / 1000)
 
-  console.log(`Получение сообщений с фото (сегодня с 19:10 до сейчас)...`)
+  console.log(`Получение сообщений с фото (сегодня с 19:15 до сейчас)...`)
   const messages = []
   for await (const msg of client.iterMessages(entity, {
     filter: Api.InputMessagesFilterPhotos,
@@ -127,13 +147,34 @@ async function main() {
 
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true })
 
-  const products = []
-  let idx = 0
+  const existingProducts = loadExistingProducts()
+  const processedIds = new Set(
+    existingProducts.flatMap((p) => (p.telegramMessageId != null ? [String(p.telegramMessageId)] : []))
+  )
+  const existingDescriptions = new Set(
+    existingProducts
+      .filter((p) => p.description && p.description.trim())
+      .map((p) => p.description.trim())
+  )
+  const maxIdx = getMaxProductIndex(existingProducts)
+  let idx = maxIdx + 1
+  const newProducts = []
+  let skipped = 0
 
   for (const [gid, msgs] of groups) {
     msgs.sort((a, b) => (a.id || 0) - (b.id || 0))
     const first = msgs[0]
+    const firstId = first?.id ?? first?.groupedId ?? gid
+    const idKey = String(firstId)
+    if (processedIds.has(idKey)) {
+      skipped++
+      continue
+    }
     const description = (first.text ?? first.message ?? "").trim()
+    if (description && existingDescriptions.has(description)) {
+      skipped++
+      continue
+    }
     const images = []
 
     for (let i = 0; i < msgs.length; i++) {
@@ -153,16 +194,21 @@ async function main() {
     }
 
     if (images.length > 0) {
-      products.push({
+      newProducts.push({
         images,
         description,
+        telegramMessageId: first.id ?? firstId,
       })
+      processedIds.add(idKey)
       idx++
     }
   }
 
-  fs.writeFileSync(productsPath, JSON.stringify(products, null, 2), "utf8")
-  console.log(`\nГотово! Выгружено товаров: ${products.length}`)
+  const allProducts = [...existingProducts, ...newProducts]
+  fs.writeFileSync(productsPath, JSON.stringify(allProducts, null, 2), "utf8")
+
+  console.log(`\nГотово! Добавлено товаров: ${newProducts.length}, всего: ${allProducts.length}`)
+  if (skipped > 0) console.log(`Пропущено (уже в базе): ${skipped}`)
   console.log(`Данные: ${productsPath}`)
   console.log(`Фото: ${outputDir}`)
 
