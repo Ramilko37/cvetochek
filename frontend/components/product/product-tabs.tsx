@@ -10,28 +10,28 @@ interface ProductTabsProps {
 export function ProductTabs({ product }: ProductTabsProps) {
   return (
     <Tabs defaultValue="description" className="w-full">
-      <TabsList className="w-full justify-start rounded-2xl bg-secondary/80 border border-border p-2 h-auto flex-wrap gap-2 min-h-12">
+      <TabsList className="w-full justify-start rounded-2xl bg-secondary/80 border border-border p-2.5 h-auto flex-nowrap gap-2 min-h-[52px] overflow-x-auto overflow-y-visible scrollbar-hide items-stretch">
         <TabsTrigger
           value="description"
-          className="rounded-xl px-5 py-2.5 text-base font-medium transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+          className="rounded-xl px-5 py-2.5 text-base font-medium whitespace-nowrap transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm shrink-0 leading-normal"
         >
           Описание
         </TabsTrigger>
         <TabsTrigger
           value="composition"
-          className="rounded-xl px-5 py-2.5 text-base font-medium transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+          className="rounded-xl px-5 py-2.5 text-base font-medium whitespace-nowrap leading-normal transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm shrink-0"
         >
           Состав
         </TabsTrigger>
         <TabsTrigger
           value="delivery"
-          className="rounded-xl px-5 py-2.5 text-base font-medium transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+          className="rounded-xl px-5 py-2.5 text-base font-medium whitespace-nowrap leading-normal transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm shrink-0"
         >
           Доставка
         </TabsTrigger>
         <TabsTrigger
           value="care"
-          className="rounded-xl px-5 py-2.5 text-base font-medium transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+          className="rounded-xl px-5 py-2.5 text-base font-medium whitespace-nowrap leading-normal transition-all duration-300 ease-out data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm shrink-0"
         >
           Уход
         </TabsTrigger>

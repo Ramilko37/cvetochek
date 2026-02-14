@@ -12,7 +12,7 @@ export default function ValentinesDayPage() {
   return (
     <main className="min-h-screen bg-background">
       <ScrollToProduct />
-      <section className="pt-14 lg:pt-[140px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-24 lg:pt-[132px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="mb-10">
           <h1 className="font-serif text-3xl md:text-4xl text-foreground text-balance">
             День всех влюблённых

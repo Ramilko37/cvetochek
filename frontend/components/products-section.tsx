@@ -58,7 +58,7 @@ export function ProductsSection() {
   }
 
   return (
-    <section className="py-12 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-12 px-5 md:px-7 lg:px-10 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         {/* Tabs */}
         <div className="flex gap-1 p-1 bg-muted rounded-full w-fit">

@@ -32,7 +32,7 @@ import { cn, getImagePath } from "@/lib/utils"
 const navigation = [
   { name: "Все товары", href: "/catalog" },
   { name: "Новинки", href: "/new" },
-  { name: "Индив. заказ", href: "/custom-order" },
+  { name: "Индивидуальный заказ", href: "/custom-order" },
   { name: "Подписка", href: "/subscription" },
 ]
 
@@ -127,7 +127,7 @@ function MegaMenuLink({ title, href, description }: MegaLink) {
             "hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
           )}
         >
-          <span className="text-base font-medium text-foreground group-hover:text-foreground">
+          <span className="text-base font-medium text-foreground group-hover:text-foreground whitespace-nowrap">
             {title}
           </span>
           {description ? (
@@ -393,8 +393,9 @@ export function Header() {
             />
           </Link>
 
-          {/* Иконки справа на мобильном: пользователь и корзина */}
+          {/* Иконки справа на мобильном: поиск, пользователь, корзина */}
           <div className="flex lg:hidden items-center gap-1 shrink-0">
+            <SearchDropdown />
             <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
               <User className="h-5 w-5" />
             </Button>
@@ -451,7 +452,7 @@ export function Header() {
                     <div className="grid grid-cols-4 gap-6 p-6">
                       {megaCatalog.map((section) => (
                         <div key={section.title} className="min-w-0">
-                          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 pl-3">
+                          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 pl-3 whitespace-nowrap">
                             {section.title}
                           </p>
                           <ul className="space-y-1">
@@ -519,14 +520,14 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap shrink-0"
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* Поиск — выпадашка с полосками карточек товаров */}
+          {/* Поиск — выпадашка с полосками карточек товаров (на мобилке уже в правом блоке иконок) */}
           <div className="hidden lg:flex lg:items-center">
             <SearchDropdown />
           </div>

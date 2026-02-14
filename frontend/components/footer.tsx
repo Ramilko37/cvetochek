@@ -21,7 +21,7 @@ const footerLinks = {
     { name: "Корпоративным клиентам", href: "/corporate" },
     { name: "Возврат", href: "/return" },
   ],
-  "Флористика и уход": [
+  "Вопрос-ответ": [
     { name: "Инструкция по свежести", href: "/care" },
     { name: "Юр. информация", href: "/legal" },
     { name: "Публичная оферта", href: "/offer" },
@@ -51,7 +51,7 @@ export function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors break-all"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors break-words"
                     >
                       {link.name}
                     </Link>

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useProductsContext } from "@/components/products-provider"
+import { productMatchesSearch } from "@/lib/search-products"
 
 const RECENTS_KEY = "cvetochek-recent-searches"
 
@@ -67,7 +68,7 @@ export function SearchDropdown() {
   const results = useMemo(() => {
     if (!normalized) return []
     return products
-      .filter((p) => p.name.toLowerCase().includes(normalized))
+      .filter((p) => productMatchesSearch(p, normalized))
       .slice(0, 12)
       .map((p) => ({
         slug: p.slug,
@@ -114,7 +115,7 @@ export function SearchDropdown() {
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[min(calc(100vw-2rem),420px)] p-0 rounded-2xl border border-border/60 bg-background shadow-xl"
+        className="max-sm:w-[100dvw] max-sm:!left-0 max-sm:!translate-x-0 max-sm:rounded-none max-sm:rounded-b-2xl sm:w-[min(calc(100vw-2rem),420px)] p-0 rounded-2xl border border-border/60 bg-background shadow-xl"
       >
         <div className="p-3 border-b border-border/50">
           <div className="relative">
@@ -123,7 +124,7 @@ export function SearchDropdown() {
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Название букета, категория..."
+              placeholder="Букет, цветы (розы, тюльпаны...)..."
               className="h-10 rounded-full pl-10 pr-10 text-sm"
               aria-label="Поиск"
             />
@@ -155,7 +156,7 @@ export function SearchDropdown() {
                         type="button"
                         variant="outline"
                         size="sm"
-                        className="rounded-full h-8 text-xs"
+                        className="rounded-full h-8 text-xs whitespace-nowrap shrink-0"
                         onClick={() => setQuery(q)}
                       >
                         {q}
@@ -170,12 +171,12 @@ export function SearchDropdown() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {POPULAR_QUERIES.map((q) => (
-                    <Button
-                      key={q}
-                      type="button"
-                      variant="secondary"
-                      size="sm"
-                      className="rounded-full h-8 text-xs bg-muted hover:bg-accent"
+<Button
+                    key={q}
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-full h-8 text-xs bg-muted hover:bg-accent whitespace-nowrap shrink-0"
                       onClick={() => setQuery(q)}
                     >
                       {q}

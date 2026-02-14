@@ -25,7 +25,7 @@ const benefits = [
 
 export function Benefits() {
   return (
-    <section className="py-12 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-12 px-5 md:px-7 lg:px-10 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground">
           Наши преимущества

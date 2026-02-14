@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { notFound } from "next/navigation"
+import { notFound, useRouter } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   ProductBreadcrumbs,
   ProductGallery,
@@ -16,6 +18,7 @@ interface ProductPageClientProps {
 }
 
 export function ProductPageClient({ slug }: ProductPageClientProps) {
+  const router = useRouter()
   const { products, isLoading, error } = useProductsContext()
 
   useEffect(() => {
@@ -63,6 +66,16 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
     <main className="min-h-screen bg-background">
       <div className="pt-14 lg:pt-[104px]">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-4 hover:bg-transparent text-muted-foreground hover:text-foreground"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Назад
+          </Button>
+
           <ProductBreadcrumbs product={product} />
 
           <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

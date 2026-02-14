@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
-import { Filter, Search, X } from "lucide-react"
+import { Filter, Search, SearchX, X } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import {
   QuickOrderDialog,
@@ -16,6 +16,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { productMatchesSearch } from "@/lib/search-products"
 import { Input } from "@/components/ui/input"
 import {
   Pagination,
@@ -111,10 +112,48 @@ function getValidOccasionSlugsFromUrl(
   return slugs.filter((slug) => occasions.some((o) => o.slug === slug))
 }
 
-function buildCatalogSearchParams(filters: CatalogFiltersState): string {
+function getEmptyStateMessage(
+  filters: CatalogFiltersState,
+  facets: ReturnType<typeof extractFacets>
+): { title: string; description: string } {
+  const hasOccasion = filters.occasionSlugs.length > 0
+  const hasCategory = filters.categorySlugs.length > 0
+  if (hasOccasion && filters.occasionSlugs.length === 1) {
+    const occ = facets.occasions.find((o) => o.slug === filters.occasionSlugs[0])
+    const name = occ?.name ?? ""
+    // Форма «свадебных нет» для поводов
+    const shortTitle =
+      occ?.slug === "wedding"
+        ? "Свадебных нет"
+        : occ?.slug === "birthday"
+          ? "Ко Дню рождения нет"
+          : occ?.slug === "march-8"
+            ? "К 8 марта нет"
+            : `${name} нет`
+    return {
+      title: shortTitle,
+      description: "Но могут подойти другие варианты:",
+    }
+  }
+  if (hasCategory && filters.categorySlugs.length === 1) {
+    const cat = facets.categories.find((c) => c.slug === filters.categorySlugs[0])
+    const name = cat?.name ?? ""
+    return {
+      title: `В категории «${name}» ничего не найдено`,
+      description: "Но могут подойти другие варианты:",
+    }
+  }
+  return {
+    title: "По вашему запросу ничего не найдено",
+    description: "Но могут подойти другие варианты:",
+  }
+}
+
+function buildCatalogSearchParams(filters: CatalogFiltersState, page = 1): string {
   const params = new URLSearchParams()
   filters.categorySlugs.forEach((s) => params.append("category", s))
   filters.occasionSlugs.forEach((s) => params.append("occasion", s))
+  if (page > 1) params.set("page", String(page))
   const q = params.toString()
   return q ? `?${q}` : ""
 }
@@ -129,7 +168,6 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
   const [quickOrderProduct, setQuickOrderProduct] = useState<QuickOrderProduct | null>(null)
   const [quickOrderOpen, setQuickOrderOpen] = useState(false)
   const [sort, setSort] = useState<string>("default")
-  const [page, setPage] = useState(1)
   const facets = useMemo(() => extractFacets(products), [products])
   const categorySlugsFromUrl = useMemo(
     () => getValidCategorySlugsFromUrl(searchParams, facets.categories),
@@ -139,6 +177,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     () => getValidOccasionSlugsFromUrl(searchParams, facets.occasions),
     [searchParams, facets.occasions]
   )
+  const pageFromUrl = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1)
   const [filters, setFilters] = useState<CatalogFiltersState>(() => {
     const f = extractFacets(products)
     const base = defaultFilters(f)
@@ -150,6 +189,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
       occasionSlugs: occValid.length > 0 ? occValid : base.occasionSlugs,
     }
   })
+  const [page, setPage] = useState(pageFromUrl)
 
   // Синхронизация фильтров при изменении URL (клиентская навигация)
   useEffect(() => {
@@ -159,7 +199,15 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
       occasionSlugs: occasionSlugsFromUrl,
     }))
     setPage(1)
+    const merged = { ...filters, categorySlugs: categorySlugsFromUrl, occasionSlugs: occasionSlugsFromUrl }
+    router.replace(`${pathname}${buildCatalogSearchParams(merged as CatalogFiltersState, 1)}`)
   }, [categorySlugsFromUrl.join(","), occasionSlugsFromUrl.join(",")])
+
+  // Синхронизация страницы из URL (возврат по кнопке «Назад»)
+  useEffect(() => {
+    const p = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1)
+    setPage(p)
+  }, [searchParams])
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
@@ -176,10 +224,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
         if (!hasFlower) return false
       }
       if (search.trim()) {
-        const q = search.trim().toLowerCase()
-        const matchName = p.name.toLowerCase().includes(q)
-        const matchFlowers = p.composition.flowers.some((f) => f.toLowerCase().includes(q))
-        if (!matchName && !matchFlowers) return false
+        if (!productMatchesSearch(p, search.trim())) return false
       }
       return true
     })
@@ -194,6 +239,28 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     const start = (page - 1) * ITEMS_PER_PAGE
     return filtered.slice(start, start + ITEMS_PER_PAGE)
   }, [filtered, page])
+
+  // Альтернативы — когда нет результатов по фильтру: показываем другие букеты без строгих фильтров
+  const alternatives = useMemo(() => {
+    if (filtered.length > 0) return []
+    if (products.length === 0) return []
+    // Убираем occasion и category, оставляем цену и цветы — показываем «другие варианты»
+    let list = products.filter((p) => {
+      if (p.price < filters.priceMin || p.price > filters.priceMax) return false
+      if (filters.flowerNames.length) {
+        const hasFlower = p.composition.flowers.some((f) => filters.flowerNames.includes(f))
+        if (!hasFlower) return false
+      }
+      if (search.trim()) {
+        if (!productMatchesSearch(p, search.trim())) return false
+      }
+      return true
+    })
+    if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price)
+    else if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price)
+    else if (sort === "name-asc") list = [...list].sort((a, b) => a.name.localeCompare(b.name))
+    return list.slice(0, ITEMS_PER_PAGE)
+  }, [products, filters, search, sort, filtered.length])
 
   const hasActiveFilters =
     filters.categorySlugs.length > 0 ||
@@ -210,10 +277,25 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     setPage(1)
   }
 
-  const syncFiltersToUrl = (next: CatalogFiltersState) => {
-    const query = buildCatalogSearchParams(next)
+  const syncFiltersToUrl = (next: CatalogFiltersState, pageNum = 1) => {
+    const query = buildCatalogSearchParams(next, pageNum)
     router.replace(`${pathname}${query}`)
   }
+
+  const goToPage = (p: number) => {
+    const clamped = Math.max(1, Math.min(p, totalPages))
+    setPage(clamped)
+    syncFiltersToUrl(filters, clamped)
+  }
+
+  // Ограничить страницу, если в URL указана несуществующая (после смены фильтров)
+  useEffect(() => {
+    if (page > totalPages && totalPages >= 1) {
+      const clamped = totalPages
+      setPage(clamped)
+      syncFiltersToUrl(filters, clamped)
+    }
+  }, [totalPages, page])
 
   const resetFilters = () => {
     const next = defaultFilters(facets)
@@ -294,7 +376,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                       <Filter className="h-4 w-4" />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-[280px] overflow-y-auto">
+                  <SheetContent side="left" className="w-[85vw] sm:max-w-sm overflow-y-auto p-6">
                     <h2 className="font-serif text-lg text-foreground mb-4">Фильтры</h2>
                     {filtersPanel}
                   </SheetContent>
@@ -332,7 +414,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                 return (
                   <span
                     key={`cat-${slug}`}
-                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0 whitespace-nowrap"
                   >
                     {cat?.name ?? slug}
                     <button
@@ -359,7 +441,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                 return (
                   <span
                     key={`occ-${slug}`}
-                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                    className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0 whitespace-nowrap"
                   >
                     {occ?.name ?? slug}
                     <button
@@ -384,7 +466,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
               {filters.flowerNames.map((name) => (
                 <span
                   key={name}
-                  className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0"
+                  className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm shrink-0 whitespace-nowrap"
                 >
                   {name}
                   <button
@@ -428,22 +510,64 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
             </div>
           </div>
 
-          {/* Сетка или пустое состояние */}
+          {/* Сетка или пустое состояние с альтернативами */}
           {paginated.length === 0 ? (
-            <Empty className="border-0 py-12">
-              <EmptyHeader>
-                <EmptyMedia variant="icon" />
-                <EmptyTitle>Ничего не найдено</EmptyTitle>
-                <EmptyDescription>
-                  Попробуйте изменить фильтры или поисковый запрос.
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button variant="outline" className="rounded-full" onClick={resetFilters}>
-                  Сбросить фильтры
-                </Button>
-              </EmptyContent>
-            </Empty>
+            <div className="space-y-8">
+              <Empty className="border-0 py-8">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                  <SearchX className="size-6" />
+                </EmptyMedia>
+                  <EmptyTitle>
+                    {hasActiveFilters ? getEmptyStateMessage(filters, facets).title : "Ничего не найдено"}
+                  </EmptyTitle>
+                  <EmptyDescription>
+                    {hasActiveFilters
+                      ? getEmptyStateMessage(filters, facets).description
+                      : "Попробуйте изменить фильтры или поисковый запрос."}
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Button variant="outline" className="rounded-full" onClick={resetFilters}>
+                    Сбросить фильтры
+                  </Button>
+                </EmptyContent>
+              </Empty>
+
+              {/* Альтернативные варианты — показываем, когда есть активные фильтры и есть что показать */}
+              {alternatives.length > 0 && (
+                <>
+                  <h2 className="font-serif text-xl text-foreground">Другие варианты</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    {alternatives.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        slug={product.slug}
+                        name={product.name}
+                        price={product.price}
+                        originalPrice={product.originalPrice}
+                        image={product.images[0] ?? "/placeholder.svg"}
+                        flowers={product.composition.flowers.join(", ")}
+                        tag={
+                          product.originalPrice != null && product.originalPrice > product.price
+                            ? "sale"
+                            : undefined
+                        }
+                        href={`/item/${product.slug}`}
+                        onAddToCart={({ slug, name, price, image }) => {
+                          addItem({ slug, name, price, image })
+                          openCart()
+                        }}
+                        onQuickOrder={(payload) => {
+                          setQuickOrderProduct(payload)
+                          setQuickOrderOpen(true)
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
@@ -481,10 +605,10 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     <PaginationContent>
                       <PaginationItem>
                         <PaginationPrevious
-                          href="#"
+                          href={page > 1 ? `${pathname}${buildCatalogSearchParams(filters, page - 1)}` : "#"}
                           onClick={(e) => {
                             e.preventDefault()
-                            if (page > 1) setPage(page - 1)
+                            if (page > 1) goToPage(page - 1)
                           }}
                           className={cn(page <= 1 && "pointer-events-none opacity-50")}
                         />
@@ -492,10 +616,10 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                       {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                         <PaginationItem key={p}>
                           <PaginationLink
-                            href="#"
+                            href={`${pathname}${buildCatalogSearchParams(filters, p)}`}
                             onClick={(e) => {
                               e.preventDefault()
-                              setPage(p)
+                              goToPage(p)
                             }}
                             isActive={p === page}
                           >
@@ -505,10 +629,10 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                       ))}
                       <PaginationItem>
                         <PaginationNext
-                          href="#"
+                          href={page < totalPages ? `${pathname}${buildCatalogSearchParams(filters, page + 1)}` : "#"}
                           onClick={(e) => {
                             e.preventDefault()
-                            if (page < totalPages) setPage(page + 1)
+                            if (page < totalPages) goToPage(page + 1)
                           }}
                           className={cn(page >= totalPages && "pointer-events-none opacity-50")}
                         />

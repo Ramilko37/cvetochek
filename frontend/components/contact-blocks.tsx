@@ -7,7 +7,7 @@ import { getImagePath } from "@/lib/utils"
 
 export function ContactBlocks() {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-16 px-5 md:px-7 lg:px-10 max-w-7xl mx-auto">
       <div className="grid md:grid-cols-3 gap-6">
         {/* Contact info */}
         <div className="bg-secondary rounded-3xl p-8">
@@ -20,13 +20,13 @@ export function ContactBlocks() {
           
           <div className="space-y-4">
             <Link 
-              href="mailto:info@cvetochek.ru" 
+              href="mailto:Cveto4ek_v_gorsho4ek@list.ru" 
               className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
                 <Mail className="h-4 w-4" />
               </div>
-              <span>info@cvetochek.ru</span>
+              <span>Cveto4ek_v_gorsho4ek@list.ru</span>
             </Link>
             
             <Link 
@@ -62,7 +62,7 @@ export function ContactBlocks() {
         </div>
 
         {/* Individual order card */}
-        <Link href="#" className="group relative rounded-3xl overflow-hidden block">
+        <Link href="/custom-order" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
               src={getImagePath("/images/cat-compositions.webp")}
@@ -70,7 +70,7 @@ export function ContactBlocks() {
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
           </div>
           <div className="relative p-8 h-full min-h-[280px] flex flex-col justify-end">
             <h3 className="font-serif text-2xl text-white mb-2">
@@ -86,7 +86,7 @@ export function ContactBlocks() {
         </Link>
 
         {/* Corporate card */}
-        <Link href="#" className="group relative rounded-3xl overflow-hidden block">
+        <Link href="/corporate" className="group relative rounded-3xl overflow-hidden block">
           <div className="absolute inset-0">
             <Image
               src={getImagePath("/images/cat-baskets.webp")}
@@ -94,7 +94,7 @@ export function ContactBlocks() {
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
           </div>
           <div className="relative p-8 h-full min-h-[280px] flex flex-col justify-end">
             <h3 className="font-serif text-2xl text-white mb-2">

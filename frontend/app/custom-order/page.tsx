@@ -43,7 +43,7 @@ export default function CustomOrderPage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero: фото на всю ширину — на мобильном первым */}
-      <section className="pt-14 lg:pt-[104px] pb-8 md:pb-12">
+      <section className="pt-24 lg:pt-[132px] pb-8 md:pb-12">
         <div className="relative aspect-[21/9] md:aspect-[3/1] lg:aspect-[3/0.8] w-full overflow-hidden">
           <Image
             src={getImagePath("/images/cat-compositions.webp")}

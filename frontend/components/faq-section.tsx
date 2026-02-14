@@ -38,7 +38,7 @@ export function FaqSection({ isFullPage }: FaqSectionProps = {}) {
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <Heading className="font-serif text-2xl md:text-3xl text-foreground">
-          {isFullPage ? "Вопрос-ответ" : "Флористика и уход"}
+          { "Вопрос-ответ"}
         </Heading>
         {!isFullPage && (
           <Link 

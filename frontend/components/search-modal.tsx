@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { useProductsContext } from "@/components/products-provider"
+import { productMatchesSearch } from "@/lib/search-products"
 
 const RECENTS_KEY = "cvetochek-recent-searches"
 
@@ -71,7 +72,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const results = useMemo(() => {
     if (!normalized) return []
     return products
-      .filter((p) => p.name.toLowerCase().includes(normalized))
+      .filter((p) => productMatchesSearch(p, normalized))
       .slice(0, 6)
       .map((p) => ({
         slug: p.slug,
@@ -112,7 +113,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Введите название букета, категории или артикул"
+            placeholder="Название букета, цветы (розы, тюльпаны...), категория"
             className="h-11 rounded-full pl-10 pr-10"
             aria-label="Поиск"
           />
@@ -141,7 +142,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                       key={q}
                       type="button"
                       variant="outline"
-                      className="rounded-full h-9"
+                      className="rounded-full h-9 whitespace-nowrap shrink-0"
                       onClick={() => setQuery(q)}
                     >
                       {q}
@@ -161,7 +162,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                     key={q}
                     type="button"
                     variant="secondary"
-                    className="rounded-full h-9 bg-muted hover:bg-accent text-foreground"
+                    className="rounded-full h-9 bg-muted hover:bg-accent text-foreground whitespace-nowrap shrink-0"
                     onClick={() => setQuery(q)}
                   >
                     {q}
