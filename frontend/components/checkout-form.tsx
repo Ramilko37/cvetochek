@@ -62,6 +62,10 @@ export function CheckoutForm() {
     setPhone(formatPhoneMask(e.target.value))
   }
 
+  const handlePhoneFocus = () => {
+    if (!phone.trim()) setPhone("+7")
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
@@ -229,6 +233,7 @@ export function CheckoutForm() {
                 placeholder="+7 (999) 123-45-67"
                 value={phone}
                 onChange={handlePhoneChange}
+                onFocus={handlePhoneFocus}
                 className="rounded-lg"
                 required
               />
