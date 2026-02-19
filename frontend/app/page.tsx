@@ -3,6 +3,7 @@ import { Categories } from "@/components/categories"
 import { ProductsSection } from "@/components/products-section"
 import { CustomOrder } from "@/components/custom-order"
 import { BlogSection } from "@/components/blog-section"
+import { ReviewsSection } from "@/components/reviews-section"
 import { Benefits } from "@/components/benefits"
 import { ContactBlocks } from "@/components/contact-blocks"
 import { FaqSection } from "@/components/faq-section"
@@ -19,6 +20,7 @@ export default function Home() {
         <ProductsSection />
         <CustomOrder />
         <BlogSection />
+        <ReviewsSection />
         {/* <AppPromo /> */}
         <ContactBlocks />
         <FaqSection />
