@@ -3,28 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { getImagePath } from "@/lib/utils"
-
-const articles = [
-  {
-    id: "premium-roses",
-    image: getImagePath("/images/cat-roses.webp"),
-    title: "Премиальные розы: почему мы их так любим и какие сорта покоряют с первого взгляда?",
-    excerpt: "Red Monster, Country Blues, Вегги — наши любимчики в мастерской",
-  },
-  {
-    id: "urban-jungle",
-    image: getImagePath("/images/cat-plants.webp"),
-    title: "Городские джунгли: стильные крупные растения, которые преобразят ваш дом",
-    excerpt: "Монстера, фикусы и другие фавориты интерьерных дизайнеров",
-  },
-  {
-    id: "exotic-plants",
-    image: getImagePath("/images/plants.webp"),
-    title: "От райских птиц до средиземноморского уюта: необычные растения в горшках",
-    excerpt: "Стрелиция, мирт, сансевиерия — растения, которые удивят гостей",
-  },
-]
+import { articles } from "@/lib/blog-data"
 
 export function BlogSection() {
   return (
@@ -49,9 +28,9 @@ export function BlogSection() {
           <Link 
             key={article.id} 
             href={`/blog#${article.id}`}
-            className="group"
+            className="group flex flex-col h-full"
           >
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden mb-4">
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden mb-4 shrink-0">
               <Image
                 src={article.image || "/placeholder.svg"}
                 alt={article.title}
@@ -59,10 +38,10 @@ export function BlogSection() {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="font-medium text-foreground mb-2 group-hover:text-primary transition-colors">
+            <h3 className="font-medium text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
               {article.title}
             </h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">
+            <p className="text-sm text-muted-foreground line-clamp-3">
               {article.excerpt}
             </p>
           </Link>
