@@ -20,13 +20,13 @@ export function ContactBlocks() {
           
           <div className="space-y-4">
             <Link 
-              href="mailto:Cveto4ek_v_gorsho4ek@list.ru" 
+              href="mailto:love@cvetipolubvi.ru" 
               className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
                 <Mail className="h-4 w-4" />
               </div>
-              <span>Cveto4ek_v_gorsho4ek@list.ru</span>
+              <span>love@cvetipolubvi.ru</span>
             </Link>
             
             <Link 

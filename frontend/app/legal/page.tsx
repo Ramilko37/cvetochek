@@ -48,10 +48,10 @@ export default function LegalPage() {
               <br />
               E-mail:{" "}
               <a
-                href="mailto:Cveto4ek_v_gorsho4ek@list.ru"
+                href="mailto:love@cvetipolubvi.ru"
                 className="text-primary hover:underline"
               >
-                Cveto4ek_v_gorsho4ek@list.ru
+                love@cvetipolubvi.ru
               </a>
             </p>
           </div>

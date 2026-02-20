@@ -6,7 +6,7 @@ import { ArrowUp } from "lucide-react"
 
 const footerLinks = {
   "Контакты": [
-    { name: "Cveto4ek_v_gorsho4ek@list.ru", href: "mailto:Cveto4ek_v_gorsho4ek@list.ru" },
+    { name: "love@cvetipolubvi.ru", href: "mailto:love@cvetipolubvi.ru" },
     { name: "+7 926 470 55 45", href: "tel:+79264705545" },
     { name: "Москва", href: "/contacts" },
   ],

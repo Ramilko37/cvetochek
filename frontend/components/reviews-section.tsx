@@ -1,9 +1,22 @@
 "use client"
 
-import Image from "next/image"
 import { Star, ExternalLink } from "lucide-react"
-import { cn, getImagePath } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+
+const AVATAR_COLORS = [
+  "bg-rose-500/90 text-white",
+  "bg-amber-500/90 text-white",
+  "bg-emerald-500/90 text-white",
+  "bg-sky-500/90 text-white",
+  "bg-violet-500/90 text-white",
+  "bg-pink-500/90 text-white",
+] as const
+
+function getAvatarColor(name: string) {
+  const index = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return AVATAR_COLORS[index % AVATAR_COLORS.length]
+}
 
 const REVIEWS = [
   {
@@ -12,9 +25,7 @@ const REVIEWS = [
     source: "Яндекс.Карты",
     rating: 5,
     text: "Потрясающий букет! Цветы свежие, стояли почти две недели. Доставка точно ко времени. Очень порадовала упаковка и забота о клиенте.",
-    date: "2024-02-12",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    customerPhotos: ["/images/product-1.webp"]
+    date: "2024-02-12"
   },
   {
     id: 2,
@@ -22,9 +33,7 @@ const REVIEWS = [
     source: "Яндекс.Карты",
     rating: 5,
     text: "Заказывал жене на годовщину. Собрали очень стильную композицию, не колхоз. Жена в полном восторге, обязательно вернусь еще раз!",
-    date: "2024-02-10",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    customerPhotos: ["/images/product-2.webp"]
+    date: "2024-02-10"
   },
   {
     id: 3,
@@ -32,9 +41,7 @@ const REVIEWS = [
     source: "Яндекс.Карты",
     rating: 5,
     text: "Очень вежливые флористы, помогли подобрать цветы под бюджет. Рекомендую этот магазин всем знакомым.",
-    date: "2024-02-05",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    customerPhotos: ["/images/product-4.webp"]
+    date: "2024-02-05"
   },
 ]
 
@@ -138,8 +145,9 @@ function ReviewCard({ review }: { review: typeof REVIEWS[0] }) {
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <Avatar>
-            <AvatarImage src={review.avatar} alt={review.author} />
-            <AvatarFallback>{review.author[0]}</AvatarFallback>
+            <AvatarFallback className={cn("font-medium", getAvatarColor(review.author))}>
+              {review.author[0]}
+            </AvatarFallback>
           </Avatar>
           <div>
             <div className="font-medium text-foreground">{review.author}</div>
@@ -168,18 +176,6 @@ function ReviewCard({ review }: { review: typeof REVIEWS[0] }) {
       <p className="text-muted-foreground text-sm mb-6 leading-relaxed flex-grow">
         {review.text}
       </p>
-
-      {/* Блок с фото от клиента */}
-      {review.customerPhotos && review.customerPhotos.length > 0 && (
-        <div className="relative h-32 w-32 rounded-lg overflow-hidden border border-border/50 mt-auto shrink-0">
-          <Image 
-            src={getImagePath(review.customerPhotos[0])} 
-            alt={`Фото заказа от ${review.author}`} 
-            fill 
-            className="object-cover" 
-          />
-        </div>
-      )}
     </a>
   )
 }

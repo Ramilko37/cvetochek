@@ -30,10 +30,10 @@ export default function ContactsPage() {
           <div>
             <h2 className="font-medium text-foreground mb-2">E-mail</h2>
             <a
-              href="mailto:Cveto4ek_v_gorsho4ek@list.ru"
+              href="mailto:love@cvetipolubvi.ru"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              Cveto4ek_v_gorsho4ek@list.ru
+              love@cvetipolubvi.ru
             </a>
           </div>
           <div>

@@ -114,8 +114,8 @@ export default function OfferPage() {
               Юридический адрес: Тайнинская, 15 к 1, 26<br />
               Телефон: 8 (926) 470 55 45<br />
               E-mail:{" "}
-              <a href="mailto:Cveto4ek_v_gorsho4ek@list.ru" className="text-primary hover:underline">
-                Cveto4ek_v_gorsho4ek@list.ru
+              <a href="mailto:love@cvetipolubvi.ru" className="text-primary hover:underline">
+                love@cvetipolubvi.ru
               </a>
             </p>
           </section>
