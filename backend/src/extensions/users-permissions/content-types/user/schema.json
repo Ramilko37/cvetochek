@@ -1,0 +1,8 @@
+{
+  "attributes": {
+    "phone": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}

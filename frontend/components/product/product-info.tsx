@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Heart, ShoppingBag, Zap } from "lucide-react"
+import { useFavoritesStore } from "@/store/favorites-store"
 import { Button } from "@/components/ui/button"
 import { QuickOrderDialog } from "@/components/quick-order-dialog"
 import { cn } from "@/lib/utils"
@@ -24,8 +25,8 @@ export function ProductInfo({
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(
     product.sizes?.[0] ?? null,
   )
-  const [isFavorite, setIsFavorite] = useState(false)
   const [quickOrderOpen, setQuickOrderOpen] = useState(false)
+  const { has: isFavorite, toggle: toggleFavorite } = useFavoritesStore()
 
   const basePrice = selectedSize?.price ?? product.price
   const optionsTotal =
@@ -115,11 +116,11 @@ export function ProductInfo({
           variant="outline"
           size="icon"
           className="rounded-full h-12 w-12 shrink-0"
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={() => toggleFavorite(product.slug)}
           aria-label="В избранное"
         >
           <Heart
-            className={cn("h-5 w-5", isFavorite && "fill-current")}
+            className={cn("h-5 w-5", isFavorite(product.slug) && "fill-current")}
           />
         </Button>
       </div>

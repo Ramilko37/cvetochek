@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCart } from "@/store/cart-store"
+import { useAuth } from "@/store/auth-store"
 
 const DELIVERY_SLOTS = [
   { value: "09:00–12:00", label: "09:00 – 12:00" },
@@ -37,6 +38,7 @@ function todayISO(): string {
 
 export function CheckoutForm() {
   const { items, totalPrice, clearCart } = useCart()
+  const { user, isAuthenticated } = useAuth()
   const [sent, setSent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -57,6 +59,17 @@ export function CheckoutForm() {
   useEffect(() => {
     setDeliveryDate(todayISO())
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated && user?.phone) {
+      const digits = user.phone.replace(/\D/g, "")
+      const normalized = digits.startsWith("8") ? "7" + digits.slice(1) : digits.length > 0 && digits[0] !== "7" ? "7" + digits : digits
+      if (normalized.length >= 11) {
+        const rest = normalized.slice(1, 11)
+        setPhone("+7 (" + rest.slice(0, 3) + ") " + rest.slice(3, 6) + "-" + rest.slice(6, 8) + "-" + rest.slice(8, 10))
+      }
+    }
+  }, [isAuthenticated, user?.phone])
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(formatPhoneMask(e.target.value))
@@ -111,6 +124,7 @@ export function CheckoutForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "checkout",
+          userId: isAuthenticated && user ? user.id : undefined,
           items: items.map((i) => ({
             id: i.id,
             slug: i.slug,

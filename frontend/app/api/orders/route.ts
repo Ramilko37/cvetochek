@@ -16,6 +16,7 @@ const checkoutBodySchema = z.object({
   totalPrice: z.number(),
   name: z.string().min(2, "Укажите имя"),
   phone: z.string().min(10, "Укажите телефон"),
+  userId: z.number().optional(),
   comment: z.string().optional(),
   deliveryDate: z.string().min(1, "Укажите дату доставки"),
   deliverySlot: z.string().min(1, "Укажите интервал доставки"),
@@ -38,6 +39,7 @@ const quickOrderBodySchema = z.object({
   phone: z.string().min(10),
   comment: z.string().optional(),
   websiteHp: z.string().max(0).optional(),
+  userId: z.number().optional(),
 })
 
 const bodySchema = z.discriminatedUnion("type", [
@@ -51,6 +53,9 @@ function formatOrderForTelegram(data: z.infer<typeof bodySchema>): string {
 
   lines.push(isQuick ? "🌸 БЫСТРЫЙ ЗАКАЗ" : "🌸 НОВЫЙ ЗАКАЗ")
   lines.push("")
+  if ("userId" in data && data.userId) {
+    lines.push(`🆔 ID пользователя: ${data.userId}`)
+  }
   lines.push(`👤 ${data.name}`)
   lines.push(`📞 ${data.phone}`)
   if (data.comment) lines.push(`💬 ${data.comment}`)

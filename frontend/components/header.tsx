@@ -4,7 +4,7 @@ import { useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, ShoppingBag, User, Phone, MapPin, ArrowRight, ExternalLink } from "lucide-react"
+import { Menu, ShoppingBag, User, Phone, MapPin, ArrowRight, ExternalLink, LogOut } from "lucide-react"
 import { ReviewsMarquee } from "@/components/reviews-marquee"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,8 +24,16 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { SearchDropdown } from "@/components/search-dropdown"
+import { AuthModal } from "@/components/auth/auth-modal"
 import { useCart } from "@/store/cart-store"
+import { useAuth } from "@/store/auth-store"
 import { getCurrentOccasions } from "@/lib/occasions"
 import { cn, getImagePath } from "@/lib/utils"
 
@@ -144,7 +152,9 @@ function MegaMenuLink({ title, href, description }: MegaLink) {
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mapDialogOpen, setMapDialogOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
   const { totalItems, openCart } = useCart()
+  const { isAuthenticated, user, logout } = useAuth()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
@@ -233,9 +243,40 @@ export function Header() {
                 <Phone className="h-4 w-4" />
                 <span>+7 926 470 55 45</span>
               </Link>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                <User className="h-5 w-5" />
-              </Button>
+              {isAuthenticated && user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" aria-label="Меню пользователя">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer">Профиль</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/favorites" className="cursor-pointer">Избранное</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/orders" className="cursor-pointer">Мои заказы</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => logout()} className="cursor-pointer text-destructive focus:text-destructive">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Выход
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={() => setAuthModalOpen(true)}
+                  aria-label="Войти"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              )}
               <Button
                 type="button"
                 variant="ghost"
@@ -533,6 +574,8 @@ export function Header() {
           </div>
         </div>
       </nav>
+
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
     </header>
   )
 }

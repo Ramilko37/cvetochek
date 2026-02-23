@@ -24,12 +24,12 @@ const slides = [
     buttonHref: "/catalog",
   },
   {
-    image: getImagePath("/images/cat-roses.webp"),
-    label: "14 февраля",
-    title: "День",
-    titleAccent: "святого Валентина",
-    description: "Букеты и композиции для самых близких",
-    buttonHref: "/catalog",
+    image: getImagePath("/images/cat-peonies.webp"),
+    label: "8 марта",
+    title: "Международный",
+    titleAccent: "женский день",
+    description: "Тюльпаны, мимоза, розы — букеты для мам и близких",
+    buttonHref: "/catalog?occasion=march-8",
   },
 ]
 
