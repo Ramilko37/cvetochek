@@ -10,7 +10,6 @@ import type { Product, ProductSize } from "@/types/product"
 
 interface ProductInfoProps {
   product: Product
-  /** Выбранные опции (id) — участвуют в итоговой цене */
   selectedOptionIds?: string[]
   onAddToCart?: (productId: string, sizeId?: string, selectedOptionIds?: string[]) => void
   onQuickOrder?: (productId: string) => void
@@ -35,17 +34,15 @@ export function ProductInfo({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="font-serif text-2xl md:text-3xl text-foreground">
           {product.name}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Артикул: {product.sku}
         </p>
       </div>
 
-      {/* Stock status */}
       <div>
         <span
           className={cn(
@@ -63,11 +60,10 @@ export function ProductInfo({
         </span>
       </div>
 
-      {/* Size selector */}
       {product.sizes && product.sizes.length > 0 && (
-        <div>
-          <p className="text-sm font-medium text-foreground mb-2">Размер</p>
-          <div className="flex gap-2">
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-foreground">Размер</p>
+          <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => (
               <button
                 key={size.id}
@@ -90,7 +86,6 @@ export function ProductInfo({
         </div>
       )}
 
-      {/* Price */}
       <div className="flex items-baseline gap-2">
         <span className="font-serif text-2xl md:text-3xl text-foreground">
           {displayPrice.toLocaleString("ru-RU")} ₽
@@ -102,7 +97,6 @@ export function ProductInfo({
         )}
       </div>
 
-      {/* CTA buttons */}
       <div className="flex flex-col sm:flex-row gap-3">
         <Button
           type="button"
@@ -148,10 +142,6 @@ export function ProductInfo({
           slug: product.slug,
         }}
       />
-
-      <p className="text-xs text-muted-foreground">
-        Бесплатная доставка по Москве при заказе от 4 500 ₽
-      </p>
     </div>
   )
 }

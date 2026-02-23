@@ -10,12 +10,16 @@ import {
   ProductInfoWithCart,
   ProductTabs,
 } from "@/components/product"
+import { ProductGalleryAb } from "@/components/product/product-gallery-ab"
+import { ProductInfoWithCartAb } from "@/components/product/product-info-with-cart-ab"
 import { useProductsContext } from "@/components/products-provider"
 import { getProductBySlug } from "@/hooks/use-products"
 
 interface ProductPageClientProps {
   slug: string
 }
+
+const AB_TEST_PRODUCT_SLUG = "tg-21"
 
 export function ProductPageClient({ slug }: ProductPageClientProps) {
   const router = useRouter()
@@ -61,6 +65,7 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
 
   const product = getProductBySlug(products, slug)
   if (!product) notFound()
+  const isAbVariant = slug === AB_TEST_PRODUCT_SLUG
 
   return (
     <main className="min-h-screen bg-background">
@@ -78,18 +83,37 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
 
           <ProductBreadcrumbs product={product} />
 
-          <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            <div>
-              <ProductGallery images={product.images} name={product.name} />
-            </div>
-            <div className="space-y-6">
-              <ProductInfoWithCart product={product} />
-            </div>
-          </div>
+          {isAbVariant ? (
+            <>
+              <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_500px] gap-8 lg:gap-12 xl:gap-16 items-start lg:py-2">
+                <div className="min-w-0">
+                  <ProductGalleryAb images={product.images} name={product.name} />
+                </div>
+                <div className="space-y-6">
+                  <ProductInfoWithCartAb product={product} />
+                </div>
+              </div>
 
-          <div className="mt-12 md:mt-16 pt-8 border-t border-border">
-            <ProductTabs product={product} />
-          </div>
+              <div className="mt-12 md:mt-16 pt-8 border-t border-border">
+                <ProductTabs product={product} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <div>
+                  <ProductGallery images={product.images} name={product.name} />
+                </div>
+                <div className="space-y-6">
+                  <ProductInfoWithCart product={product} />
+                </div>
+              </div>
+
+              <div className="mt-12 md:mt-16 pt-8 border-t border-border">
+                <ProductTabs product={product} />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </main>

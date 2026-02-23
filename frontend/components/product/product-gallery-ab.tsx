@@ -12,22 +12,22 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-interface ProductGalleryProps {
+interface ProductGalleryAbProps {
   images: string[]
   name: string
 }
 
-export function ProductGallery({ images, name }: ProductGalleryProps) {
+export function ProductGalleryAb({ images, name }: ProductGalleryAbProps) {
   const [mainIndex, setMainIndex] = useState(0)
-
-  const goPrev = () => setMainIndex((i) => (i - 1 + images.length) % images.length)
-  const goNext = () => setMainIndex((i) => (i + 1) % images.length)
+  const safeImages = images.length > 0 ? images : ["/placeholder.svg"]
+  const goPrev = () => setMainIndex((i) => (i - 1 + safeImages.length) % safeImages.length)
+  const goNext = () => setMainIndex((i) => (i + 1) % safeImages.length)
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary/30 group">
+      <div className="relative aspect-square lg:aspect-auto lg:h-[min(56vh,620px)] rounded-3xl overflow-hidden bg-secondary/25 group">
         <Image
-          src={images[mainIndex] ?? images[0]}
+          src={safeImages[mainIndex]}
           alt={`${name} — фото ${mainIndex + 1}`}
           fill
           className="object-cover transition-opacity duration-300"
@@ -35,7 +35,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
-        {images.length > 1 && (
+        {safeImages.length > 1 && (
           <>
             <button
               type="button"
@@ -57,7 +57,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
         )}
       </div>
 
-      <div className="px-4 relative group/thumbs">
+      <div className="px-2 sm:px-4 relative group/thumbs">
         <Carousel
           opts={{
             align: "start",
@@ -65,23 +65,25 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           }}
           className="w-full"
         >
-          <div className="[mask-image:linear-gradient(to_right,transparent,black_20px,black_calc(100%-20px),transparent)]">
+          <div className="[mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)]">
             <CarouselContent className="-ml-2">
-              {images.map((src, index) => (
-                <CarouselItem key={src} className="pl-2 basis-auto">
+              {safeImages.map((src, index) => (
+                <CarouselItem key={`${src}-${index}`} className="pl-2 basis-auto">
                   <button
                     type="button"
                     onClick={() => setMainIndex(index)}
-                    className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-secondary/30 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className={cn(
+                      "relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-secondary/30 transition-all duration-200",
+                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      mainIndex === index ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : "",
+                    )}
+                    aria-label={`Открыть фото ${index + 1}`}
                   >
                     <Image
                       src={src}
                       alt={`${name} — миниатюра ${index + 1}`}
                       fill
-                      className={cn(
-                        "object-cover transition-all duration-200",
-                        mainIndex === index && "ring-2 ring-primary ring-inset",
-                      )}
+                      className="object-cover"
                       sizes="80px"
                     />
                   </button>
@@ -89,8 +91,8 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
               ))}
             </CarouselContent>
           </div>
-          <CarouselPrevious className="-left-4 size-8 rounded-full bg-background/80 backdrop-blur-sm border-none shadow-sm hover:bg-background/95 md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
-          <CarouselNext className="-right-4 size-8 rounded-full bg-background/80 backdrop-blur-sm border-none shadow-sm hover:bg-background/95 md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
+          <CarouselPrevious className="-left-3 size-8 rounded-full bg-background/85 backdrop-blur-sm border-none shadow-sm hover:bg-background md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
+          <CarouselNext className="-right-3 size-8 rounded-full bg-background/85 backdrop-blur-sm border-none shadow-sm hover:bg-background md:opacity-0 md:group-hover/thumbs:opacity-100 transition-opacity" />
         </Carousel>
       </div>
     </div>
