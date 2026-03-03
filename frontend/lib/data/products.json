@@ -1,27 +1,6 @@
 [
   {
     "images": [
-      "/images/telegram-products/product_4_0.jpg",
-      "/images/telegram-products/product_3_0.jpg",
-      "/images/telegram-products/product_2_0.jpg",
-      "/images/telegram-products/product_1_0.jpg",
-      "/images/telegram-products/product_0_0.jpg",
-      "/images/telegram-products/product_202_0.jpg",
-      "/images/telegram-products/product_201_0.jpg",
-      "/images/telegram-products/product_200_0.jpg",
-      "/images/telegram-products/product_199_0.jpg",
-      "/images/telegram-products/product_198_0.jpg"
-    ],
-    "description": "Нежный и утончённый букет. Роза Кения розового оттенка, символизирующей любовь, заботу и теплоту. Минималистичная упаковка нежно-розового цвета подчёркивает красоту цветка, делая его идеальным подарком для дорогого человека. Этот букет дарит мгновение радости и наполняет день светом и нежностью.",
-    "type": "Букет",
-    "composition": "Роза Кения 19",
-    "packaging": "упаковка, лента",
-    "name": "Букет из роз Кения",
-    "size": "35*50",
-    "price": 6800
-  },
-  {
-    "images": [
       "/images/telegram-products/product_8_0.jpg",
       "/images/telegram-products/product_7_0.jpg",
       "/images/telegram-products/product_6_0.jpg",
@@ -37,7 +16,8 @@
     "packaging": "упаковка, лента",
     "name": "Легкое очарование",
     "size": "50*50",
-    "price": 13100
+    "price": 13100,
+    "inStock": true
   },
   {
     "images": [
@@ -58,21 +38,8 @@
     "packaging": "упаковка, лента",
     "name": "«Лёгкая свежесть»",
     "size": "35*45",
-    "price": 4800
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_16_0.jpg",
-      "/images/telegram-products/product_15_0.jpg",
-      "/images/telegram-products/product_14_0.jpg"
-    ],
-    "description": "Нежный букет с розовыми тюльпанами и ларгусом, оформленный в белую бумагу с розовой тишью. Лёгкость и свежесть композиции подчёркивает аккуратная розовая лента, делая букет утончённым и гармоничным. Идеальный подарок для романтического жеста, тёплого комплимента или светлого праздничного момента.",
-    "type": "Букет",
-    "composition": "Тюльпан 25, Ларгус 15",
-    "packaging": "Упаковка 1",
-    "name": "Современная романтика",
-    "size": "40*35",
-    "price": 9900
+    "price": 4800,
+    "inStock": true
   },
   {
     "images": [
@@ -89,7 +56,8 @@
     "packaging": "упаковка, лента",
     "name": "Простая нежность",
     "size": "35*40",
-    "price": 7400
+    "price": 7400,
+    "inStock": true
   },
   {
     "images": [
@@ -104,7 +72,8 @@
     "packaging": "Лента 1",
     "name": "Яркое признание",
     "size": "70*20",
-    "price": 9100
+    "price": 9100,
+    "inStock": true
   },
   {
     "images": [
@@ -119,7 +88,8 @@
     "packaging": "Упаковка",
     "name": "Нежный объем",
     "size": "30*45",
-    "price": 5800
+    "price": 5800,
+    "inStock": true
   },
   {
     "images": [
@@ -133,7 +103,8 @@
     "packaging": "Коробка 1, Оазис 1",
     "name": "Естественная симфония",
     "size": "25*25",
-    "price": 5800
+    "price": 5800,
+    "inStock": false
   },
   {
     "images": [
@@ -147,7 +118,8 @@
     "packaging": "упаковка, лента",
     "name": "Чистая любовь",
     "size": "40*40",
-    "price": 5800
+    "price": 5800,
+    "inStock": true
   },
   {
     "images": [
@@ -161,7 +133,8 @@
     "composition": "Альстромерия 2, Роза кустовая 1, хризантема кустовая 1, сантини 2, хризантема одноголовая 1, оксипеталум 3, астранция 2",
     "name": "«Светлая радость»",
     "size": "40*40",
-    "price": 5900
+    "price": 5900,
+    "inStock": true
   },
   {
     "images": [
@@ -176,7 +149,8 @@
     "packaging": "упаковка, лента",
     "name": "Нежность в деталях",
     "size": "30*40",
-    "price": 5900
+    "price": 5900,
+    "inStock": true
   },
   {
     "images": [
@@ -191,7 +165,8 @@
     "packaging": "упаковка, лента",
     "name": "Лунный сад",
     "size": "30*40",
-    "price": 4200
+    "price": 4200,
+    "inStock": true
   },
   {
     "images": [
@@ -207,7 +182,8 @@
     "packaging": "упаковка, лента",
     "name": "Белый шелк",
     "size": "25*45",
-    "price": 4800
+    "price": 4800,
+    "inStock": true
   },
   {
     "images": [
@@ -220,7 +196,8 @@
     "packaging": "упаковка, лента",
     "name": "Первое свидание",
     "size": "35*10",
-    "price": 5500
+    "price": 5500,
+    "inStock": true
   },
   {
     "images": [
@@ -236,7 +213,8 @@
     "packaging": "упаковка",
     "name": "«Солнечный комплимент»",
     "size": "35*40",
-    "price": 3260
+    "price": 3260,
+    "inStock": true
   },
   {
     "images": [
@@ -252,24 +230,8 @@
     "packaging": "упаковка, лента",
     "name": "Пионовая гармония",
     "size": "30*45",
-    "price": 6300
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_71_0.jpg",
-      "/images/telegram-products/product_70_0.jpg",
-      "/images/telegram-products/product_69_0.jpg",
-      "/images/telegram-products/product_68_0.jpg",
-      "/images/telegram-products/product_67_0.jpg",
-      "/images/telegram-products/product_66_0.jpg"
-    ],
-    "description": "Воздушная композиция в белой шляпной коробке с лентой и транспортировочной упаковкой. Белый лизиантус и альстромерия в сочетании с рускусом создают лёгкий, свежий и элегантный образ. Идеальный подарок для деликатного комплимента, поздравления или стильного интерьерного акцента.",
-    "type": "Композиция",
-    "composition": "лизиантус белый 5, альстромерия 5, рускус 3",
-    "packaging": "Коробка шляпная, оазис, лента, транспортировочная упаковка",
-    "name": "«Белое облако»",
-    "size": "25*25",
-    "price": 6800
+    "price": 6300,
+    "inStock": true
   },
   {
     "images": [
@@ -285,7 +247,8 @@
     "name": "Экзотическая гармония",
     "size": "30*30",
     "price": 9600,
-    "tag": "#14февраля"
+    "tag": "#14февраля",
+    "inStock": false
   },
   {
     "images": [
@@ -300,24 +263,8 @@
     "name": "«Чистая классика»",
     "size": "60*25",
     "price": 7700,
-    "tag": "#14февраля"
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_83_0.jpg",
-      "/images/telegram-products/product_82_0.jpg",
-      "/images/telegram-products/product_81_0.jpg",
-      "/images/telegram-products/product_80_0.jpg",
-      "/images/telegram-products/product_79_0.jpg"
-    ],
-    "description": "Очаровательный букет из 7 белых французских роз и 2 веточек эвкалипта, оформленный в красную и белую бумагу с сердечками и лентой. Идеальный выбор для признания в любви, романтического комплимента или особого повода. Элегантность белых роз в сочетании с яркой упаковкой создаёт атмосферу нежности и тепла.",
-    "type": "Букет",
-    "composition": "Французская Роза белая 7, эвкалипт 2",
-    "packaging": "Упаковка",
-    "name": "«Сердечная нежность»",
-    "size": "35*50",
-    "price": 4100,
-    "tag": "#14февраля"
+    "tag": "#14февраля",
+    "inStock": true
   },
   {
     "images": [
@@ -333,7 +280,8 @@
     "name": "«Малиново-белая страсть»",
     "size": "35*50",
     "price": 4650,
-    "tag": "#14февраля"
+    "tag": "#14февраля",
+    "inStock": true
   },
   {
     "images": [
@@ -379,7 +327,9 @@
         "price": 14500,
         "flowers": 21
       }
-    ]
+    ],
+    "price": 4950,
+    "inStock": true
   },
   {
     "images": [
@@ -391,22 +341,8 @@
     "packaging": "упаковка, лента",
     "name": "Нежное настроение",
     "size": "45*50",
-    "price": 13950
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_118_0.jpg",
-      "/images/telegram-products/product_117_0.jpg",
-      "/images/telegram-products/product_116_0.jpg"
-    ],
-    "description": "Роскошный букет из 21 розы сорта Red Monster, собранный с лаконичной лентой. Глубокий насыщенный оттенок и крупные бутоны создают яркий, страстный и премиальный образ. Идеальный выбор для признания в любви, эффектного комплимента и особых моментов, которые хочется подчеркнуть.",
-    "type": "Букет",
-    "composition": "Роза red monster 21",
-    "packaging": "Упаковка, лента",
-    "name": "Красный бархат",
-    "size": "30*60",
-    "price": 14500,
-    "tag": "#14февраля"
+    "price": 13950,
+    "inStock": true
   },
   {
     "images": [
@@ -425,28 +361,8 @@
     "packaging": "Оазис, Коробка",
     "name": "«Бордовый шик»",
     "size": "30*30",
-    "price": 8200
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_127_0.jpg",
-      "/images/telegram-products/product_126_0.jpg",
-      "/images/telegram-products/product_125_0.jpg",
-      "/images/telegram-products/product_124_0.jpg",
-      "/images/telegram-products/product_123_0.jpg",
-      "/images/telegram-products/product_220_0.jpg",
-      "/images/telegram-products/product_219_0.jpg",
-      "/images/telegram-products/product_218_0.jpg",
-      "/images/telegram-products/product_217_0.jpg",
-      "/images/telegram-products/product_216_0.jpg"
-    ],
-    "description": "Очаровательная композиция в сумке с ручками на оазисе из ромашковых хризантем, кустового диантуса, ларгуса и солидаго. Лёгкая, свежая палитра создаёт настроение радости, уюта и тёплого внимания. Идеальный вариант для приятного сюрприза, комплимента или небольшого подарка без повода.",
-    "type": "Композиция",
-    "composition": "Хризантема кустовая ромашковая 2, Диантус кустовой 1, Ларгус 5, Солидаго 1",
-    "packaging": "Оазис 1, сумка",
-    "name": "«Солнечный комплимент» (в сумке)",
-    "size": "25*25",
-    "price": 2500
+    "price": 8200,
+    "inStock": true
   },
   {
     "images": [
@@ -463,16 +379,15 @@
     "packaging": "лента",
     "name": "«Сюрприз»",
     "size": "17*20",
-    "price": 12100
+    "price": 12100,
+    "inStock": false
   },
   {
     "images": [
       "/images/telegram-products/product_136_0.jpg",
       "/images/telegram-products/product_135_0.jpg",
       "/images/telegram-products/product_134_0.jpg",
-      "/images/telegram-products/product_133_0.jpg",
-      "/images/telegram-products/product_132_0.jpg",
-      "/images/telegram-products/product_131_0.jpg"
+      "/images/telegram-products/product_133_0.jpg"
     ],
     "description": "Букет для самых нежных романтических натур. Свежий цветок на любой вкус с доставкой до двери. Его нежные краски впишутся в любой интерьер и создадут уют и тепло в каждом уголке квартиры. Идеальный подарок на день рождения, юбилей, свадьбу или как букет-комплимент.",
     "type": "Букет",
@@ -480,23 +395,8 @@
     "packaging": "упаковка, лента",
     "name": "«Лимонный фреш»",
     "size": "22*30",
-    "price": 4200
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_141_0.jpg",
-      "/images/telegram-products/product_140_0.jpg",
-      "/images/telegram-products/product_139_0.jpg",
-      "/images/telegram-products/product_138_0.jpg",
-      "/images/telegram-products/product_137_0.jpg"
-    ],
-    "description": "Легкий и очаровательный букет из 15 белых ромашковых Сантини — воплощение чистоты и свежести. Эти изящные цветы с пушистыми лепестками и яркими сердцевинами создают атмосферу простоты и гармонии, идеально подходя для поздравлений, свадеб или просто для поднятия настроения. Белый цвет символизирует невинность и новые начинания, делая букет универсальным подарком, который радует своей естественной красотой.",
-    "type": "Букет",
-    "composition": "Сантини 15",
-    "packaging": "лента",
-    "name": "Букет из сантини",
-    "size": "40*50",
-    "price": 4990
+    "price": 4200,
+    "inStock": true
   },
   {
     "images": [
@@ -512,7 +412,8 @@
     "composition": "рафаелло конфеты, альстромерия 1, хризантема кустовая 1, роза пионовидная 2",
     "packaging": "Коробка «сердце», оазис, транспортировочная упаковка",
     "name": "«Сладкое признание»",
-    "price": 5700
+    "price": 5700,
+    "inStock": true
   },
   {
     "images": [
@@ -529,7 +430,8 @@
     "packaging": "корзина, оазис, транспортировочная упаковка",
     "name": "«Белая гармония»",
     "size": "30*30",
-    "price": 8250
+    "price": 8250,
+    "inStock": true
   },
   {
     "images": [
@@ -548,7 +450,8 @@
     "packaging": "Корзина 1, оазис, транспортировочная упаковка",
     "name": "«Сладкая корзина»",
     "size": "30*30",
-    "price": 8960
+    "price": 8960,
+    "inStock": true
   },
   {
     "images": [
@@ -562,23 +465,8 @@
     "packaging": "упаковка, лента",
     "name": "Букет Magnum",
     "size": "30*50",
-    "price": 3950
-  },
-  {
-    "images": [
-      "/images/telegram-products/product_169_0.jpg",
-      "/images/telegram-products/product_168_0.jpg",
-      "/images/telegram-products/product_167_0.jpg",
-      "/images/telegram-products/product_166_0.jpg",
-      "/images/telegram-products/product_165_0.jpg"
-    ],
-    "description": "Светлый и искренний букет из ромашковых сантиний. Легкий, воздушный и трогательный — будто теплое утро, когда всё начинается мягко и спокойно.",
-    "type": "Букет",
-    "composition": "Сантини 9",
-    "packaging": "упаковка, лента",
-    "name": "«Ромашковое утро»",
-    "size": "25*30",
-    "price": 2600
+    "price": 3950,
+    "inStock": true
   },
   {
     "images": [
@@ -592,7 +480,8 @@
     "packaging": "упаковка, лента",
     "name": "«Легкий бриз»",
     "size": "45*50",
-    "price": 9760
+    "price": 9760,
+    "inStock": true
   },
   {
     "images": [
@@ -606,7 +495,8 @@
     "packaging": "упаковка, лента",
     "name": "«Кремовый поцелуй»",
     "size": "35*45",
-    "price": 6990
+    "price": 6990,
+    "inStock": true
   },
   {
     "images": [
@@ -620,7 +510,8 @@
     "packaging": "упаковка, лента",
     "name": "«Классика чувств»",
     "size": "20*45",
-    "price": 5200
+    "price": 5200,
+    "inStock": true
   },
   {
     "images": [
@@ -636,7 +527,8 @@
     "packaging": "упаковка, лента",
     "name": "«Country Rose Dream»",
     "size": "25*60",
-    "price": 11000
+    "price": 11000,
+    "inStock": true
   },
   {
     "images": [
@@ -652,7 +544,8 @@
     "packaging": "упаковка, лента",
     "name": "«Совершенство»",
     "size": "30*45",
-    "price": 7990
+    "price": 7990,
+    "inStock": true
   },
   {
     "images": [
@@ -672,6 +565,7 @@
     "packaging": "упаковка, лента",
     "name": "«Белоснежная гармония»",
     "size": "35*45",
-    "price": 8000
+    "price": 8000,
+    "inStock": true
   }
 ]

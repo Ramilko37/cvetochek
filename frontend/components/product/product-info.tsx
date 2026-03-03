@@ -31,6 +31,7 @@ export function ProductInfo({
   const optionsTotal =
     product.options?.filter((o) => selectedOptionIds.includes(o.id)).reduce((sum, o) => sum + o.price, 0) ?? 0
   const displayPrice = basePrice + optionsTotal
+  const canAddToCart = product.inStock
 
   return (
     <div className="space-y-6">
@@ -101,10 +102,11 @@ export function ProductInfo({
         <Button
           type="button"
           className="rounded-full flex-1 h-12"
-          onClick={() => onAddToCart?.(product.id, selectedSize?.id, selectedOptionIds)}
+          onClick={() => canAddToCart && onAddToCart?.(product.id, selectedSize?.id, selectedOptionIds)}
+          disabled={!canAddToCart}
         >
           <ShoppingBag className="h-4 w-4 mr-2" />
-          В корзину
+          {canAddToCart ? "В корзину" : "Только под заказ"}
         </Button>
         <Button
           variant="outline"

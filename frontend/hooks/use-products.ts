@@ -80,7 +80,7 @@ function telegramToProduct(tg: TelegramProduct, index: number): Product {
     name: tg.name ?? "Букет",
     sku: `TG-${String(index).padStart(4, "0")}`,
     price,
-    inStock: true,
+    inStock: tg.inStock ?? true,
     images: tg.images.map((p) => getImagePath(p)),
     sizes: tg.sizes?.map((s) => ({
       id: s.id,

@@ -29,6 +29,7 @@ interface ProductCardProps {
   price: number
   originalPrice?: number
   image: string
+  inStock?: boolean
   tag?: "hit" | "new" | "sale"
   flowers?: string
   href?: string
@@ -42,6 +43,7 @@ export function ProductCard({
   price,
   originalPrice,
   image,
+  inStock = true,
   tag,
   flowers,
   href,
@@ -102,17 +104,23 @@ export function ProductCard({
               }}
             >
               <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
-                  onClick={() =>
-                    slug && onAddToCart?.({ slug, name, price, image })
-                  }
-                >
-                  <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
-                  В корзину
-                </Button>
+                {inStock ? (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
+                    onClick={() =>
+                      slug && onAddToCart?.({ slug, name, price, image })
+                    }
+                  >
+                    <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
+                    В корзину
+                  </Button>
+                ) : (
+                  <div className="flex-1 bg-white/95 text-foreground rounded-full text-xs h-9 px-3 inline-flex items-center justify-center">
+                    Под заказ
+                  </div>
+                )}
                 <Button
                   variant="secondary"
                   size="icon"
@@ -157,6 +165,9 @@ export function ProductCard({
             </span>
           )}
         </div>
+        <p className="text-xs text-muted-foreground">
+          {inStock ? "В наличии" : "Под заказ"}
+        </p>
       </div>
     </>
   )

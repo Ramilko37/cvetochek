@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "next start",
     "images:webp": "node scripts/convert-to-webp.mjs",
-    "parse-telegram": "node scripts/parse-telegram.mjs"
+    "parse-telegram": "node scripts/parse-telegram.mjs",
+    "export-products": "node scripts/export-products-to-excel.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

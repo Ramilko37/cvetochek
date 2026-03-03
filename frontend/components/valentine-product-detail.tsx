@@ -28,6 +28,7 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
   const displayPrice = selectedSize?.price ?? product.price ?? 0
   const image = product.images[0] ?? "/placeholder.svg"
   const slug = `/valentines-day/${productId}`
+  const inStock = product.inStock ?? true
 
   const quickOrderPayload: QuickOrderProduct = {
     name: selectedSize ? `${name} (${selectedSize.label})` : name,
@@ -36,6 +37,7 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
   }
 
   const handleAddToCart = () => {
+    if (!inStock) return
     addItem({
       slug,
       name: selectedSize ? `${name} (${selectedSize.label})` : name,
@@ -66,6 +68,9 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
                 {displayPrice.toLocaleString("ru-RU")} ₽
               </p>
             )}
+            <p className="mt-1 text-sm text-muted-foreground">
+              {inStock ? "В наличии" : "Под заказ"}
+            </p>
           </div>
 
           {/* Выбор размера */}
@@ -107,9 +112,10 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
               onClick={handleAddToCart}
               className="rounded-full flex-1"
               size="lg"
+              disabled={!inStock}
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              В корзину
+              {inStock ? "В корзину" : "Только под заказ"}
             </Button>
             <Button
               variant="outline"

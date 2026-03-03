@@ -97,6 +97,7 @@ export function ProductsSection() {
             price={product.price}
             originalPrice={product.originalPrice}
             image={product.images[0] ?? "/placeholder.svg"}
+            inStock={product.inStock}
             flowers={product.composition.flowers.join(", ")}
             tag={tagByTab[activeTab as keyof typeof tagByTab]}
             href={`/item/${product.slug}`}

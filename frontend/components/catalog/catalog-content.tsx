@@ -547,6 +547,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                         price={product.price}
                         originalPrice={product.originalPrice}
                         image={product.images[0] ?? "/placeholder.svg"}
+                        inStock={product.inStock}
                         flowers={product.composition.flowers.join(", ")}
                         tag={
                           product.originalPrice != null && product.originalPrice > product.price
@@ -579,6 +580,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     price={product.price}
                     originalPrice={product.originalPrice}
                     image={product.images[0] ?? "/placeholder.svg"}
+                    inStock={product.inStock}
                     flowers={product.composition.flowers.join(", ")}
                     tag={
                       product.originalPrice != null && product.originalPrice > product.price

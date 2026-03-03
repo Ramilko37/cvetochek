@@ -23,6 +23,7 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
   const price = product.sizes?.[0]?.price ?? product.price ?? 0
   const image = product.images[0] ?? "/placeholder.svg"
   const hasSizes = product.sizes && product.sizes.length > 1
+  const inStock = product.inStock ?? true
 
   const quickOrderPayload: QuickOrderProduct = {
     name,
@@ -51,26 +52,32 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
               }}
             >
               <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
-                  onClick={() => {
-                    const size = product.sizes?.[0]
-                    addItem({
-                      slug: href,
-                      name,
-                      price,
-                      image,
-                      sizeId: size?.id,
-                      sizeLabel: size?.label,
-                    })
-                    openCart()
-                  }}
-                >
-                  <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
-                  В корзину
-                </Button>
+                {inStock ? (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
+                    onClick={() => {
+                      const size = product.sizes?.[0]
+                      addItem({
+                        slug: href,
+                        name,
+                        price,
+                        image,
+                        sizeId: size?.id,
+                        sizeLabel: size?.label,
+                      })
+                      openCart()
+                    }}
+                  >
+                    <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
+                    В корзину
+                  </Button>
+                ) : (
+                  <div className="flex-1 bg-white/95 text-foreground rounded-full text-xs h-9 px-3 inline-flex items-center justify-center">
+                    Под заказ
+                  </div>
+                )}
                 <Button
                   variant="secondary"
                   size="icon"
@@ -103,6 +110,9 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
             {price.toLocaleString("ru-RU")} ₽
           </span>
         )}
+        <p className="text-xs text-muted-foreground">
+          {inStock ? "В наличии" : "Под заказ"}
+        </p>
       </div>
     </>
   )
