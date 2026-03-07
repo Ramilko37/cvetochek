@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment",
+    "description": "Robokassa payment records"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "invId": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "orderId": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "default": "RUB"
+    },
+    "description": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "paid",
+        "failed"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "isTest": {
+      "type": "boolean",
+      "default": false
+    },
+    "paidAt": {
+      "type": "datetime"
+    },
+    "metadata": {
+      "type": "json"
+    },
+    "shp": {
+      "type": "json"
+    },
+    "rawInitPayload": {
+      "type": "json"
+    },
+    "rawResultPayload": {
+      "type": "json"
+    },
+    "rawFailPayload": {
+      "type": "json"
+    },
+    "resultSignatureValid": {
+      "type": "boolean"
+    }
+  }
+}
