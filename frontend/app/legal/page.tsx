@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function LegalPage() {
   return (
     <main className="min-h-screen bg-background">
-      <section className="pt-14 lg:pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-24 lg:pt-[132px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <h1 className="font-serif text-2xl md:text-3xl text-foreground">
           Юридическая информация
         </h1>
@@ -58,12 +58,20 @@ export default function LegalPage() {
         </div>
 
         <div className="mt-12">
-          <Link
-            href="/offer"
-            className="text-primary hover:underline font-medium"
-          >
-            Публичная оферта
-          </Link>
+          <div className="flex flex-col gap-2">
+            <Link
+              href="/offer"
+              className="text-primary hover:underline font-medium"
+            >
+              Публичная оферта
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-primary hover:underline font-medium"
+            >
+              Политика конфиденциальности
+            </Link>
+          </div>
         </div>
       </section>
     </main>

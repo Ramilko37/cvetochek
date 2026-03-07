@@ -25,6 +25,7 @@ const footerLinks = {
     { name: "Инструкция по свежести", href: "/care" },
     { name: "Юр. информация", href: "/legal" },
     { name: "Публичная оферта", href: "/offer" },
+    { name: "Конфиденциальность", href: "/privacy" },
   ],
 }
 
@@ -64,9 +65,10 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm text-muted-foreground">
-            © 2015-2026, Цветочек в Горшочек
-          </p>
+          <div className="text-sm text-muted-foreground text-center md:text-left">
+            <p>© 2015-2026, Cvetipolubvi</p>
+            <p className="mt-1">Сделано в Novera</p>
+          </div>
 
           <div className="flex items-center gap-6">
             {/* Social links */}

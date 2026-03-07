@@ -1,124 +1,46 @@
+import { readFile } from "node:fs/promises"
+import path from "node:path"
+import Link from "next/link"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Публичная оферта | Цветочек в Горшочек",
-  description: "Публичная оферта интернет-магазина Цветочек в Горшочек. Условия оказания услуг и продажи товаров.",
+  description: "Публичная оферта интернет-магазина Цветочек в Горшочек.",
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://cvetochek.ru"
+async function loadOfferText(): Promise<string> {
+  const filePath = path.join(process.cwd(), "public", "legal-docs", "offer.txt")
+  try {
+    const raw = await readFile(filePath, "utf8")
+    return raw.replace(/\r/g, "").trim()
+  } catch {
+    return "Документ оферты временно недоступен."
+  }
+}
 
-export default function OfferPage() {
+export default async function OfferPage() {
+  const offerText = await loadOfferText()
+
   return (
     <main className="min-h-screen bg-background">
-      <article className="pt-14 lg:pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-3xl mx-auto">
-        <h1 className="font-serif text-2xl md:text-3xl text-foreground mb-2">
+      <article className="pt-14 lg:pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-4xl mx-auto">
+        <h1 className="font-serif text-2xl md:text-3xl text-foreground">
           Публичная оферта
         </h1>
-        <p className="text-muted-foreground mb-12">
-          об оказании услуг и продаже товаров дистанционным способом
+        <p className="mt-4 text-muted-foreground">
+          Актуальная редакция документа интернет-магазина «Cvetipolubvi».
         </p>
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-foreground">
-          <section>
-            <h2 className="font-serif text-lg text-foreground">1. Общие положения</h2>
-            <p>
-              <strong>1.1.</strong> Данный документ является официальным предложением (публичной офертой) интернет-магазина «Цветочек в Горшочек» в лице Индивидуального предпринимателя Шалит П.В., далее именуемого «Продавец», заключить договор купли-продажи товаров дистанционным способом с любым лицом, далее именуемым «Покупатель».
-            </p>
-            <p>
-              <strong>1.2.</strong> Оформление заказа на сайте{" "}
-              <a href={SITE_URL} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
-                {SITE_URL}
-              </a>{" "}
-              означает полное и безоговорочное согласие Покупателя с условиями настоящей оферты.
-            </p>
-          </section>
+        <div className="mt-8 rounded-2xl border border-border bg-card p-5 md:p-7">
+          <div className="whitespace-pre-wrap text-[15px] leading-7 text-foreground/90">
+            {offerText}
+          </div>
+        </div>
 
-          <section>
-            <h2 className="font-serif text-lg text-foreground">2. Предмет договора</h2>
-            <p>
-              <strong>2.1.</strong> Продавец обязуется передать в собственность Покупателю (или указанному им Получателю) живые срезанные цветы, флористические композиции, горшечные растения и сопутствующие товары (далее — Товар), а Покупатель обязуется оплатить и принять Товар на условиях настоящей Оферты.
-            </p>
-            <p>
-              <strong>2.2.</strong> Фотографии на сайте являются вариантами составления цветочных композиций. Ввиду того, что цветы являются живым материалом, допускается незначительное отличие готового Товара от фотографий, представленных на сайте.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">3. Оформление заказа и политика замен</h2>
-            <p>
-              <strong>3.1.</strong> Заказ оформляется Покупателем самостоятельно через форму на сайте или по телефону.
-            </p>
-            <p>
-              <strong>3.2.</strong> Политика замен: Цветочные композиции являются уникальными. В зависимости от сезона и поставки, Продавец оставляет за собой право заменить до 20% состава букета на эквивалентные по стоимости и качеству цветы, сохраняя общую цветовую гамму, стиль и заявленный бюджет, если согласовать замену с Покупателем в короткие сроки невозможно.
-            </p>
-            <p>
-              <strong>3.3.</strong> При заказе экзотических горшечных растений Продавец гарантирует соответствие вида (сорта), но форма кроны или точная высота могут иметь естественные природные погрешности.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">4. Цена и порядок оплаты</h2>
-            <p>
-              <strong>4.1.</strong> Цены на сайте указаны в рублях и могут быть изменены Продавцом в одностороннем порядке до момента оплаты заказа.
-            </p>
-            <p>
-              <strong>4.2.</strong> Оплата производится безналичным расчетом на сайте с помощью банковских карт или иных платежных систем, указанных в разделе «Оплата».
-            </p>
-            <p>
-              <strong>4.3.</strong> Заказ принимается в работу только после поступления 100% предоплаты (если не оговорено иное).
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">5. Доставка</h2>
-            <p>
-              <strong>5.1.</strong> Доставка осуществляется курьерской службой по адресу, указанному Покупателем, в выбранный временной интервал.
-            </p>
-            <p>
-              <strong>5.2.</strong> Если Получателя нет на месте в согласованное время, курьер ожидает не более 15 минут. В случае невозможности передать Товар (ошибочный адрес, закрытая территория, Получатель не отвечает), Товар возвращается в магазин.
-            </p>
-            <p>
-              <strong>5.3.</strong> Повторная доставка оплачивается Покупателем дополнительно. Если Покупатель отказывается от повторной доставки, стоимость скоропортящегося Товара (живых цветов) не возвращается.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">6. Возврат и обмен товара</h2>
-            <p>
-              <strong>6.1.</strong> Согласно законодательству, живые растения (горшечные) и срезанные цветы надлежащего качества обмену и возврату не подлежат.
-            </p>
-            <p>
-              <strong>6.2.</strong> В случае претензий к качеству цветов в момент доставки (увядание, заломы стеблей), Покупатель или Получатель вправе отказаться от приемки.
-            </p>
-            <p>
-              <strong>6.3.</strong> Претензии по качеству принимаются в течение 24 часов с момента получения заказа при наличии фото- и видеофиксации дефектов. По истечении этого срока ответственность за уход за живым товаром полностью переходит к Покупателю.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">7. Конфиденциальность и персональные данные</h2>
-            <p>
-              <strong>7.1.</strong> Продавец гарантирует конфиденциальность информации, полученной от Покупателя, и использует ее исключительно для выполнения заказа (включая передачу адреса курьерской службе).
-            </p>
-            <p>
-              <strong>7.2.</strong> Если доставка оформлена как «Анонимная», Продавец обязуется не раскрывать Получателю данные Покупателя.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg text-foreground">8. Реквизиты Продавца</h2>
-            <p className="space-y-1">
-              <strong>ИП Шалит П.В.</strong><br />
-              ИНН: 771676692207<br />
-              ОГРН: 318774600303847<br />
-              Юридический адрес: Тайнинская, 15 к 1, 26<br />
-              Телефон: 8 (926) 470 55 45<br />
-              E-mail:{" "}
-              <a href="mailto:love@cvetipolubvi.ru" className="text-primary hover:underline">
-                love@cvetipolubvi.ru
-              </a>
-            </p>
-          </section>
+        <div className="mt-8">
+          <Link href="/privacy" className="text-primary hover:underline font-medium">
+            Политика конфиденциальности
+          </Link>
         </div>
       </article>
     </main>
