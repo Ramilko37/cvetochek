@@ -10,6 +10,10 @@ export interface Occasion {
   relevantMonths?: number[]
 }
 
+interface OccasionAwareProduct {
+  occasions?: string[]
+}
+
 /** Поводы для подарка — используются в каталоге, фильтрах, на главной */
 export const OCCASIONS: Occasion[] = [
   { slug: "valentines-day", name: "День всех влюблённых", description: "Розы и романтика для двоих", href: "/valentines-day", image: getImagePath("/images/cat-roses.webp"), relevantMonths: [2] },
@@ -36,6 +40,23 @@ export function getOccasionsForMonth(month: number): Occasion[] {
 /** Поводы для текущего месяца (используется на главной, в меню, в фильтрах) */
 export function getCurrentOccasions(): Occasion[] {
   return getOccasionsForMonth(new Date().getMonth() + 1)
+}
+
+/**
+ * Возвращает поводы текущего месяца, которые реально есть в переданных товарах.
+ * Если товаров нет или совпадений не найдено — возвращает стандартный набор текущего месяца.
+ */
+export function getCurrentOccasionsForProducts(products: OccasionAwareProduct[]): Occasion[] {
+  const current = getCurrentOccasions()
+  if (!products.length) return current
+
+  const availableOccasions = new Set<string>()
+  products.forEach((p) => {
+    p.occasions?.forEach((slug) => availableOccasions.add(slug))
+  })
+
+  const filtered = current.filter((o) => availableOccasions.has(o.slug))
+  return filtered.length > 0 ? filtered : current
 }
 
 export function getOccasionBySlug(slug: string): Occasion | undefined {

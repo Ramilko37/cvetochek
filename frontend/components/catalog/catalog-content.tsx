@@ -38,7 +38,7 @@ import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useCart } from "@/store/cart-store"
 import type { Product } from "@/types/product"
-import { getCurrentOccasions } from "@/lib/occasions"
+import { getCurrentOccasionsForProducts } from "@/lib/occasions"
 import { CatalogFilters } from "./catalog-filters"
 import { cn } from "@/lib/utils"
 
@@ -83,7 +83,7 @@ function extractFacets(products: Product[]) {
   }
   return {
     categories: Array.from(categoriesMap.entries()).map(([slug, name]) => ({ slug, name })),
-    occasions: getCurrentOccasions().map((o) => ({ slug: o.slug, name: o.name })),
+    occasions: getCurrentOccasionsForProducts(products).map((o) => ({ slug: o.slug, name: o.name })),
     flowers: Array.from(flowersSet).sort(),
     priceMin: priceMin === Infinity ? 0 : priceMin,
     priceMax: priceMax || 100000,

@@ -8,8 +8,9 @@ export const CATALOG_SLUG_TITLES: Record<string, string> = {
   bouquets: "Букеты",
   compositions: "Композиции",
   baskets: "Корзины",
-  "new-year": "Новый год",
+  boxes: "Коробочки",
   // Будущие витрины (раскомментировать при появлении данных):
+  // "new-year": "Новый год",
   // new: "Новинки",
   // sale: "Акции",
 }

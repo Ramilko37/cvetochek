@@ -67,11 +67,51 @@ const DEFAULT_COMPOSITION: Product["composition"] = {
   diameter: "около 25 см",
 }
 
-const DEFAULT_CATEGORY = { name: "Букеты", slug: "bouquets" }
+const DEFAULT_CATEGORY: Product["category"] = { name: "Букеты", slug: "bouquets" }
+const MONO_CATEGORY: Product["category"] = { name: "Монобукеты", slug: "mono" }
+
+const CATEGORY_BY_TYPE: Record<string, Product["category"]> = {
+  букет: DEFAULT_CATEGORY,
+  композиция: { name: "Композиции", slug: "compositions" },
+  корзина: { name: "Корзины", slug: "baskets" },
+  коробка: { name: "Коробочки", slug: "boxes" },
+}
+
+function normalizeType(type?: string): string {
+  return (type ?? "").trim().toLowerCase()
+}
+
+function splitCsvField(value?: string): string[] {
+  if (!value) return []
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+}
+
+function normalizeFlowerEntry(entry: string): string {
+  return entry.replace(/\s*[-–—]?\s*\d+\s*$/, "").trim()
+}
+
+function getCompositionFlowers(composition?: string): string[] {
+  return splitCsvField(composition).map(normalizeFlowerEntry).filter(Boolean)
+}
+
+function isMonoBouquetByComposition(tg: TelegramProduct): boolean {
+  if (normalizeType(tg.type) !== "букет") return false
+  return splitCsvField(tg.composition).length === 1
+}
+
+function resolveCategory(tg: TelegramProduct): Product["category"] {
+  if (isMonoBouquetByComposition(tg)) return MONO_CATEGORY
+  return CATEGORY_BY_TYPE[normalizeType(tg.type)] ?? DEFAULT_CATEGORY
+}
 
 function telegramToProduct(tg: TelegramProduct, index: number): Product {
   const slug = `tg-${index}`
   const price = tg.sizes?.[0]?.price ?? tg.price ?? 0
+  const flowers = getCompositionFlowers(tg.composition)
+  const packaging = splitCsvField(tg.packaging)
   const occasions: string[] = ["birthday", "just-because"]
   if (tg.tag === "#14февраля") occasions.push("valentines-day")
   return {
@@ -88,9 +128,14 @@ function telegramToProduct(tg: TelegramProduct, index: number): Product {
       price: s.price,
       available: s.available,
     })),
-    category: DEFAULT_CATEGORY,
+    category: resolveCategory(tg),
     description: tg.description ?? "",
-    composition: DEFAULT_COMPOSITION,
+    composition: {
+      flowers: flowers.length > 0 ? flowers : DEFAULT_COMPOSITION.flowers,
+      packaging: packaging.length > 0 ? packaging : DEFAULT_COMPOSITION.packaging,
+      height: DEFAULT_COMPOSITION.height,
+      diameter: DEFAULT_COMPOSITION.diameter,
+    },
     delivery: DEFAULT_DELIVERY,
     careInstructions: DEFAULT_CARE,
     occasions,

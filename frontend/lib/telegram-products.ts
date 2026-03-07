@@ -7,6 +7,12 @@ export interface RawProductVariant {
 export interface RawProduct {
   images: string[]
   description: string
+  /** Тип товара из импорта (например: Букет, Композиция, Корзина, Коробка) */
+  type?: string
+  /** Состав одной строкой из импорта */
+  composition?: string
+  /** Упаковка одной строкой из импорта */
+  packaging?: string
   /** Извлечённое название */
   name?: string
   /** Размер (для одиночного товара) */
@@ -31,6 +37,12 @@ export interface TelegramProductSize {
 export interface TelegramProduct {
   images: string[]
   description: string
+  /** Тип товара из импорта (например: Букет, Композиция, Корзина, Коробка) */
+  type?: string
+  /** Состав одной строкой из импорта */
+  composition?: string
+  /** Упаковка одной строкой из импорта */
+  packaging?: string
   /** Извлечённое название из «кавычек» или **жирного** */
   name?: string
   /** Базовая цена (минимальная при наличии размеров) */
@@ -76,6 +88,9 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
     return data.map((item) => {
       const images = item.images ?? []
       const description = item.description ?? ""
+      const type = item.type?.trim()
+      const composition = item.composition?.trim()
+      const packaging = item.packaging?.trim()
 
       // Новый формат: уже обогащённый (size, price, variants)
       if (item.variants && item.variants.length > 0) {
@@ -90,6 +105,9 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
         return {
           images,
           description,
+          ...(type && { type }),
+          ...(composition && { composition }),
+          ...(packaging && { packaging }),
           name: item.name ?? parseName(description),
           price: Math.min(...sizes.map((s) => s.price)),
           inStock: item.inStock ?? true,
@@ -103,6 +121,9 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
         return {
           images,
           description,
+          ...(type && { type }),
+          ...(composition && { composition }),
+          ...(packaging && { packaging }),
           name: item.name ?? parseName(description),
           price: item.price,
           inStock: item.inStock ?? true,
@@ -116,6 +137,9 @@ export function parseRawProducts(data: RawProduct[]): TelegramProduct[] {
       return {
         images,
         description,
+        ...(type && { type }),
+        ...(composition && { composition }),
+        ...(packaging && { packaging }),
         name,
         price,
         inStock: item.inStock ?? true,

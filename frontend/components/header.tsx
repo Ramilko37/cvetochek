@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
@@ -34,7 +34,8 @@ import { SearchDropdown } from "@/components/search-dropdown"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { useCart } from "@/store/cart-store"
 import { useAuth } from "@/store/auth-store"
-import { getCurrentOccasions } from "@/lib/occasions"
+import { useProductsContext } from "@/components/products-provider"
+import { getCurrentOccasionsForProducts } from "@/lib/occasions"
 import { cn, getImagePath } from "@/lib/utils"
 
 const navigation = [
@@ -63,36 +64,13 @@ type MegaLink = {
   description?: string
 }
 
-const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
-  {
-    title: "Цветы",
-    items: [
-      { title: "Букеты", href: "/catalog?category=bouquets", description: "Авторские и сезонные композиции" },
-      { title: "Моно-букеты", href: "/catalog?category=mono", description: "Один сорт — идеальный акцент" },
-      { title: "Композиции", href: "/catalog?category=compositions", description: "В коробках и декоративных формах" },
-      { title: "Корзины", href: "/catalog?category=baskets", description: "Пышно, торжественно, на особый случай" },
-      { title: "Весенние", href: "/catalog", description: "Тюльпаны и первоцветы для настроения" },
-    ],
-  },
-  {
-    title: "Поводы",
-    items: getCurrentOccasions().map((o) => ({
-      title: o.name,
-      href: o.href,
-      description: o.description,
-    })),
-  },
-  {
-    title: "Подборки",
-    items: [
-      { title: "Со скидкой", href: "/catalog", description: "Лучшие предложения недели" },
-      { title: "Популярное", href: "/catalog", description: "Часто выбирают для подарка" },
-      { title: "Новинки", href: "/catalog", description: "Свежие поступления и коллекции" },
-      { title: "Быстрая доставка", href: "/catalog", description: "Поможем выбрать и собрать оперативно" },
-      { title: "До 5 000 ₽", href: "/catalog", description: "Нежные варианты в комфортном бюджете" },
-    ],
-  },
-]
+const CATEGORY_META: Record<string, { title: string; description: string; order: number }> = {
+  bouquets: { title: "Букеты", description: "Авторские и сезонные композиции", order: 1 },
+  mono: { title: "Монобукеты", description: "Один сорт — идеальный акцент", order: 2 },
+  compositions: { title: "Композиции", description: "В коробках и декоративных формах", order: 3 },
+  baskets: { title: "Корзины", description: "Пышно, торжественно, на особый случай", order: 4 },
+  boxes: { title: "Коробочки", description: "Композиции в шляпных и подарочных коробках", order: 5 },
+}
 
 /** Ссылка на карту и отзывы магазина в Яндекс.Картах */
 const YANDEX_MAPS_STORE_URL = "https://yandex.ru/maps/-/CPQbn4-K"
@@ -155,6 +133,61 @@ export function Header() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const { totalItems, openCart } = useCart()
   const { isAuthenticated, user, logout } = useAuth()
+  const { products } = useProductsContext()
+
+  const categoryItems = useMemo<MegaLink[]>(() => {
+    const categoryMap = new Map<string, string>()
+    products.forEach((product) => {
+      categoryMap.set(product.category.slug, product.category.name)
+    })
+
+    if (categoryMap.size === 0) {
+      return [
+        {
+          title: CATEGORY_META.bouquets.title,
+          href: "/catalog?category=bouquets",
+          description: CATEGORY_META.bouquets.description,
+        },
+      ]
+    }
+
+    return Array.from(categoryMap.entries())
+      .sort(([slugA], [slugB]) => {
+        const orderA = CATEGORY_META[slugA]?.order ?? Number.MAX_SAFE_INTEGER
+        const orderB = CATEGORY_META[slugB]?.order ?? Number.MAX_SAFE_INTEGER
+        return orderA - orderB || slugA.localeCompare(slugB)
+      })
+      .map(([slug, fallbackName]) => ({
+        title: CATEGORY_META[slug]?.title ?? fallbackName,
+        href: `/catalog?category=${slug}`,
+        description: CATEGORY_META[slug]?.description ?? "Авторские и сезонные композиции",
+      }))
+  }, [products])
+
+  const megaCatalog: Array<{ title: string; items: MegaLink[] }> = [
+    {
+      title: "Цветы",
+      items: categoryItems,
+    },
+    {
+      title: "Поводы",
+      items: getCurrentOccasionsForProducts(products).map((o) => ({
+        title: o.name,
+        href: o.href,
+        description: o.description,
+      })),
+    },
+    {
+      title: "Подборки",
+      items: [
+        { title: "Со скидкой", href: "/catalog", description: "Лучшие предложения недели" },
+        { title: "Популярное", href: "/catalog", description: "Часто выбирают для подарка" },
+        { title: "Новинки", href: "/catalog", description: "Свежие поступления и коллекции" },
+        { title: "Быстрая доставка", href: "/catalog", description: "Поможем выбрать и собрать оперативно" },
+        { title: "До 5 000 ₽", href: "/catalog", description: "Нежные варианты в комфортном бюджете" },
+      ],
+    },
+  ]
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
