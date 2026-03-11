@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label"
 import { useCart } from "@/store/cart-store"
 import { useAuth } from "@/store/auth-store"
 
+const PAYMENT_INIT_URL =
+  process.env.NEXT_PUBLIC_ROBOKASSA_INIT_URL || "/api/payments/robokassa/init"
+
 const DELIVERY_SLOTS = [
   { value: "09:00–12:00", label: "09:00 – 12:00" },
   { value: "12:00–15:00", label: "12:00 – 15:00" },
@@ -155,8 +158,34 @@ export function CheckoutForm() {
         setError(data.error || "Не удалось отправить заказ. Попробуйте позже.")
         return
       }
+
+      const orderId = `checkout-${Date.now()}`
+      const paymentRes = await fetch(PAYMENT_INIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId,
+          amount: Number(totalPrice).toFixed(2),
+          description: `Заказ ${orderId}`,
+          shp: { orderId },
+          isTest: "true",
+        }),
+      })
+      const paymentData = await paymentRes.json().catch(() => ({}))
+      const paymentUrl =
+        paymentRes.ok && paymentData?.data?.paymentUrl
+          ? String(paymentData.data.paymentUrl)
+          : null
+
       clearCart()
+
+      if (paymentUrl) {
+        window.location.assign(paymentUrl)
+        return
+      }
+
       setSent(true)
+      setError("Заявка отправлена, но не удалось открыть страницу оплаты. Мы свяжемся с вами для подтверждения заказа.")
     } catch {
       setError("Ошибка соединения. Проверьте интернет и попробуйте снова.")
     } finally {
@@ -197,8 +226,11 @@ export function CheckoutForm() {
             уточнения деталей. Если не дозвонимся — заказ может быть отменён.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Оплата — наличными при получении.
+            Обычно после отправки заявки мы сразу перенаправляем на страницу оплаты.
           </p>
+          {error && (
+            <p className="mt-3 text-sm text-destructive">{error}</p>
+          )}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild variant="outline" className="rounded-full">
               <Link href="/">На главную</Link>
@@ -368,8 +400,7 @@ export function CheckoutForm() {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Оплата — наличными при получении. После подтверждения заказа по
-          телефону мы соберём и доставим ваш заказ.
+          После отправки заявки откроется страница оплаты заказа.
         </p>
 
         {/* Honeypot */}
@@ -397,7 +428,7 @@ export function CheckoutForm() {
             className="w-full sm:w-auto rounded-full h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Отправка…" : "Оставить заявку"}
+            {isSubmitting ? "Отправка…" : "Оплатить"}
           </Button>
         </div>
       </form>
