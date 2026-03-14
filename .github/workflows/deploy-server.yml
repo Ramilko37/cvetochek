@@ -11,13 +11,11 @@ jobs:
     steps:
       - name: Validate deploy secrets
         env:
-          PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
+          PROD_HOST: 155.212.218.145
+          PROD_USER: root
           PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
         run: |
           set -euo pipefail
-          [ -n "${PROD_HOST:-}" ] || { echo "::error::Missing PROD_HOST secret"; exit 11; }
-          [ -n "${PROD_USER:-}" ] || { echo "::error::Missing PROD_USER secret"; exit 12; }
           [ -n "${PROD_PASSWORD:-}" ] || { echo "::error::Missing PROD_PASSWORD secret"; exit 13; }
           echo "Secrets are present. Host=$PROD_HOST User=$PROD_USER PasswordLength=${#PROD_PASSWORD}"
 
@@ -28,15 +26,15 @@ jobs:
 
       - name: Check SSH port reachability
         env:
-          PROD_HOST: ${{ secrets.PROD_HOST }}
+          PROD_HOST: 155.212.218.145
         run: |
           set -euo pipefail
           nc -vz -w 8 "$PROD_HOST" 22
 
       - name: Deploy over SSH
         env:
-          PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
+          PROD_HOST: 155.212.218.145
+          PROD_USER: root
           PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
         run: |
           set -euo pipefail
