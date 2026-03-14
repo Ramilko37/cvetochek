@@ -9,15 +9,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Install SSH client dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
       - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          password: ${{ secrets.PROD_PASSWORD }}
-          script_stop: true
-          script: |
-            set -e
+        env:
+          PROD_HOST: ${{ secrets.PROD_HOST }}
+          PROD_USER: ${{ secrets.PROD_USER }}
+          PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
+        run: |
+          set -euo pipefail
+          SSHPASS="$PROD_PASSWORD" sshpass -e ssh \
+            -o StrictHostKeyChecking=no \
+            -o PreferredAuthentications=password \
+            -o PubkeyAuthentication=no \
+            "$PROD_USER@$PROD_HOST" <<'EOF'
+            set -euo pipefail
             if [ ! -d /opt/cvetochek/.git ]; then
               git clone https://github.com/Ramilko37/cvetochek.git /opt/cvetochek
             fi
@@ -28,3 +37,4 @@ jobs:
             export REPO_URL=https://github.com/Ramilko37/cvetochek.git
             export BRANCH=main
             bash /opt/cvetochek/deploy/server-bootstrap.sh
+          EOF
