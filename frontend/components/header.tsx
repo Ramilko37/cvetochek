@@ -23,7 +23,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -347,9 +347,9 @@ export function Header() {
                   <SheetTitle className="font-serif text-lg">
                     Цветочек в Горшочек
                   </SheetTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <SheetDescription className="text-sm text-muted-foreground">
                     Выберите раздел — и мы поможем найти идеальный букет.
-                  </p>
+                  </SheetDescription>
                 </SheetHeader>
 
                 <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">

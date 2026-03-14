@@ -1,0 +1,30 @@
+name: Deploy To Production Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          password: ${{ secrets.PROD_PASSWORD }}
+          script_stop: true
+          script: |
+            set -e
+            if [ ! -d /opt/cvetochek/.git ]; then
+              git clone https://github.com/Ramilko37/cvetochek.git /opt/cvetochek
+            fi
+            cd /opt/cvetochek
+            git fetch origin main
+            git reset --hard origin/main
+            export APP_DIR=/opt/cvetochek
+            export REPO_URL=https://github.com/Ramilko37/cvetochek.git
+            export BRANCH=main
+            bash /opt/cvetochek/deploy/server-bootstrap.sh

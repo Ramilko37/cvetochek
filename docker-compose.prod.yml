@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cvetochek-backend
+    restart: unless-stopped
+    env_file:
+      - ./deploy/backend.env
+    ports:
+      - "1337:1337"
+    volumes:
+      - strapi_uploads:/app/public/uploads
+      - strapi_tmp:/app/.tmp
+    networks:
+      - cvetochek-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cvetochek-frontend
+    restart: unless-stopped
+    env_file:
+      - ./deploy/frontend.env
+    depends_on:
+      - backend
+    ports:
+      - "80:3000"
+    networks:
+      - cvetochek-net
+
+networks:
+  cvetochek-net:
+    driver: bridge
+
+volumes:
+  strapi_uploads:
+  strapi_tmp:

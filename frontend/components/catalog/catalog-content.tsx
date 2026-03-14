@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useCart } from "@/store/cart-store"
@@ -377,7 +377,12 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="left" className="w-[85vw] sm:max-w-sm overflow-y-auto p-6">
-                    <h2 className="font-serif text-lg text-foreground mb-4">Фильтры</h2>
+                    <SheetHeader className="px-0 pt-0 pb-4 text-left">
+                      <SheetTitle className="font-serif text-lg text-foreground">Фильтры</SheetTitle>
+                      <SheetDescription className="sr-only">
+                        Панель фильтрации каталога по категории, поводу, цене и составу.
+                      </SheetDescription>
+                    </SheetHeader>
                     {filtersPanel}
                   </SheetContent>
                 </Sheet>

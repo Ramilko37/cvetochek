@@ -6,6 +6,7 @@ import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
@@ -31,6 +32,9 @@ export function CartDrawer() {
               </span>
             )}
           </SheetTitle>
+          <SheetDescription className="sr-only">
+            Просмотр товаров в корзине, изменение количества и переход к оформлению заказа.
+          </SheetDescription>
         </SheetHeader>
 
         {items.length === 0 ? (
