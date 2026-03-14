@@ -572,11 +572,11 @@
     "images": [
       "/images/products/romashkoviy_shepot_01.webp"
     ],
-    "description": "Мини-товар для проверки реальной оплаты через Robokassa.",
-    "type": "Букет",
-    "composition": "Тестовая позиция 1",
+    "description": "Подарочная открытка с подписью к заказу. Можно добавить к любому букету.",
+    "type": "Дополнение",
+    "composition": "Открытка 1 шт.",
     "packaging": "упаковка",
-    "name": "Тестовый товар 15 ₽",
+    "name": "Открытка к букету",
     "size": "mini",
     "price": 15,
     "inStock": true
