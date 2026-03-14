@@ -21,20 +21,31 @@ jobs:
           PROD_PASSWORD: ${{ secrets.PROD_PASSWORD }}
         run: |
           set -euo pipefail
-          SSHPASS="$PROD_PASSWORD" sshpass -e ssh \
-            -o StrictHostKeyChecking=no \
-            -o PreferredAuthentications=password \
-            -o PubkeyAuthentication=no \
-            "$PROD_USER@$PROD_HOST" <<'EOF'
-            set -euo pipefail
-            if [ ! -d /opt/cvetochek/.git ]; then
-              git clone https://github.com/Ramilko37/cvetochek.git /opt/cvetochek
-            fi
-            cd /opt/cvetochek
-            git fetch origin main
-            git reset --hard origin/main
-            export APP_DIR=/opt/cvetochek
-            export REPO_URL=https://github.com/Ramilko37/cvetochek.git
-            export BRANCH=main
-            bash /opt/cvetochek/deploy/server-bootstrap.sh
-          EOF
+          set +e
+          SSH_OUTPUT=$(
+            SSHPASS="$PROD_PASSWORD" sshpass -e ssh \
+              -o StrictHostKeyChecking=no \
+              -o PreferredAuthentications=password \
+              -o PubkeyAuthentication=no \
+              "$PROD_USER@$PROD_HOST" <<'EOF'
+              set -euo pipefail
+              if [ ! -d /opt/cvetochek/.git ]; then
+                git clone https://github.com/Ramilko37/cvetochek.git /opt/cvetochek
+              fi
+              cd /opt/cvetochek
+              git fetch origin main
+              git reset --hard origin/main
+              export APP_DIR=/opt/cvetochek
+              export REPO_URL=https://github.com/Ramilko37/cvetochek.git
+              export BRANCH=main
+              bash /opt/cvetochek/deploy/server-bootstrap.sh
+            EOF
+          2>&1
+          )
+          SSH_EXIT_CODE=$?
+          set -e
+          printf '%s\n' "$SSH_OUTPUT"
+          if [ "$SSH_EXIT_CODE" -ne 0 ]; then
+            echo "::error title=SSH deploy failed::${SSH_OUTPUT}"
+            exit "$SSH_EXIT_CODE"
+          fi
