@@ -168,7 +168,6 @@ export function CheckoutForm() {
           amount: Number(totalPrice).toFixed(2),
           description: `Заказ ${orderId}`,
           shp: { orderId },
-          isTest: "true",
         }),
       })
       const paymentData = await paymentRes.json().catch(() => ({}))
@@ -177,9 +176,8 @@ export function CheckoutForm() {
           ? String(paymentData.data.paymentUrl)
           : null
 
-      clearCart()
-
       if (paymentUrl) {
+        clearCart()
         window.location.assign(paymentUrl)
         return
       }
