@@ -4,6 +4,7 @@ set -euo pipefail
 APP_DIR="${APP_DIR:-/opt/cvetochek}"
 REPO_URL="${REPO_URL:-https://github.com/Ramilko37/cvetochek.git}"
 BRANCH="${BRANCH:-main}"
+DOMAIN_NAME="${DOMAIN_NAME:-cvetipolubvi.ru}"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -39,6 +40,38 @@ fi
 if [ ! -f deploy/frontend.env ]; then
   cp deploy/frontend.env.example deploy/frontend.env
   echo "Created deploy/frontend.env from example. Fill secrets before first production use."
+fi
+
+if ! command -v nginx >/dev/null 2>&1; then
+  apt-get update
+  apt-get install -y nginx
+fi
+
+install -d -m 0755 /etc/nginx/sites-available /etc/nginx/sites-enabled
+
+cp deploy/nginx/default.conf /etc/nginx/sites-available/default
+
+CERT_CHAIN="/etc/letsencrypt/live/${DOMAIN_NAME}/fullchain.pem"
+CERT_KEY="/etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem"
+CERTBOT_SSL_OPTS="/etc/letsencrypt/options-ssl-nginx.conf"
+CERTBOT_DHPARAM="/etc/letsencrypt/ssl-dhparams.pem"
+
+if [ -f "$CERT_CHAIN" ] && [ -f "$CERT_KEY" ] && [ -f "$CERTBOT_SSL_OPTS" ] && [ -f "$CERTBOT_DHPARAM" ]; then
+  cp deploy/nginx/cvetochek.https.conf /etc/nginx/sites-available/cvetochek
+  echo "Applied HTTPS nginx config."
+else
+  cp deploy/nginx/cvetochek.http.conf /etc/nginx/sites-available/cvetochek
+  echo "Applied HTTP-only nginx config (no certbot certificate files found)."
+fi
+
+ln -sfn /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+ln -sfn /etc/nginx/sites-available/cvetochek /etc/nginx/sites-enabled/cvetochek
+
+nginx -t
+if systemctl is-active --quiet nginx; then
+  systemctl reload nginx
+else
+  systemctl enable --now nginx
 fi
 
 docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
