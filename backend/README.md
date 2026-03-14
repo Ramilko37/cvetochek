@@ -84,6 +84,10 @@ Optional:
 - `ROBOKASSA_PAYMENT_URL`
 - `ROBOKASSA_SUCCESS_URL`, `ROBOKASSA_FAIL_URL`, `ROBOKASSA_RESULT_URL`
 - `ROBOKASSA_FRONTEND_SUCCESS_URL`, `ROBOKASSA_FRONTEND_FAIL_URL`
+- `ROBOKASSA_RECEIPT_TAX` (`none`, `vat0`, `vat10`, `vat20`, `vat110`, `vat120`)
+- `ROBOKASSA_RECEIPT_PAYMENT_METHOD` (`full_prepayment` by default)
+- `ROBOKASSA_RECEIPT_PAYMENT_OBJECT` (`commodity` by default)
+- `ROBOKASSA_RECEIPT_SNO` (`osn`, `usn_income`, `usn_income_outcome`, `esn`, `patent`)
 
 ### Init request example
 
@@ -95,6 +99,11 @@ curl -X POST http://localhost:1337/api/payments/robokassa/init \
     "amount":"1500.00",
     "description":"Order #1001",
     "email":"buyer@example.com",
+    "receipt":{
+      "items":[
+        {"name":"Букет роз","quantity":1,"sum":1500}
+      ]
+    },
     "shp":{"orderId":"order-1001"}
   }'
 ```

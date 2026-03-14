@@ -39,6 +39,26 @@ function todayISO(): string {
   return d.toISOString().slice(0, 10)
 }
 
+function toMoney(value: number): number {
+  return Number(value.toFixed(2))
+}
+
+function buildRobokassaReceipt(
+  cartItems: Array<{ name: string; price: number; quantity: number }>
+) {
+  return {
+    items: cartItems.map((item, index) => {
+      const normalizedName =
+        item.name.trim().replace(/\s+/g, " ").slice(0, 128) || `Товар ${index + 1}`
+      return {
+        name: normalizedName,
+        quantity: toMoney(item.quantity),
+        sum: toMoney(item.price * item.quantity),
+      }
+    }),
+  }
+}
+
 export function CheckoutForm() {
   const { items, totalPrice, clearCart } = useCart()
   const { user, isAuthenticated } = useAuth()
@@ -160,6 +180,13 @@ export function CheckoutForm() {
       }
 
       const orderId = `checkout-${Date.now()}`
+      const receipt = buildRobokassaReceipt(
+        items.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        }))
+      )
       const paymentRes = await fetch(PAYMENT_INIT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -167,6 +194,7 @@ export function CheckoutForm() {
           orderId,
           amount: Number(totalPrice).toFixed(2),
           description: `Заказ ${orderId}`,
+          receipt,
           shp: { orderId },
         }),
       })

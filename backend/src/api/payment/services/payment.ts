@@ -5,6 +5,18 @@ import { factories } from '@strapi/strapi';
 type AnyRecord = Record<string, unknown>;
 type StringMap = Record<string, string>;
 type SignatureAlgorithm = 'md5' | 'sha256' | 'sha512';
+type ReceiptItem = {
+  name: string;
+  quantity: number;
+  sum: number;
+  tax: string;
+  payment_method: string;
+  payment_object: string;
+};
+type ReceiptPayload = {
+  sno?: string;
+  items: ReceiptItem[];
+};
 
 type RobokassaConfig = {
   merchantLogin: string;
@@ -18,10 +30,46 @@ type RobokassaConfig = {
   frontendFailUrl?: string;
   isTest: boolean;
   hashAlgorithm: SignatureAlgorithm;
+  receiptDefaultTax: string;
+  receiptDefaultPaymentMethod: string;
+  receiptDefaultPaymentObject: string;
+  receiptSno?: string;
 };
 
 const PAYMENT_UID = 'api::payment.payment' as any;
 const HASH_ALGORITHMS: SignatureAlgorithm[] = ['md5', 'sha256', 'sha512'];
+const RECEIPT_TAX_VALUES = new Set(['none', 'vat0', 'vat10', 'vat20', 'vat110', 'vat120']);
+const RECEIPT_PAYMENT_METHOD_VALUES = new Set([
+  'full_payment',
+  'full_prepayment',
+  'prepayment',
+  'advance',
+  'partial_payment',
+  'credit',
+  'credit_payment',
+]);
+const RECEIPT_PAYMENT_OBJECT_VALUES = new Set([
+  'commodity',
+  'excise',
+  'job',
+  'service',
+  'gambling_bet',
+  'gambling_prize',
+  'lottery',
+  'lottery_prize',
+  'intellectual_activity',
+  'payment',
+  'agent_commission',
+  'composite',
+  'another',
+]);
+const RECEIPT_SNO_VALUES = new Set([
+  'osn',
+  'usn_income',
+  'usn_income_outcome',
+  'esn',
+  'patent',
+]);
 
 const parseBoolean = (value?: string) => {
   if (!value) return false;
@@ -54,6 +102,12 @@ const getConfig = (): RobokassaConfig => {
     frontendFailUrl: process.env.ROBOKASSA_FRONTEND_FAIL_URL?.trim(),
     isTest: parseBoolean(process.env.ROBOKASSA_IS_TEST),
     hashAlgorithm: hashAlgorithmRaw as SignatureAlgorithm,
+    receiptDefaultTax: process.env.ROBOKASSA_RECEIPT_TAX?.trim().toLowerCase() || 'none',
+    receiptDefaultPaymentMethod:
+      process.env.ROBOKASSA_RECEIPT_PAYMENT_METHOD?.trim().toLowerCase() || 'full_prepayment',
+    receiptDefaultPaymentObject:
+      process.env.ROBOKASSA_RECEIPT_PAYMENT_OBJECT?.trim().toLowerCase() || 'commodity',
+    receiptSno: process.env.ROBOKASSA_RECEIPT_SNO?.trim().toLowerCase() || undefined,
   };
 };
 
@@ -80,6 +134,22 @@ const normalizeAmount = (amount: unknown): string => {
     throw new Error('Amount must be a positive number');
   }
   return value.toFixed(2);
+};
+
+const normalizeMoneyNumber = (value: unknown, fieldName: string): number => {
+  const numeric = typeof value === 'number' ? value : Number(String(value).replace(',', '.'));
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    throw new Error(`${fieldName} must be a positive number`);
+  }
+  return Number(numeric.toFixed(2));
+};
+
+const normalizeReceiptItemName = (value: unknown) => {
+  const raw = String(value ?? '').trim().replace(/\s+/g, ' ');
+  if (!raw) {
+    throw new Error('Receipt item name is required');
+  }
+  return raw.slice(0, 128);
 };
 
 const normalizeInvId = (invId: unknown) => {
@@ -150,6 +220,84 @@ const getFirstValue = (payload: StringMap, keys: string[]) => {
   return '';
 };
 
+const normalizeReceipt = (value: unknown, config: RobokassaConfig): ReceiptPayload | null => {
+  if (value === null || typeof value === 'undefined' || value === '') return null;
+
+  const source =
+    typeof value === 'string' ? (JSON.parse(value) as AnyRecord) : (value as AnyRecord);
+  if (!source || typeof source !== 'object' || Array.isArray(source)) {
+    throw new Error('Receipt must be an object');
+  }
+
+  const sourceItems = Array.isArray(source.items) ? source.items : null;
+  if (!sourceItems || sourceItems.length === 0) {
+    throw new Error('Receipt.items must be a non-empty array');
+  }
+  if (sourceItems.length > 100) {
+    throw new Error('Receipt.items cannot contain more than 100 items');
+  }
+
+  const normalizedItems = sourceItems.map((item, index) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      throw new Error(`Receipt item #${index + 1} must be an object`);
+    }
+
+    const data = item as AnyRecord;
+    const name = normalizeReceiptItemName(data.name);
+    const quantity = normalizeMoneyNumber(data.quantity, `Receipt item #${index + 1} quantity`);
+    const sum =
+      typeof data.sum !== 'undefined'
+        ? normalizeMoneyNumber(data.sum, `Receipt item #${index + 1} sum`)
+        : normalizeMoneyNumber(
+            Number(data.price ?? 0) * quantity,
+            `Receipt item #${index + 1} sum`
+          );
+
+    const tax = String(data.tax ?? config.receiptDefaultTax)
+      .trim()
+      .toLowerCase();
+    if (!RECEIPT_TAX_VALUES.has(tax)) {
+      throw new Error(`Unsupported Receipt tax value: ${tax}`);
+    }
+
+    const paymentMethod = String(data.payment_method ?? config.receiptDefaultPaymentMethod)
+      .trim()
+      .toLowerCase();
+    if (!RECEIPT_PAYMENT_METHOD_VALUES.has(paymentMethod)) {
+      throw new Error(`Unsupported Receipt payment_method value: ${paymentMethod}`);
+    }
+
+    const paymentObject = String(data.payment_object ?? config.receiptDefaultPaymentObject)
+      .trim()
+      .toLowerCase();
+    if (!RECEIPT_PAYMENT_OBJECT_VALUES.has(paymentObject)) {
+      throw new Error(`Unsupported Receipt payment_object value: ${paymentObject}`);
+    }
+
+    return {
+      name,
+      quantity,
+      sum,
+      tax,
+      payment_method: paymentMethod,
+      payment_object: paymentObject,
+    };
+  });
+
+  const receipt: ReceiptPayload = { items: normalizedItems };
+  const sourceSno = String(source.sno ?? config.receiptSno ?? '')
+    .trim()
+    .toLowerCase();
+  if (sourceSno) {
+    if (!RECEIPT_SNO_VALUES.has(sourceSno)) {
+      throw new Error(`Unsupported Receipt sno value: ${sourceSno}`);
+    }
+    receipt.sno = sourceSno;
+  }
+
+  return receipt;
+};
+
 export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
   getConfig,
 
@@ -165,9 +313,24 @@ export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
     }
 
     const outSum = normalizeAmount(payload.amount);
+    const receipt = normalizeReceipt(input.receipt, config);
+    const receiptJson = receipt ? JSON.stringify(receipt) : '';
+    const receiptForSignature = receiptJson ? encodeURIComponent(receiptJson) : '';
+    if (receipt) {
+      const receiptTotal = Number(
+        receipt.items.reduce((acc, item) => acc + item.sum, 0).toFixed(2)
+      );
+      if (receiptTotal.toFixed(2) !== outSum) {
+        throw new Error('Receipt items sum must be equal to amount');
+      }
+    }
+
     const shpEntries = normalizeShpEntries(input.shp);
+    const signatureParts = [config.merchantLogin, outSum, invId];
+    if (receiptForSignature) signatureParts.push(receiptForSignature);
+    signatureParts.push(config.password1);
     const signatureBase = buildSignatureBase(
-      [config.merchantLogin, outSum, invId, config.password1],
+      signatureParts,
       shpEntries
     );
     const signatureValue = makeSignature(config.hashAlgorithm, signatureBase);
@@ -205,6 +368,7 @@ export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
     });
     if (payload.description) params.set('Description', payload.description);
     if (payload.email) params.set('Email', payload.email);
+    if (receiptJson) params.set('Receipt', receiptJson);
     if (config.successUrl) params.set('SuccessURL', config.successUrl);
     if (config.failUrl) params.set('FailURL', config.failUrl);
     if (config.resultUrl) params.set('ResultURL', config.resultUrl);
@@ -218,6 +382,7 @@ export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
       paymentUrl: `${config.paymentUrl}?${params.toString()}`,
       signatureValue,
       isTest,
+      receiptIncluded: Boolean(receiptJson),
     };
   },
 
