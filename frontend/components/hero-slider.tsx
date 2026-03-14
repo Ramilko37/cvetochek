@@ -8,7 +8,7 @@ import { getImagePath } from "@/lib/utils"
 
 const slides = [
   {
-    image: getImagePath("/images/hero-peonies.webp"),
+    image: getImagePath("/images/products/vesennee_utro_01.webp"),
     label: "Новая коллекция",
     title: "Весенние",
     titleAccent: "букеты",
@@ -16,7 +16,7 @@ const slides = [
     buttonHref: "/catalog",
   },
   {
-    image: getImagePath("/images/cat-roses.webp"),
+    image: getImagePath("/images/products/nejnoe_nastroenie_01.webp"),
     label: "Весенний бестселлер",
     title: "Нежные",
     titleAccent: "розы",
@@ -24,12 +24,12 @@ const slides = [
     buttonHref: "/catalog",
   },
   {
-    image: getImagePath("/images/cat-plants.webp"),
-    label: "8 марта",
-    title: "Международный",
-    titleAccent: "женский день",
-    description: "Тюльпаны, мимоза и сезонные миксы для мам и близких",
-    buttonHref: "/catalog?occasion=march-8",
+    image: getImagePath("/images/products/serdce_vesny_01.webp"),
+    label: "Весеннее настроение",
+    title: "Цветы",
+    titleAccent: "по любви",
+    description: "Лёгкие сезонные букеты, когда хочется порадовать без повода",
+    buttonHref: "/catalog?occasion=just-because",
   },
 ]
 

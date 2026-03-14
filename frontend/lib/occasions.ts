@@ -22,12 +22,12 @@ export const OCCASIONS: Occasion[] = [
   { slug: "march-8", name: "8 марта", description: "Весенние букеты и тюльпаны", href: "/catalog?occasion=march-8", image: getImagePath("/images/cat-peonies.webp"), relevantMonths: [3] },
   { slug: "new-year", name: "Новый год", description: "Еловые ветви и праздничный декор", href: "/catalog?occasion=new-year", image: getImagePath("/images/cat-newyear.webp"), relevantMonths: [12, 1] },
   { slug: "easter", name: "Пасха", description: "Светлые весенние букеты", href: "/catalog?occasion=easter", image: getImagePath("/images/cat-bouquets.webp"), relevantMonths: [3, 4] },
-  { slug: "birthday", name: "День рождения", description: "Яркие букеты для именинника", href: "/catalog?occasion=birthday", image: getImagePath("/images/cat-bouquets.webp") },
+  { slug: "birthday", name: "День рождения", description: "Яркие букеты для именинника", href: "/catalog?occasion=birthday", image: getImagePath("/images/products/tcvetochnaya_radost_01.webp") },
   { slug: "graduation", name: "Выпускной", description: "Элегантные композиции", href: "/catalog?occasion=graduation", image: getImagePath("/images/cat-compositions.webp"), relevantMonths: [5, 6] },
   { slug: "september-1", name: "1 сентября", description: "Скромные букеты для школьников", href: "/catalog?occasion=september-1", image: getImagePath("/images/cat-mono.webp"), relevantMonths: [8, 9] },
   { slug: "wedding", name: "Свадебные букеты", description: "Белоснежные розы и композиции", href: "/catalog?occasion=wedding", image: getImagePath("/images/products/balosnejnaya_klassika_02.webp") },
   { slug: "home", name: "Цветы для дома", description: "Композиции для интерьера", href: "/catalog?occasion=home", image: getImagePath("/images/cat-compositions.webp") },
-  { slug: "just-because", name: "Просто, по любви", description: "Букеты без особого повода", href: "/catalog?occasion=just-because", image: getImagePath("/images/cat-plants.webp") },
+  { slug: "just-because", name: "Просто, по любви", description: "Букеты без особого повода", href: "/catalog?occasion=just-because", image: getImagePath("/images/products/romantika_utra_01.webp") },
 ]
 
 /** Поводы, актуальные в указанный месяц (1–12). Без relevantMonths = круглый год. */
@@ -39,7 +39,16 @@ export function getOccasionsForMonth(month: number): Occasion[] {
 
 /** Поводы для текущего месяца (используется на главной, в меню, в фильтрах) */
 export function getCurrentOccasions(): Occasion[] {
-  return getOccasionsForMonth(new Date().getMonth() + 1)
+  const now = new Date()
+  const month = now.getMonth() + 1
+  const day = now.getDate()
+
+  return getOccasionsForMonth(month).filter((occasion) => {
+    if (occasion.slug === "march-8" && month === 3 && day > 8) {
+      return false
+    }
+    return true
+  })
 }
 
 /**
