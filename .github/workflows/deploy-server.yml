@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: DEPLOYMENT
     steps:
       - name: Validate deploy secrets
         env:
