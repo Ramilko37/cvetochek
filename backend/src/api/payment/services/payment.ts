@@ -38,7 +38,20 @@ type RobokassaConfig = {
 
 const PAYMENT_UID = 'api::payment.payment' as any;
 const HASH_ALGORITHMS: SignatureAlgorithm[] = ['md5', 'sha256', 'sha512'];
-const RECEIPT_TAX_VALUES = new Set(['none', 'vat0', 'vat10', 'vat20', 'vat110', 'vat120']);
+const RECEIPT_TAX_VALUES = new Set([
+  'none',
+  'vat0',
+  'vat10',
+  'vat20',
+  'vat110',
+  'vat120',
+  'vat22',
+  'vat122',
+  'vat5',
+  'vat7',
+  'vat105',
+  'vat107',
+]);
 const RECEIPT_PAYMENT_METHOD_VALUES = new Set([
   'full_payment',
   'full_prepayment',
@@ -61,6 +74,12 @@ const RECEIPT_PAYMENT_OBJECT_VALUES = new Set([
   'payment',
   'agent_commission',
   'composite',
+  'resort_fee',
+  'property_right',
+  'non-operating_gain',
+  'insurance_premium',
+  'sales_tax',
+  'tovar_mark',
   'another',
 ]);
 const RECEIPT_SNO_VALUES = new Set([
@@ -150,6 +169,11 @@ const normalizeReceiptItemName = (value: unknown) => {
     throw new Error('Receipt item name is required');
   }
   return raw.slice(0, 128);
+};
+
+const encodeReceiptForSignature = (receiptJson: string) => {
+  const encoded = new URLSearchParams({ Receipt: receiptJson }).toString();
+  return encoded.startsWith('Receipt=') ? encoded.slice('Receipt='.length) : encoded;
 };
 
 const normalizeInvId = (invId: unknown) => {
@@ -315,7 +339,7 @@ export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
     const outSum = normalizeAmount(payload.amount);
     const receipt = normalizeReceipt(input.receipt, config);
     const receiptJson = receipt ? JSON.stringify(receipt) : '';
-    const receiptForSignature = receiptJson ? encodeURIComponent(receiptJson) : '';
+    const receiptForSignature = receiptJson ? encodeReceiptForSignature(receiptJson) : '';
     if (receipt) {
       const receiptTotal = Number(
         receipt.items.reduce((acc, item) => acc + item.sum, 0).toFixed(2)
