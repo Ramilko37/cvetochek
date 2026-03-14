@@ -27,7 +27,7 @@ export const OCCASIONS: Occasion[] = [
   { slug: "september-1", name: "1 сентября", description: "Скромные букеты для школьников", href: "/catalog?occasion=september-1", image: getImagePath("/images/cat-mono.webp"), relevantMonths: [8, 9] },
   { slug: "wedding", name: "Свадебные букеты", description: "Белоснежные розы и композиции", href: "/catalog?occasion=wedding", image: getImagePath("/images/products/balosnejnaya_klassika_02.webp") },
   { slug: "home", name: "Цветы для дома", description: "Композиции для интерьера", href: "/catalog?occasion=home", image: getImagePath("/images/cat-compositions.webp") },
-  { slug: "just-because", name: "Просто, по любви", description: "Букеты без особого повода", href: "/catalog?occasion=just-because", image: getImagePath("/images/cat-bouquets.webp") },
+  { slug: "just-because", name: "Просто, по любви", description: "Букеты без особого повода", href: "/catalog?occasion=just-because", image: getImagePath("/images/cat-plants.webp") },
 ]
 
 /** Поводы, актуальные в указанный месяц (1–12). Без relevantMonths = круглый год. */
