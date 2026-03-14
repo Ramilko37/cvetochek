@@ -567,5 +567,18 @@
     "size": "35*45",
     "price": 8000,
     "inStock": true
+  },
+  {
+    "images": [
+      "/images/products/romashkoviy_shepot_01.webp"
+    ],
+    "description": "Мини-товар для проверки реальной оплаты через Robokassa.",
+    "type": "Букет",
+    "composition": "Тестовая позиция 1",
+    "packaging": "упаковка",
+    "name": "Тестовый товар 15 ₽",
+    "size": "mini",
+    "price": 15,
+    "inStock": true
   }
 ]
