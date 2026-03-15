@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { CartDrawer } from '@/components/cart-drawer'
+import { MixpanelProvider } from '@/components/mixpanel-provider'
 import { ProductsProvider } from '@/components/products-provider'
 import '@/styles/globals.css'
 
@@ -55,6 +56,7 @@ export default function RootLayout({
           <CartDrawer />
         </ProductsProvider>
         <Toaster />
+        <MixpanelProvider />
         <Analytics />
       </body>
     </html>
