@@ -171,11 +171,6 @@ const normalizeReceiptItemName = (value: unknown) => {
   return raw.slice(0, 128);
 };
 
-const encodeReceiptForSignature = (receiptJson: string) => {
-  const encoded = new URLSearchParams({ Receipt: receiptJson }).toString();
-  return encoded.startsWith('Receipt=') ? encoded.slice('Receipt='.length) : encoded;
-};
-
 const normalizeInvId = (invId: unknown) => {
   if (typeof invId === 'undefined' || invId === null || String(invId).trim() === '') {
     const randomSuffix = crypto.randomInt(100, 1000);
@@ -339,7 +334,7 @@ export default factories.createCoreService(PAYMENT_UID, ({ strapi }) => ({
     const outSum = normalizeAmount(payload.amount);
     const receipt = normalizeReceipt(input.receipt, config);
     const receiptJson = receipt ? JSON.stringify(receipt) : '';
-    const receiptForSignature = receiptJson ? encodeReceiptForSignature(receiptJson) : '';
+    const receiptForSignature = receiptJson;
     if (receipt) {
       const receiptTotal = Number(
         receipt.items.reduce((acc, item) => acc + item.sum, 0).toFixed(2)
