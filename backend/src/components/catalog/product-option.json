@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_catalog_product_options",
+  "info": {
+    "displayName": "Product Option",
+    "description": "Additional paid option"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

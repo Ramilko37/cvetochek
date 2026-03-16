@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_catalog_product_sizes",
+  "info": {
+    "displayName": "Product Size",
+    "description": "Size/price option"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "available": {
+      "type": "boolean",
+      "default": true
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

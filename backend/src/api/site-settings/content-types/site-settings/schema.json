@@ -1,0 +1,48 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-settings",
+    "pluralName": "site-settings-global",
+    "displayName": "Site Settings",
+    "description": "Global website settings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "brandName": {
+      "type": "string",
+      "default": "Цветочек в Горшочек"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "telegram": {
+      "type": "string"
+    },
+    "whatsapp": {
+      "type": "string"
+    },
+    "deliveryNote": {
+      "type": "text"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "heroSlides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "catalog.hero-slide"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_catalog_product_compositions",
+  "info": {
+    "displayName": "Product Composition",
+    "description": "Product composition details"
+  },
+  "options": {},
+  "attributes": {
+    "flowers": {
+      "type": "json"
+    },
+    "packaging": {
+      "type": "json"
+    },
+    "height": {
+      "type": "string"
+    },
+    "diameter": {
+      "type": "string"
+    }
+  }
+}

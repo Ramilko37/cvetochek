@@ -122,3 +122,43 @@ Response contains `paymentUrl`; redirect customer to this URL.
 - Set `Success URL` and `Fail URL` to backend endpoints or frontend pages (depending on your flow)
 - Use the same hash algorithm in cabinet and `ROBOKASSA_HASH_ALGORITHM`
 - For testing, enable test mode in both cabinet and `ROBOKASSA_IS_TEST=true`
+
+## CMS Catalog (Strapi v5)
+
+Added content structures for managing storefront data from Strapi admin:
+
+- Collection types: `Category`, `Product`, `Banner`, `Page`
+- Single type: `Site Settings`
+- Components: `shared.seo`, `catalog.product-size`, `catalog.product-option`, `catalog.delivery-interval`, `catalog.product-composition`, `catalog.hero-slide`
+
+All public catalog reads are served via custom API using Document Service (`strapi.documents`).
+
+### Public catalog endpoints
+
+- `GET /api/catalog/public`
+- `GET /api/catalog/public/products/:slug`
+- `GET /api/catalog/public/categories`
+- `GET /api/catalog/public/banners`
+- `GET /api/catalog/public/pages/:slug`
+- `GET /api/catalog/public/settings`
+
+For correct absolute media links in JSON responses, set:
+
+- `STRAPI_PUBLIC_URL=https://api.your-domain.tld`
+
+### Frontend integration
+
+Frontend product hook first tries `GET /api/catalog/public` and falls back to legacy Telegram JSON if CMS is empty/unavailable.
+
+Optional frontend env overrides:
+
+- `NEXT_PUBLIC_STRAPI_URL`
+- `NEXT_PUBLIC_CATALOG_PUBLIC_URL`
+- `NEXT_PUBLIC_ROBOKASSA_INIT_URL`
+
+### Admin panel setup
+
+1. Open `/admin` on your Strapi domain.
+2. Create the first admin account (if not initialized yet).
+3. Fill `Category`, `Product`, `Banner`, `Page`, `Site Settings`.
+4. Publish records (drafts are not returned by public catalog API).

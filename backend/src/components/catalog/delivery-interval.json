@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_catalog_delivery_intervals",
+  "info": {
+    "displayName": "Delivery Interval",
+    "description": "Delivery pricing interval"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "moscow": {
+      "type": "string",
+      "required": true
+    },
+    "outsideMkad": {
+      "type": "string"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

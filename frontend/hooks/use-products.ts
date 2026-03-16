@@ -7,6 +7,10 @@ import type { Product } from "@/types/product"
 import type { TelegramProduct } from "@/lib/telegram-products"
 
 const PRODUCTS_JSON_URL = "/images/telegram-products/products.json"
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL?.replace(/\/$/, "")
+const CATALOG_PUBLIC_URL =
+  process.env.NEXT_PUBLIC_CATALOG_PUBLIC_URL ||
+  (STRAPI_URL ? `${STRAPI_URL}/api/catalog/public` : "/api/catalog/public")
 
 export interface UseTelegramProductsResult {
   products: TelegramProduct[]
@@ -75,6 +79,166 @@ const CATEGORY_BY_TYPE: Record<string, Product["category"]> = {
   композиция: { name: "Композиции", slug: "compositions" },
   корзина: { name: "Корзины", slug: "baskets" },
   коробка: { name: "Коробочки", slug: "boxes" },
+}
+
+type AnyRecord = Record<string, unknown>
+
+type PublicCatalogResponse = {
+  ok?: boolean
+  data?: {
+    products?: unknown[]
+  }
+}
+
+function toNumber(value: unknown, fallback = 0): number {
+  const parsed = typeof value === "number" ? value : Number(value)
+  return Number.isFinite(parsed) ? parsed : fallback
+}
+
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value.map((item) => String(item)).filter(Boolean)
+}
+
+function toDelivery(value: unknown): Product["delivery"] {
+  const maybeDelivery = value && typeof value === "object" ? (value as AnyRecord) : null
+  const intervals = maybeDelivery?.intervals
+  if (!Array.isArray(intervals) || intervals.length === 0) return DEFAULT_DELIVERY
+
+  const normalized = intervals
+    .map((interval) => {
+      const row = interval && typeof interval === "object" ? (interval as AnyRecord) : null
+      if (!row) return null
+      const label = String(row.label ?? "").trim()
+      const moscow = String(row.moscow ?? "").trim()
+      const outsideMkad =
+        typeof row.outsideMkad === "string" && row.outsideMkad.trim()
+          ? row.outsideMkad.trim()
+          : undefined
+      if (!label || !moscow) return null
+      return { label, moscow, outsideMkad }
+    })
+    .filter((row): row is { label: string; moscow: string; outsideMkad?: string } => Boolean(row))
+
+  return normalized.length > 0 ? { intervals: normalized } : DEFAULT_DELIVERY
+}
+
+function normalizeCatalogProduct(value: unknown, index: number): Product | null {
+  if (!value || typeof value !== "object") return null
+  const row = value as AnyRecord
+
+  const id = String(row.id ?? row.documentId ?? `catalog-${index}`)
+  const slug = String(row.slug ?? "").trim() || id
+  const name = String(row.name ?? "").trim()
+  const sku = String(row.sku ?? "").trim() || `CAT-${String(index).padStart(4, "0")}`
+  const originalPrice = toNumber(row.originalPrice, NaN)
+
+  if (!name) return null
+
+  const categoryValue = row.category && typeof row.category === "object" ? (row.category as AnyRecord) : null
+  const category = {
+    name: String(categoryValue?.name ?? "").trim() || DEFAULT_CATEGORY.name,
+    slug: String(categoryValue?.slug ?? "").trim() || DEFAULT_CATEGORY.slug,
+  }
+
+  const images = Array.isArray(row.images)
+    ? row.images.map((image) => String(image)).filter(Boolean)
+    : []
+
+  const sizes = Array.isArray(row.sizes)
+    ? row.sizes
+        .map((size, sizeIndex) => {
+          const sizeRow = size && typeof size === "object" ? (size as AnyRecord) : null
+          if (!sizeRow) return null
+          const label = String(sizeRow.label ?? "").trim()
+          if (!label) return null
+          return {
+            id: String(sizeRow.id ?? `${slug}-size-${sizeIndex}`),
+            label,
+            price: toNumber(sizeRow.price),
+            available: Boolean(sizeRow.available ?? true),
+          }
+        })
+        .filter((size): size is NonNullable<typeof size> => Boolean(size))
+    : undefined
+
+  const options = Array.isArray(row.options)
+    ? row.options
+        .map((option, optionIndex) => {
+          const optionRow = option && typeof option === "object" ? (option as AnyRecord) : null
+          if (!optionRow) return null
+          const optionName = String(optionRow.name ?? "").trim()
+          if (!optionName) return null
+          const description =
+            typeof optionRow.description === "string" && optionRow.description.trim()
+              ? optionRow.description.trim()
+              : undefined
+          return {
+            id: String(optionRow.id ?? `${slug}-option-${optionIndex}`),
+            name: optionName,
+            price: toNumber(optionRow.price),
+            description,
+          }
+        })
+        .filter((option): option is NonNullable<typeof option> => Boolean(option))
+    : undefined
+
+  const compositionValue =
+    row.composition && typeof row.composition === "object" ? (row.composition as AnyRecord) : null
+  const composition: Product["composition"] = {
+    flowers: toStringArray(compositionValue?.flowers),
+    packaging: toStringArray(compositionValue?.packaging),
+    height: String(compositionValue?.height ?? "").trim() || DEFAULT_COMPOSITION.height,
+    diameter: String(compositionValue?.diameter ?? "").trim() || DEFAULT_COMPOSITION.diameter,
+  }
+  if (composition.flowers.length === 0) composition.flowers = DEFAULT_COMPOSITION.flowers
+  if (composition.packaging.length === 0) composition.packaging = DEFAULT_COMPOSITION.packaging
+
+  return {
+    id,
+    slug,
+    name,
+    sku,
+    price: toNumber(row.price),
+    ...(Number.isFinite(originalPrice) ? { originalPrice } : {}),
+    inStock: Boolean(row.inStock ?? true),
+    images: images.length > 0 ? images : [getImagePath("/placeholder.webp")],
+    sizes: sizes && sizes.length > 0 ? sizes : undefined,
+    category,
+    description: String(row.description ?? "").trim(),
+    composition,
+    delivery: toDelivery(row.delivery),
+    careInstructions:
+      String(row.careInstructions ?? "").trim() || DEFAULT_CARE,
+    options: options && options.length > 0 ? options : undefined,
+    occasions: toStringArray(row.occasions),
+  }
+}
+
+async function loadProductsFromCatalogApi(): Promise<Product[]> {
+  const response = await fetch(CATALOG_PUBLIC_URL)
+  if (!response.ok) {
+    throw new Error(`Catalog API HTTP ${response.status}`)
+  }
+
+  const payload = (await response.json()) as PublicCatalogResponse
+  const rawProducts = payload?.data?.products
+  if (!Array.isArray(rawProducts)) return []
+
+  const normalized = rawProducts
+    .map((product, index) => normalizeCatalogProduct(product, index))
+    .filter((product): product is Product => Boolean(product))
+
+  return normalized
+}
+
+async function loadTelegramProductsFromJson(): Promise<Product[]> {
+  const res = await fetch(PRODUCTS_JSON_URL)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  const raw: RawProduct[] = await res.json()
+  if (!Array.isArray(raw)) throw new Error("Invalid products data")
+  const tg = parseRawProducts(raw)
+  return telegramProductsToProducts(tg)
 }
 
 function normalizeType(type?: string): string {
@@ -162,20 +326,32 @@ export function useProducts(): UseProductsResult {
     let cancelled = false
 
     async function load() {
+      let catalogError: unknown = null
       try {
-        const res = await fetch(PRODUCTS_JSON_URL)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const raw: RawProduct[] = await res.json()
-        if (!Array.isArray(raw)) throw new Error("Invalid products data")
+        const catalogProducts = await loadProductsFromCatalogApi()
         if (cancelled) return
-        const tg = parseRawProducts(raw)
-        setProducts(telegramProductsToProducts(tg))
+        if (catalogProducts.length > 0) {
+          setProducts(catalogProducts)
+          setError(null)
+          return
+        }
+      } catch (e) {
+        catalogError = e
+      }
+
+      try {
+        const legacyProducts = await loadTelegramProductsFromJson()
+        if (cancelled) return
+        setProducts(legacyProducts)
         setError(null)
       } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : "Не удалось загрузить товары")
-          setProducts([])
-        }
+        if (cancelled) return
+        const message =
+          e instanceof Error ? e.message : "Не удалось загрузить товары"
+        const catalogMessage =
+          catalogError instanceof Error ? ` (catalog: ${catalogError.message})` : ""
+        setError(`${message}${catalogMessage}`)
+        setProducts([])
       } finally {
         if (!cancelled) setIsLoading(false)
       }
@@ -190,6 +366,9 @@ export function useProducts(): UseProductsResult {
 
 /** Возвращает продукт по slug (требует загрузки продуктов через useProducts). */
 export function getProductBySlug(products: Product[], slug: string): Product | undefined {
+  const bySlug = products.find((product) => product.slug === slug)
+  if (bySlug) return bySlug
+
   const match = slug.match(/^tg-(\d+)$/)
   if (!match) return undefined
   const index = parseInt(match[1], 10)
