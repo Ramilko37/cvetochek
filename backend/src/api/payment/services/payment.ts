@@ -222,11 +222,13 @@ const appendRedirectQuery = (targetUrl: string, payload: StringMap, status: 'suc
   const invId = payload.InvId || '';
   const outSum = payload.OutSum || '';
   const orderId = payload.Shp_orderId || '';
+  const orderLabel = payload.Shp_orderLabel || '';
 
   url.searchParams.set('status', status);
   if (invId) url.searchParams.set('invId', invId);
   if (outSum) url.searchParams.set('outSum', outSum);
   if (orderId) url.searchParams.set('orderId', orderId);
+  if (orderLabel) url.searchParams.set('orderLabel', orderLabel);
 
   return url.toString();
 };

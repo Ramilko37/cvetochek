@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCart } from "@/store/cart-store"
 import { useAuth } from "@/store/auth-store"
+import { generateOrderId } from "@/lib/order-id"
 
 const PAYMENT_INIT_URL =
   process.env.NEXT_PUBLIC_ROBOKASSA_INIT_URL || "/api/payments/robokassa/init"
@@ -57,6 +58,13 @@ function buildRobokassaReceipt(
       }
     }),
   }
+}
+
+function buildOrderLabel(items: Array<{ name: string }>): string {
+  if (items.length === 0) return "Заказ"
+  const first = items[0]?.name?.trim().replace(/\s+/g, " ") || "Заказ"
+  if (items.length === 1) return first.slice(0, 80)
+  return `${first.slice(0, 60)} +${items.length - 1}`
 }
 
 export function CheckoutForm() {
@@ -179,7 +187,8 @@ export function CheckoutForm() {
         return
       }
 
-      const orderId = `checkout-${Date.now()}`
+      const orderId = generateOrderId()
+      const orderLabel = buildOrderLabel(items)
       const receipt = buildRobokassaReceipt(
         items.map((item) => ({
           name: item.name,
@@ -195,7 +204,7 @@ export function CheckoutForm() {
           amount: Number(totalPrice).toFixed(2),
           description: `Заказ ${orderId}`,
           receipt,
-          shp: { orderId },
+          shp: { orderId, orderLabel },
         }),
       })
       const paymentData = await paymentRes.json().catch(() => ({}))

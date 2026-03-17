@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { formatInvIdForDisplay, formatOrderIdForDisplay } from "@/lib/order-id"
 
 export const metadata: Metadata = {
   title: "Оплата успешна | Цветочек в Горшочек",
@@ -13,6 +14,7 @@ type SearchParams = {
   invId?: string
   outSum?: string
   orderId?: string
+  orderLabel?: string
 }
 
 interface CheckoutSuccessPageProps {
@@ -26,11 +28,23 @@ function formatAmount(amount?: string) {
   return `${value.toLocaleString("ru-RU")} ₽`
 }
 
+function safeDecode(value?: string) {
+  if (!value) return null
+  try {
+    return decodeURIComponent(value).trim()
+  } catch {
+    return value.trim()
+  }
+}
+
 export default async function CheckoutSuccessPage({
   searchParams,
 }: CheckoutSuccessPageProps) {
   const query = await searchParams
   const amount = formatAmount(query.outSum)
+  const orderId = formatOrderIdForDisplay(query.orderId)
+  const invId = formatInvIdForDisplay(query.invId)
+  const orderLabel = safeDecode(query.orderLabel)
 
   return (
     <main className="min-h-screen bg-background">
@@ -47,8 +61,9 @@ export default async function CheckoutSuccessPage({
           </p>
 
           <div className="mt-6 rounded-xl border border-border bg-muted/30 p-4 text-left text-sm">
-            {query.orderId && <p><span className="text-muted-foreground">Заказ:</span> {query.orderId}</p>}
-            {query.invId && <p><span className="text-muted-foreground">InvId:</span> {query.invId}</p>}
+            {orderLabel && <p><span className="text-muted-foreground">Заказ:</span> {orderLabel}</p>}
+            {orderId && <p><span className="text-muted-foreground">Номер заказа:</span> {orderId}</p>}
+            {invId && <p><span className="text-muted-foreground">Платёж:</span> {invId}</p>}
             {amount && <p><span className="text-muted-foreground">Сумма:</span> {amount}</p>}
           </div>
 
