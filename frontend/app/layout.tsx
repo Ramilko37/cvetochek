@@ -26,11 +26,40 @@ const cormorant = Cormorant_Garamond({
 
 // basePath: пусто = сайт в корне; NEXT_PUBLIC_BASE_PATH=/cvetochek = в подпапке
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
+  "https://cvetipolubvi.ru"
+).replace(/\/$/, "")
+const ogImage = `${siteUrl}${basePath}/logo.png`
 
 export const metadata: Metadata = {
   title: 'Цветочек в Горшочек | Доставка цветов в Москве',
   description: 'Изысканные букеты и цветочные композиции с доставкой по Москве. Создаём с любовью.',
   generator: 'v0.app',
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: siteUrl,
+    siteName: "Цветочек в Горшочек",
+    title: "Цветочек в Горшочек | Доставка цветов в Москве",
+    description: "Изысканные букеты и цветочные композиции с доставкой по Москве. Создаём с любовью.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Цветочек в Горшочек",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Цветочек в Горшочек | Доставка цветов в Москве",
+    description: "Изысканные букеты и цветочные композиции с доставкой по Москве. Создаём с любовью.",
+    images: [ogImage],
+  },
   icons: {
     icon: [
       { url: `${basePath}/favicon.ico`, sizes: 'any' },

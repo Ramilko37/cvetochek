@@ -47,8 +47,10 @@ const navigation = [
 
 /** Доп. пункты для мобильного меню (как в футере: О магазине и др.) */
 const mobileMenuExtra = [
+  { name: "О магазине", href: "/about" },
   { name: "Вопрос-ответ", href: "/faq" },
   { name: "Блог", href: "/blog" },
+  { name: "Доставка", href: "/delivery" },
 ]
 
 /** Контакты в разделе «О магазине» мобильного меню */
@@ -470,7 +472,13 @@ export function Header() {
           {/* Иконки справа на мобильном: поиск, пользователь, корзина */}
           <div className="flex lg:hidden items-center gap-1 shrink-0">
             <SearchDropdown />
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 text-muted-foreground hover:text-foreground"
+              onClick={() => setAuthModalOpen(true)}
+              aria-label="Войти"
+            >
               <User className="h-5 w-5" />
             </Button>
             <Button

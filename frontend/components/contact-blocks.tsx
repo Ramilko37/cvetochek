@@ -40,7 +40,9 @@ export function ContactBlocks() {
             </Link>
             
             <Link 
-              href="#" 
+              href="https://wa.me/79264705545" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
@@ -50,7 +52,9 @@ export function ContactBlocks() {
             </Link>
             
             <Link 
-              href="#" 
+              href="https://t.me/cvetoc4ek_v_gorsho4ek" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">

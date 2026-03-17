@@ -11,11 +11,13 @@ const footerLinks = {
     { name: "Москва", href: "/contacts" },
   ],
   "О магазине": [
+    { name: "О нас", href: "/about" },
     { name: "Блог", href: "/blog" },
     { name: "Вопросы и ответы", href: "/faq" },
     { name: "Карта сайта", href: "/sitemap" },
   ],
   "Доставка": [
+    { name: "Условия доставки", href: "/delivery" },
     { name: "Оплата", href: "/payment" },
     { name: "Программа лояльности", href: "/loyalty" },
     { name: "Корпоративным клиентам", href: "/corporate" },

@@ -24,20 +24,20 @@ export const articles: BlogPost[] = [
         <p>В холодильнике нашей мастерской всегда есть особенные любимчики, которые производят вау-эффект:</p>
         <ul className="space-y-4">
           <li>
-            • <Link href="/item/tg-23" className="text-primary hover:underline font-medium">Red Monster (Ред Монстер)</Link> — настоящий гигант в мире флористики! Огромный бархатистый бутон глубокого красного цвета с красивым, слегка волнистым краем. Классика на максималках для самых страстных признаний. Смотрите букет <Link href="/item/tg-23" className="text-primary hover:underline">«Красный бархат»</Link>.
+            • <Link href="/catalog/bouquets" className="text-primary hover:underline font-medium">Красные розы</Link> — выразительные букеты с глубоким бархатным оттенком, которые идеально подходят для признаний в любви и ярких поводов. Смотрите варианты в <Link href="/catalog/bouquets" className="text-primary hover:underline">каталоге</Link>.
           </li>
           <li>
-            • <Link href="/item/tg-37" className="text-primary hover:underline font-medium">Country Blues (Кантри Блюз)</Link> — роскошная пионовидная роза пыльно-розового, слегка лавандового оттенка. Ее густомахровый бутон раскрывается невероятно пышно и романтично. Безупречный выбор для стильных и нежных посланий — букет <Link href="/item/tg-37" className="text-primary hover:underline">«Country Rose Dream»</Link>.
+            • <Link href="/catalog/bouquets" className="text-primary hover:underline font-medium">Пионовидные кустовые розы</Link> — объемные и фактурные букеты в нежной палитре, которые смотрятся особенно романтично и современно. Смотрите похожие варианты в <Link href="/catalog/bouquets" className="text-primary hover:underline">каталоге</Link>.
           </li>
           <li>
-            • <Link href="/item/tg-21" className="text-primary hover:underline font-medium">Кантриблюз</Link> — ещё одна утончённая пионовидная роза в нежных оттенках. В букете <Link href="/item/tg-21" className="text-primary hover:underline">«Розовая мелодия»</Link> для романтичных жестов.
+            • <Link href="/catalog/bouquets" className="text-primary hover:underline font-medium">Нежные розовые букеты</Link> — легкие композиции в пастельных тонах для деликатного, но запоминающегося жеста. Смотрите варианты в <Link href="/catalog/bouquets" className="text-primary hover:underline">каталоге</Link>.
           </li>
         </ul>
         <p>Мы собираем из этих сортов потрясающие монобукеты, которые говорят сами за себя. Подарите момент, который запомнится навсегда.</p>
       </div>
     ),
-    ctaText: "Смотреть «Красный бархат»",
-    ctaLink: "/item/tg-23",
+    ctaText: "Смотреть романтичные букеты",
+    ctaLink: "/catalog/bouquets",
   },
   {
     id: "urban-jungle",
@@ -61,11 +61,11 @@ export const articles: BlogPost[] = [
             4. Фикус Бенджамина (Ficus Benjamina) — изящное деревце с россыпью мелких листочков. Идеально для создания легкой, воздушной атмосферы.
           </li>
         </ul>
-        <p>Живые растения не только украшают дом, но и работают как природные фильтры воздуха. А для тех, кто выбирает цветочные композиции в интерьер — смотрите <Link href="/item/tg-17" className="text-primary hover:underline font-medium">«Экзотическую гармонию»</Link> в шляпной коробке.</p>
+        <p>Живые растения не только украшают дом, но и работают как природные фильтры воздуха. А для тех, кто выбирает цветочные композиции в интерьер — смотрите варианты в разделе <Link href="/catalog/compositions" className="text-primary hover:underline font-medium">«Композиции»</Link>.</p>
       </div>
     ),
-    ctaText: "Смотреть «Экзотическую гармонию»",
-    ctaLink: "/item/tg-17",
+    ctaText: "Смотреть композиции",
+    ctaLink: "/catalog/compositions",
   },
   {
     id: "exotic-plants",
@@ -86,10 +86,10 @@ export const articles: BlogPost[] = [
             • Сансевиерия (Sansevieria). Стильное архитектурное растение с вытянутыми мечевидными листьями. Ее главный плюс, помимо эффектного внешнего вида — она практически неубиваема и идеальна для занятых людей.
           </li>
         </ul>
-        <p>Экзотика доступнее, чем кажется. А для эффектных цветочных композиций с нотками тропики — <Link href="/item/tg-17" className="text-primary hover:underline font-medium">«Экзотическая гармония»</Link> в шляпной коробке.</p>
+        <p>Экзотика доступнее, чем кажется. А для эффектных цветочных композиций с нотками тропики — загляните в раздел <Link href="/catalog/compositions" className="text-primary hover:underline font-medium">«Композиции»</Link>.</p>
       </div>
     ),
-    ctaText: "Смотреть «Экзотическую гармонию»",
-    ctaLink: "/item/tg-17",
+    ctaText: "Смотреть композиции",
+    ctaLink: "/catalog/compositions",
   },
 ]

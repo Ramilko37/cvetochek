@@ -15,10 +15,20 @@ interface ProductPageClientProps {
   slug: string
 }
 
+const LEGACY_BLOG_SLUG_REDIRECTS: Record<string, string> = {
+  "tg-17": "/catalog/compositions",
+  "tg-21": "/catalog/bouquets",
+  "tg-23": "/catalog/bouquets",
+  "tg-37": "/catalog/bouquets",
+}
+
 export function ProductPageClient({ slug }: ProductPageClientProps) {
   const router = useRouter()
   const { products, isLoading, error } = useProductsContext()
   const product = getProductBySlug(products, slug)
+  const isLegacyTelegramSlug = /^tg-\d+$/.test(slug)
+  const legacyRedirectTarget =
+    LEGACY_BLOG_SLUG_REDIRECTS[slug] ?? (isLegacyTelegramSlug ? "/catalog" : null)
 
   useEffect(() => {
     if (error) {
@@ -38,6 +48,11 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
       source_path: `/item/${product.slug}`,
     })
   }, [product, isLoading, error])
+
+  useEffect(() => {
+    if (isLoading || error || product || !legacyRedirectTarget) return
+    router.replace(legacyRedirectTarget)
+  }, [isLoading, error, product, legacyRedirectTarget, router])
 
   if (isLoading) {
     return (
@@ -71,7 +86,18 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
     )
   }
 
-  if (!product) notFound()
+  if (!product) {
+    if (legacyRedirectTarget) {
+      return (
+        <main className="min-h-screen bg-background">
+          <div className="pt-14 lg:pt-[104px] flex items-center justify-center min-h-[50vh]">
+            <p className="text-muted-foreground">Перенаправляем в актуальный каталог…</p>
+          </div>
+        </main>
+      )
+    }
+    notFound()
+  }
 
   return (
     <main className="min-h-screen bg-background">

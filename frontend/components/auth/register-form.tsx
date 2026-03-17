@@ -105,7 +105,7 @@ export function RegisterForm({ embedded }: RegisterFormProps) {
           className="text-sm font-normal text-muted-foreground cursor-pointer leading-tight"
         >
           Я соглашаюсь с{" "}
-          <Link href="#" className="text-primary hover:underline">
+          <Link href="/privacy" className="text-primary hover:underline">
             условиями обработки персональных данных
           </Link>
         </Label>

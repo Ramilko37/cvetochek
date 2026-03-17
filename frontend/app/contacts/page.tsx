@@ -43,6 +43,12 @@ export default function ContactsPage() {
             </p>
           </div>
           <div>
+            <h2 className="font-medium text-foreground mb-2">Режим работы</h2>
+            <p className="text-muted-foreground">
+              Ежедневно: 09:00-21:00
+            </p>
+          </div>
+          <div>
             <h2 className="font-medium text-foreground mb-2">Мы в соцсетях</h2>
             <div className="flex gap-3">
               <a
@@ -73,13 +79,21 @@ export default function ContactsPage() {
           </div>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 flex flex-wrap gap-5">
           <Link
             href="/custom-order"
             className="text-primary hover:underline font-medium"
           >
             Оформить индивидуальный заказ
           </Link>
+          <a
+            href="https://yandex.ru/maps/-/CPQbn4-K"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline font-medium"
+          >
+            Открыть магазин на карте
+          </a>
         </div>
       </section>
     </main>

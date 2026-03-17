@@ -16,6 +16,9 @@ const checkoutBodySchema = z.object({
   totalPrice: z.number(),
   name: z.string().min(2, "Укажите имя"),
   phone: z.string().min(10, "Укажите телефон"),
+  personalDataConsent: z
+    .boolean({ required_error: "Нужно согласие на обработку персональных данных" })
+    .refine((value) => value, "Нужно согласие на обработку персональных данных"),
   userId: z.number().optional(),
   comment: z.string().optional(),
   deliveryDate: z.string().min(1, "Укажите дату доставки"),
@@ -37,6 +40,9 @@ const quickOrderBodySchema = z.object({
   totalPrice: z.number(),
   name: z.string().min(2),
   phone: z.string().min(10),
+  personalDataConsent: z
+    .boolean({ required_error: "Нужно согласие на обработку персональных данных" })
+    .refine((value) => value, "Нужно согласие на обработку персональных данных"),
   comment: z.string().optional(),
   websiteHp: z.string().max(0).optional(),
   userId: z.number().optional(),

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCart } from "@/store/cart-store"
@@ -86,6 +87,7 @@ export function CheckoutForm() {
   const [floor, setFloor] = useState("")
   const [recipientName, setRecipientName] = useState("")
   const [comment, setComment] = useState("")
+  const [personalDataConsent, setPersonalDataConsent] = useState(false)
   const [websiteHp, setWebsiteHp] = useState("")
 
   useEffect(() => {
@@ -180,6 +182,13 @@ export function CheckoutForm() {
       setError("Укажите дом.")
       return
     }
+    if (!personalDataConsent) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "personal_data_consent_missing",
+      })
+      setError("Подтвердите согласие на обработку персональных данных.")
+      return
+    }
 
     const cartItemsCount = items.reduce((sum, item) => sum + item.quantity, 0)
     setIsSubmitting(true)
@@ -219,6 +228,7 @@ export function CheckoutForm() {
             floor: floor.trim() || undefined,
           },
           recipientName: recipientName.trim() || undefined,
+          personalDataConsent,
           websiteHp: websiteHp || undefined,
         }),
       })
@@ -501,6 +511,24 @@ export function CheckoutForm() {
         <p className="text-sm text-muted-foreground">
           После отправки заявки откроется страница оплаты заказа.
         </p>
+        <div className="flex items-start gap-2">
+          <Checkbox
+            id="checkout-consent"
+            checked={personalDataConsent}
+            onCheckedChange={(checked) => setPersonalDataConsent(checked === true)}
+            className="mt-0.5"
+          />
+          <Label
+            htmlFor="checkout-consent"
+            className="text-sm font-normal text-muted-foreground cursor-pointer leading-snug"
+          >
+            Я соглашаюсь на обработку персональных данных в соответствии с{" "}
+            <Link href="/privacy" className="text-primary hover:underline">
+              политикой конфиденциальности
+            </Link>
+            .
+          </Label>
+        </div>
 
         {/* Honeypot */}
         <div className="absolute -left-[9999px] top-0" aria-hidden="true">

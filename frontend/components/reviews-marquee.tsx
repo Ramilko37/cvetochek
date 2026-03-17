@@ -14,7 +14,7 @@ const REVIEWS = [
     author: "Анна С.",
     rating: 5,
     text: "Потрясающий букет! Цветы свежие, стояли почти две недели. Доставка точно ко времени.",
-    date: "12 февраля 2024",
+    date: "12 февраля 2026",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {
@@ -22,7 +22,7 @@ const REVIEWS = [
     author: "Михаил",
     rating: 5,
     text: "Заказывал жене на годовщину. Собрали очень стильную композицию, не колхоз. Спасибо!",
-    date: "10 февраля 2024",
+    date: "10 февраля 2026",
     avatar: "https://randomuser.me/api/portraits/men/32.jpg"
   },
   {
@@ -30,7 +30,7 @@ const REVIEWS = [
     author: "Елена В.",
     rating: 5,
     text: "Очень вежливые флористы, помогли подобрать цветы под бюджет. Рекомендую!",
-    date: "05 февраля 2024",
+    date: "05 февраля 2026",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg"
   },
   {
@@ -38,7 +38,7 @@ const REVIEWS = [
     author: "Дмитрий К.",
     rating: 5,
     text: "Отличный сервис, букет полностью соответствовал фото на сайте. Жена в восторге!",
-    date: "01 февраля 2024",
+    date: "01 февраля 2026",
     avatar: "https://randomuser.me/api/portraits/men/86.jpg"
   },
   {
@@ -46,7 +46,7 @@ const REVIEWS = [
     author: "Ольга М.",
     rating: 5,
     text: "Заказываю здесь уже не первый раз. Всегда свежие цветы и красивые композиции.",
-    date: "28 января 2024",
+    date: "28 января 2026",
     avatar: "https://randomuser.me/api/portraits/women/12.jpg"
   },
 ]

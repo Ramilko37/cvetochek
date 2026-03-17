@@ -10,7 +10,7 @@ const PRODUCTS_JSON_URL = "/images/telegram-products/products.json"
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL?.replace(/\/$/, "")
 const CATALOG_PUBLIC_URL =
   process.env.NEXT_PUBLIC_CATALOG_PUBLIC_URL ||
-  (STRAPI_URL ? `${STRAPI_URL}/api/catalog/public` : "/api/catalog/public")
+  (STRAPI_URL ? `${STRAPI_URL}/api/catalog/public` : null)
 
 export interface UseTelegramProductsResult {
   products: TelegramProduct[]
@@ -216,6 +216,7 @@ function normalizeCatalogProduct(value: unknown, index: number): Product | null 
 }
 
 async function loadProductsFromCatalogApi(): Promise<Product[]> {
+  if (!CATALOG_PUBLIC_URL) return []
   const response = await fetch(CATALOG_PUBLIC_URL)
   if (!response.ok) {
     throw new Error(`Catalog API HTTP ${response.status}`)
@@ -326,34 +327,46 @@ export function useProducts(): UseProductsResult {
     let cancelled = false
 
     async function load() {
+      let legacyError: unknown = null
       let catalogError: unknown = null
-      try {
-        const catalogProducts = await loadProductsFromCatalogApi()
-        if (cancelled) return
-        if (catalogProducts.length > 0) {
-          setProducts(catalogProducts)
-          setError(null)
-          return
-        }
-      } catch (e) {
-        catalogError = e
-      }
+      let hasAnyProducts = false
 
       try {
         const legacyProducts = await loadTelegramProductsFromJson()
         if (cancelled) return
-        setProducts(legacyProducts)
-        setError(null)
+        if (legacyProducts.length > 0) {
+          setProducts(legacyProducts)
+          setError(null)
+          hasAnyProducts = true
+        }
       } catch (e) {
-        if (cancelled) return
-        const message =
-          e instanceof Error ? e.message : "Не удалось загрузить товары"
-        const catalogMessage =
-          catalogError instanceof Error ? ` (catalog: ${catalogError.message})` : ""
-        setError(`${message}${catalogMessage}`)
-        setProducts([])
-      } finally {
-        if (!cancelled) setIsLoading(false)
+        legacyError = e
+      }
+
+      if (CATALOG_PUBLIC_URL) {
+        try {
+          const catalogProducts = await loadProductsFromCatalogApi()
+          if (cancelled) return
+          if (catalogProducts.length > 0) {
+            setProducts(catalogProducts)
+            setError(null)
+            hasAnyProducts = true
+          }
+        } catch (e) {
+          catalogError = e
+        }
+      }
+
+      if (!cancelled) {
+        if (!hasAnyProducts) {
+          const legacyMessage =
+            legacyError instanceof Error ? legacyError.message : "Не удалось загрузить товары"
+          const catalogMessage =
+            catalogError instanceof Error ? ` (catalog: ${catalogError.message})` : ""
+          setError(`${legacyMessage}${catalogMessage}`)
+          setProducts([])
+        }
+        setIsLoading(false)
       }
     }
 
@@ -368,6 +381,11 @@ export function useProducts(): UseProductsResult {
 export function getProductBySlug(products: Product[], slug: string): Product | undefined {
   const bySlug = products.find((product) => product.slug === slug)
   if (bySlug) return bySlug
+
+  const isLegacyTelegramList =
+    products.length > 0 &&
+    products.every((product) => /^tg-\d+$/.test(product.slug))
+  if (!isLegacyTelegramList) return undefined
 
   const match = slug.match(/^tg-(\d+)$/)
   if (!match) return undefined

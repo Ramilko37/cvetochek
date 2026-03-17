@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Zap } from "lucide-react"
 import {
   Dialog,
@@ -10,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
@@ -37,6 +39,7 @@ export function QuickOrderDialog({
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [comment, setComment] = useState("")
+  const [personalDataConsent, setPersonalDataConsent] = useState(false)
   const [websiteHp, setWebsiteHp] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
@@ -45,6 +48,7 @@ export function QuickOrderDialog({
     setName("")
     setPhone("")
     setComment("")
+    setPersonalDataConsent(false)
     setWebsiteHp("")
     setIsSubmitting(false)
   }
@@ -132,6 +136,19 @@ export function QuickOrderDialog({
       })
       return
     }
+    if (!personalDataConsent) {
+      analytics.track(AnalyticsEvent.QuickOrderFailed, {
+        reason: "personal_data_consent_missing",
+        product_name: product.name,
+        product_slug: product.slug,
+      })
+      toast({
+        title: "Требуется согласие",
+        description: "Подтвердите согласие на обработку персональных данных.",
+        variant: "destructive",
+      })
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -154,6 +171,7 @@ export function QuickOrderDialog({
           name: trimmedName,
           phone: trimmedPhone,
           comment: comment.trim() || undefined,
+          personalDataConsent,
           websiteHp: websiteHp || undefined,
         }),
       })
@@ -264,6 +282,24 @@ export function QuickOrderDialog({
               onChange={(e) => setComment(e.target.value)}
               className="rounded-lg"
             />
+          </div>
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="quick-order-consent"
+              checked={personalDataConsent}
+              onCheckedChange={(checked) => setPersonalDataConsent(checked === true)}
+              className="mt-0.5"
+            />
+            <Label
+              htmlFor="quick-order-consent"
+              className="text-sm font-normal text-muted-foreground cursor-pointer leading-snug"
+            >
+              Я соглашаюсь на обработку персональных данных в соответствии с{" "}
+              <Link href="/privacy" className="text-primary hover:underline">
+                политикой конфиденциальности
+              </Link>
+              .
+            </Label>
           </div>
           <div className="absolute -left-[9999px] top-0" aria-hidden="true">
             <label htmlFor="quick-order-hp">Не заполняйте</label>
