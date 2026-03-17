@@ -16,7 +16,7 @@ const deliveryRows = [
 export default function DeliveryPage() {
   return (
     <main className="min-h-screen bg-background">
-      <section className="pt-14 lg:pt-[104px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-24 lg:pt-[132px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <h1 className="font-serif text-2xl md:text-3xl text-foreground">Доставка</h1>
         <p className="mt-4 text-muted-foreground max-w-3xl">
           Доставляем по Москве и за МКАД ежедневно. После оформления заказа
