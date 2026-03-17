@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 const FAVORITES_STORAGE_KEY = "cvetochek-favorites"
 
@@ -19,21 +20,32 @@ export const useFavoritesStore = create<FavoritesState>()(
       slugs: [],
 
       add: (slug) =>
-        set((state) =>
-          state.slugs.includes(slug) ? state : { slugs: [...state.slugs, slug] }
-        ),
+        set((state) => {
+          if (state.slugs.includes(slug)) return state
+          analytics.track(AnalyticsEvent.FavoriteAdded, { product_slug: slug })
+          return { slugs: [...state.slugs, slug] }
+        }),
 
       remove: (slug) =>
-        set((state) => ({
-          slugs: state.slugs.filter((s) => s !== slug),
-        })),
+        set((state) => {
+          if (state.slugs.includes(slug)) {
+            analytics.track(AnalyticsEvent.FavoriteRemoved, { product_slug: slug })
+          }
+          return {
+            slugs: state.slugs.filter((s) => s !== slug),
+          }
+        }),
 
       toggle: (slug) =>
-        set((state) =>
-          state.slugs.includes(slug)
-            ? { slugs: state.slugs.filter((s) => s !== slug) }
-            : { slugs: [...state.slugs, slug] }
-        ),
+        set((state) => {
+          if (state.slugs.includes(slug)) {
+            analytics.track(AnalyticsEvent.FavoriteRemoved, { product_slug: slug })
+            return { slugs: state.slugs.filter((s) => s !== slug) }
+          }
+
+          analytics.track(AnalyticsEvent.FavoriteAdded, { product_slug: slug })
+          return { slugs: [...state.slugs, slug] }
+        }),
 
       has: (slug) => get().slugs.includes(slug),
     }),

@@ -67,7 +67,7 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
                         sizeId: size?.id,
                         sizeLabel: size?.label,
                       })
-                      openCart()
+                      openCart("valentine_card")
                     }}
                   >
                     <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />

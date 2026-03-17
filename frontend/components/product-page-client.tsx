@@ -9,6 +9,7 @@ import { ProductGalleryAb } from "@/components/product/product-gallery-ab"
 import { ProductInfoWithCartAb } from "@/components/product/product-info-with-cart-ab"
 import { useProductsContext } from "@/components/products-provider"
 import { getProductBySlug } from "@/hooks/use-products"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 interface ProductPageClientProps {
   slug: string
@@ -17,12 +18,26 @@ interface ProductPageClientProps {
 export function ProductPageClient({ slug }: ProductPageClientProps) {
   const router = useRouter()
   const { products, isLoading, error } = useProductsContext()
+  const product = getProductBySlug(products, slug)
 
   useEffect(() => {
     if (error) {
       console.error("[ProductPage] Failed to load products:", error)
     }
   }, [error])
+
+  useEffect(() => {
+    if (!product || isLoading || error) return
+    analytics.track(AnalyticsEvent.ProductViewed, {
+      product_slug: product.slug,
+      product_name: product.name,
+      product_price: product.price,
+      category_slug: product.category.slug,
+      category_name: product.category.name,
+      in_stock: product.inStock,
+      source_path: `/item/${product.slug}`,
+    })
+  }, [product, isLoading, error])
 
   if (isLoading) {
     return (
@@ -56,7 +71,6 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
     )
   }
 
-  const product = getProductBySlug(products, slug)
   if (!product) notFound()
 
   return (

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { Filter, Search, SearchX, X } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
@@ -37,6 +37,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useCart } from "@/store/cart-store"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 import type { Product } from "@/types/product"
 import { getCurrentOccasionsForProducts } from "@/lib/occasions"
 import { CatalogFilters } from "./catalog-filters"
@@ -190,6 +191,17 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
     }
   })
   const [page, setPage] = useState(pageFromUrl)
+  const hasTrackedCatalogViewRef = useRef(false)
+
+  useEffect(() => {
+    if (hasTrackedCatalogViewRef.current) return
+    analytics.track(AnalyticsEvent.CatalogViewed, {
+      page_title: pageTitle || "Каталог",
+      products_count: products.length,
+      source_path: pathname,
+    })
+    hasTrackedCatalogViewRef.current = true
+  }, [pageTitle, pathname, products.length])
 
   // Синхронизация фильтров при изменении URL (клиентская навигация)
   useEffect(() => {
@@ -562,7 +574,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                         href={`/item/${product.slug}`}
                         onAddToCart={({ slug, name, price, image }) => {
                           addItem({ slug, name, price, image })
-                          openCart()
+                          openCart("catalog_grid")
                         }}
                         onQuickOrder={(payload) => {
                           setQuickOrderProduct(payload)
@@ -595,7 +607,7 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                     href={`/item/${product.slug}`}
                     onAddToCart={({ slug, name, price, image }) => {
                       addItem({ slug, name, price, image })
-                      openCart()
+                      openCart("catalog_grid")
                     }}
                     onQuickOrder={(payload) => {
                       setQuickOrderProduct(payload)

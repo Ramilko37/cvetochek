@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 export interface QuickOrderProduct {
   name: string
@@ -76,12 +77,26 @@ export function QuickOrderDialog({
     if (!open) resetForm()
   }, [open])
 
+  useEffect(() => {
+    if (!open || !product) return
+    analytics.track(AnalyticsEvent.QuickOrderOpened, {
+      product_name: product.name,
+      product_slug: product.slug,
+      product_price: product.price,
+    })
+  }, [open, product])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!product) return
 
     const trimmedName = name.trim()
     if (trimmedName.length < 2) {
+      analytics.track(AnalyticsEvent.QuickOrderFailed, {
+        reason: "name_too_short",
+        product_name: product.name,
+        product_slug: product.slug,
+      })
       toast({
         title: "Укажите имя",
         description: "Введите имя не короче двух символов.",
@@ -90,6 +105,11 @@ export function QuickOrderDialog({
       return
     }
     if (!/^[\p{L}\s\-]+$/u.test(trimmedName)) {
+      analytics.track(AnalyticsEvent.QuickOrderFailed, {
+        reason: "name_invalid_symbols",
+        product_name: product.name,
+        product_slug: product.slug,
+      })
       toast({
         title: "Некорректное имя",
         description: "Имя может содержать только буквы, пробелы и дефис.",
@@ -100,6 +120,11 @@ export function QuickOrderDialog({
 
     const trimmedPhone = phone.replace(/\D/g, "")
     if (trimmedPhone.length < 10) {
+      analytics.track(AnalyticsEvent.QuickOrderFailed, {
+        reason: "phone_invalid",
+        product_name: product.name,
+        product_slug: product.slug,
+      })
       toast({
         title: "Укажите телефон",
         description: "Введите корректный номер телефона для связи.",
@@ -134,6 +159,12 @@ export function QuickOrderDialog({
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
+        analytics.track(AnalyticsEvent.QuickOrderFailed, {
+          reason: "order_api_error",
+          http_status: res.status,
+          product_name: product.name,
+          product_slug: product.slug,
+        })
         toast({
           title: "Ошибка",
           description: data.error ?? "Не удалось отправить заявку. Попробуйте позже.",
@@ -141,12 +172,22 @@ export function QuickOrderDialog({
         })
         return
       }
+      analytics.track(AnalyticsEvent.QuickOrderSubmitted, {
+        product_name: product.name,
+        product_slug: product.slug,
+        product_price: product.price,
+      })
       toast({
         title: "Заявка принята",
         description: `Мы перезвоним вам в ближайшее время по поводу «${product.name}».`,
       })
       onOpenChange(false)
     } catch {
+      analytics.track(AnalyticsEvent.QuickOrderFailed, {
+        reason: "network_or_runtime_error",
+        product_name: product.name,
+        product_slug: product.slug,
+      })
       toast({
         title: "Ошибка",
         description: "Не удалось отправить заявку. Попробуйте позже.",

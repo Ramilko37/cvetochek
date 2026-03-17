@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Heart, ShoppingBag, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 
 const SCROLL_TO_PRODUCT_KEY = "scrollToProduct"
@@ -59,6 +60,13 @@ export function ProductCard({
       sessionStorage.setItem(SCROLL_TO_PRODUCT_KEY, slug)
       sessionStorage.setItem(SCROLL_TO_PRODUCT_FROM_KEY, pathname ?? "")
     }
+
+    analytics.track(AnalyticsEvent.ProductCardClicked, {
+      product_slug: slug,
+      product_name: name,
+      source_path: pathname || "",
+      destination: href,
+    })
   }
 
   const tagLabels: Record<"hit" | "new" | "sale", string> = {

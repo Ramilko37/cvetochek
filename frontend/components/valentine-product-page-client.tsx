@@ -1,10 +1,12 @@
 "use client"
 
+import { useEffect } from "react"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { ValentineProductDetail } from "@/components/valentine-product-detail"
 import { useTelegramProducts } from "@/hooks/use-products"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 interface ValentineProductPageClientProps {
   id: string
@@ -12,6 +14,21 @@ interface ValentineProductPageClientProps {
 
 export function ValentineProductPageClient({ id }: ValentineProductPageClientProps) {
   const { products, isLoading, error } = useTelegramProducts()
+  const index = parseInt(id, 10)
+  const product = Number.isNaN(index) ? null : products[index]
+
+  useEffect(() => {
+    if (!product || isLoading || error) return
+    analytics.track(AnalyticsEvent.ProductViewed, {
+      product_slug: `/valentines-day/${id}`,
+      product_name: product.name ?? "Букет",
+      product_price: product.sizes?.[0]?.price ?? product.price ?? 0,
+      category_slug: "valentines-day",
+      category_name: "День всех влюблённых",
+      in_stock: product.inStock ?? true,
+      source_path: `/valentines-day/${id}`,
+    })
+  }, [product, id, isLoading, error])
 
   if (isLoading) {
     return (
@@ -39,9 +56,6 @@ export function ValentineProductPageClient({ id }: ValentineProductPageClientPro
       </main>
     )
   }
-
-  const index = parseInt(id, 10)
-  const product = products[index]
 
   if (!product || isNaN(index) || index < 0 || index >= products.length) {
     notFound()

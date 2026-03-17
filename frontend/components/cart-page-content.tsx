@@ -1,14 +1,24 @@
 "use client"
 
+import { useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/store/cart-store"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 export function CartPageContent() {
   const { items, totalItems, totalPrice, removeItem, updateQuantity } =
     useCart()
+
+  useEffect(() => {
+    analytics.track(AnalyticsEvent.CartViewed, {
+      cart_items_count: totalItems,
+      cart_total: totalPrice,
+      source_path: "/cart",
+    })
+  }, [])
 
   if (items.length === 0) {
     return (
@@ -142,7 +152,18 @@ export function CartPageContent() {
               asChild
               className="w-full rounded-full h-12 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              <Link href="/checkout">Оформить заказ</Link>
+              <Link
+                href="/checkout"
+                onClick={() =>
+                  analytics.track(AnalyticsEvent.CheckoutStarted, {
+                    source: "cart_page",
+                    cart_items_count: totalItems,
+                    cart_total: totalPrice,
+                  })
+                }
+              >
+                Оформить заказ
+              </Link>
             </Button>
             <Link
               href="/#products"

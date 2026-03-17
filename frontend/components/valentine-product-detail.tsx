@@ -46,7 +46,7 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
       sizeId: selectedSize?.id,
       sizeLabel: selectedSize?.label,
     })
-    openCart()
+    openCart("valentine_product_page")
   }
 
   return (

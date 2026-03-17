@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { useCart } from "@/store/cart-store"
 import { useAuth } from "@/store/auth-store"
 import { generateOrderId } from "@/lib/order-id"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 const PAYMENT_INIT_URL =
   process.env.NEXT_PUBLIC_ROBOKASSA_INIT_URL || "/api/payments/robokassa/init"
@@ -88,6 +89,14 @@ export function CheckoutForm() {
   const [websiteHp, setWebsiteHp] = useState("")
 
   useEffect(() => {
+    analytics.track(AnalyticsEvent.CheckoutViewed, {
+      cart_items_count: items.reduce((sum, item) => sum + item.quantity, 0),
+      cart_total: totalPrice,
+      source_path: "/checkout",
+    })
+  }, [])
+
+  useEffect(() => {
     setDeliveryDate(todayISO())
   }, [])
 
@@ -114,41 +123,73 @@ export function CheckoutForm() {
     e.preventDefault()
     setError(null)
     if (items.length === 0) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "empty_cart",
+      })
       setError("Корзина пуста. Добавьте товары.")
       return
     }
     const trimmedName = name.trim()
     if (trimmedName.length < 2) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "name_too_short",
+      })
       setError("Укажите имя (не менее 2 символов).")
       return
     }
     if (!/^[\p{L}\s\-]+$/u.test(trimmedName)) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "name_invalid_symbols",
+      })
       setError("Имя может содержать только буквы, пробелы и дефис.")
       return
     }
     const trimmedPhone = phone.replace(/\D/g, "")
     if (trimmedPhone.length < 10) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "phone_invalid",
+      })
       setError("Укажите корректный телефон.")
       return
     }
     if (!deliveryDate) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "delivery_date_missing",
+      })
       setError("Укажите дату доставки.")
       return
     }
     if (!deliverySlot) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "delivery_slot_missing",
+      })
       setError("Выберите интервал доставки.")
       return
     }
     if (!street.trim()) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "street_missing",
+      })
       setError("Укажите улицу.")
       return
     }
     if (!building.trim()) {
+      analytics.track(AnalyticsEvent.CheckoutValidationFailed, {
+        reason: "building_missing",
+      })
       setError("Укажите дом.")
       return
     }
 
+    const cartItemsCount = items.reduce((sum, item) => sum + item.quantity, 0)
     setIsSubmitting(true)
+    analytics.track(AnalyticsEvent.CheckoutSubmitted, {
+      cart_items_count: cartItemsCount,
+      cart_total: totalPrice,
+      has_comment: Boolean(comment.trim()),
+      has_recipient: Boolean(recipientName.trim()),
+      has_apartment: Boolean(apartment.trim()),
+    })
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
@@ -183,6 +224,10 @@ export function CheckoutForm() {
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
+        analytics.track(AnalyticsEvent.CheckoutFailed, {
+          reason: "order_api_error",
+          http_status: res.status,
+        })
         setError(data.error || "Не удалось отправить заказ. Попробуйте позже.")
         return
       }
@@ -214,14 +259,33 @@ export function CheckoutForm() {
           : null
 
       if (paymentUrl) {
+        analytics.track(AnalyticsEvent.PaymentRedirected, {
+          order_id: orderId,
+          payment_url_host: (() => {
+            try {
+              return new URL(paymentUrl).host
+            } catch {
+              return "unknown"
+            }
+          })(),
+          cart_items_count: cartItemsCount,
+          cart_total: totalPrice,
+        })
         clearCart()
         window.location.assign(paymentUrl)
         return
       }
 
+      analytics.track(AnalyticsEvent.PaymentRedirectFailed, {
+        reason: "empty_payment_url",
+        order_id: orderId,
+      })
       setSent(true)
       setError("Заявка отправлена, но не удалось открыть страницу оплаты. Мы свяжемся с вами для подтверждения заказа.")
     } catch {
+      analytics.track(AnalyticsEvent.CheckoutFailed, {
+        reason: "network_or_runtime_error",
+      })
       setError("Ошибка соединения. Проверьте интернет и попробуйте снова.")
     } finally {
       setIsSubmitting(false)

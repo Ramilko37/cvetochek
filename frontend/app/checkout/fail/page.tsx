@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CheckoutStatusTracker } from "@/components/checkout-status-tracker"
 import { formatInvIdForDisplay, formatOrderIdForDisplay } from "@/lib/order-id"
 
 export const metadata: Metadata = {
@@ -48,6 +49,13 @@ export default async function CheckoutFailPage({
 
   return (
     <main className="min-h-screen bg-background">
+      <CheckoutStatusTracker
+        status="fail"
+        orderId={orderId}
+        invId={invId}
+        amount={query.outSum}
+        orderLabel={orderLabel}
+      />
       <section className="pt-24 lg:pt-[132px] pb-16 md:pb-24 px-4 md:px-6 lg:px-8 max-w-3xl mx-auto">
         <div className="rounded-2xl border border-border bg-card p-8 md:p-10 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">

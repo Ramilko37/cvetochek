@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { AnalyticsEvent, analytics } from "@/lib/analytics"
 
 const AUTH_STORAGE_KEY = "cvetochek-auth"
 
@@ -25,10 +26,20 @@ export const useAuthStore = create<AuthState>()(
       token: null,
 
       login: (token, user) =>
-        set({ token, user }),
+        set(() => {
+          analytics.identify(user.id, { phone: user.phone })
+          analytics.track(AnalyticsEvent.UserSignedIn, {
+            user_id: user.id,
+          })
+          return { token, user }
+        }),
 
       logout: () =>
-        set({ token: null, user: null }),
+        set(() => {
+          analytics.track(AnalyticsEvent.UserSignedOut)
+          analytics.reset()
+          return { token: null, user: null }
+        }),
     }),
     {
       name: AUTH_STORAGE_KEY,
