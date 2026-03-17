@@ -13,7 +13,6 @@ const routes = [
   "/catalog",
   "/new",
   "/blog",
-  "/about",
   "/delivery",
   "/contacts",
   "/faq",

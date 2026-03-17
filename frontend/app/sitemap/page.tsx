@@ -11,7 +11,6 @@ const sitemapLinks = [
   { title: "Каталог", href: "/catalog" },
   { title: "Новинки", href: "/new" },
   { title: "Блог", href: "/blog" },
-  { title: "О магазине", href: "/about" },
   { title: "Доставка", href: "/delivery" },
   { title: "Контакты", href: "/contacts" },
   { title: "FAQ", href: "/faq" },

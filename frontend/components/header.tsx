@@ -47,7 +47,6 @@ const navigation = [
 
 /** Доп. пункты для мобильного меню (как в футере: О магазине и др.) */
 const mobileMenuExtra = [
-  { name: "О магазине", href: "/about" },
   { name: "Вопрос-ответ", href: "/faq" },
   { name: "Блог", href: "/blog" },
   { name: "Доставка", href: "/delivery" },

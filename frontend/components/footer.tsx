@@ -11,7 +11,6 @@ const footerLinks = {
     { name: "Москва", href: "/contacts" },
   ],
   "О магазине": [
-    { name: "О нас", href: "/about" },
     { name: "Блог", href: "/blog" },
     { name: "Вопросы и ответы", href: "/faq" },
     { name: "Карта сайта", href: "/sitemap" },
