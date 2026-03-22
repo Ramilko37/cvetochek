@@ -317,27 +317,6 @@ export interface UseProductsResult {
   error: string | null
 }
 
-function mergeCatalogWithLegacyProducts(legacy: Product[], catalog: Product[]): Product[] {
-  if (legacy.length === 0) return catalog
-  if (catalog.length === 0) return legacy
-
-  const seen = new Set<string>()
-  const result: Product[] = []
-
-  const pushUnique = (product: Product) => {
-    const key = product.slug || product.id
-    if (!key || seen.has(key)) return
-    seen.add(key)
-    result.push(product)
-  }
-
-  // Keep legacy catalog as baseline and append CMS-only products.
-  legacy.forEach(pushUnique)
-  catalog.forEach(pushUnique)
-
-  return result
-}
-
 /** Клиентская загрузка продуктов из JSON. */
 export function useProducts(): UseProductsResult {
   const [products, setProducts] = useState<Product[]>([])
@@ -348,46 +327,52 @@ export function useProducts(): UseProductsResult {
     let cancelled = false
 
     async function load() {
-      let legacyError: unknown = null
       let catalogError: unknown = null
-      let hasAnyProducts = false
-      let legacyProducts: Product[] = []
-
-      try {
-        legacyProducts = await loadTelegramProductsFromJson()
-        if (cancelled) return
-        if (legacyProducts.length > 0) {
-          setProducts(legacyProducts)
-          setError(null)
-          hasAnyProducts = true
-        }
-      } catch (e) {
-        legacyError = e
-      }
 
       if (CATALOG_PUBLIC_URL) {
         try {
           const catalogProducts = await loadProductsFromCatalogApi()
           if (cancelled) return
           if (catalogProducts.length > 0) {
-            setProducts(mergeCatalogWithLegacyProducts(legacyProducts, catalogProducts))
+            // Production source of truth: Strapi catalog.
+            setProducts(catalogProducts)
             setError(null)
-            hasAnyProducts = true
+            setIsLoading(false)
+            return
           }
+          catalogError = new Error("Catalog API returned empty product list")
         } catch (e) {
           catalogError = e
         }
       }
 
-      if (!cancelled) {
-        if (!hasAnyProducts) {
+      try {
+        const legacyProducts = await loadTelegramProductsFromJson()
+        if (cancelled) return
+        if (legacyProducts.length > 0) {
+          setProducts(legacyProducts)
+          setError(null)
+          setIsLoading(false)
+          return
+        }
+      } catch (legacyError) {
+        if (!cancelled) {
           const legacyMessage =
             legacyError instanceof Error ? legacyError.message : "Не удалось загрузить товары"
           const catalogMessage =
             catalogError instanceof Error ? ` (catalog: ${catalogError.message})` : ""
           setError(`${legacyMessage}${catalogMessage}`)
           setProducts([])
+          setIsLoading(false)
         }
+        return
+      }
+
+      if (!cancelled) {
+        const catalogMessage =
+          catalogError instanceof Error ? ` (catalog: ${catalogError.message})` : ""
+        setError(`Не удалось загрузить товары${catalogMessage}`)
+        setProducts([])
         setIsLoading(false)
       }
     }
