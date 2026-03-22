@@ -5,6 +5,7 @@ export interface CartItem {
   name: string
   price: number
   image: string
+  composition?: string
   quantity: number
   sizeId?: string
   sizeLabel?: string

@@ -8,6 +8,8 @@ const orderItemSchema = z.object({
   price: z.number(),
   quantity: z.number(),
   sizeLabel: z.string().optional(),
+  image: z.string().optional(),
+  composition: z.string().optional(),
 })
 
 const checkoutBodySchema = z.object({
@@ -53,9 +55,95 @@ const bodySchema = z.discriminatedUnion("type", [
   quickOrderBodySchema,
 ])
 
-function formatOrderForTelegram(data: z.infer<typeof bodySchema>): string {
+type ParsedOrder = z.infer<typeof bodySchema>
+type TelegramOrderPhoto = {
+  url: string
+  caption: string
+}
+
+function resolveSiteUrl(requestUrl?: string): string {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL
+  if (envUrl?.trim()) return envUrl.trim().replace(/\/$/, "")
+  if (requestUrl) {
+    try {
+      return new URL(requestUrl).origin.replace(/\/$/, "")
+    } catch {
+      // no-op
+    }
+  }
+  return "https://cvetipolubvi.ru"
+}
+
+function normalizePathWithBasePath(rawPath: string): string {
+  const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "").trim().replace(/\/$/, "")
+  const normalizedBasePath = basePath
+    ? basePath.startsWith("/")
+      ? basePath
+      : `/${basePath}`
+    : ""
+  const normalizedPath = rawPath.startsWith("/") ? rawPath : `/${rawPath}`
+
+  if (!normalizedBasePath) return normalizedPath
+  if (normalizedPath === normalizedBasePath || normalizedPath.startsWith(`${normalizedBasePath}/`)) {
+    return normalizedPath
+  }
+  return `${normalizedBasePath}${normalizedPath}`
+}
+
+function resolveTelegramPhotoUrl(image?: string, requestUrl?: string): string | null {
+  if (!image?.trim()) return null
+  const raw = image.trim()
+  if (/^https?:\/\//i.test(raw)) return raw
+  if (/^\/\//.test(raw)) return `https:${raw}`
+
+  // Strapi иногда отдает медиа как относительный /uploads/... путь.
+  if (raw.startsWith("/uploads/")) {
+    const strapiBase = process.env.NEXT_PUBLIC_STRAPI_URL?.trim().replace(/\/$/, "")
+    if (strapiBase) return `${strapiBase}${raw}`
+  }
+
+  const siteUrl = resolveSiteUrl(requestUrl)
+  const path = normalizePathWithBasePath(raw)
+  return `${siteUrl}${path}`
+}
+
+function truncateCaption(text: string, limit = 900): string {
+  const value = text.trim()
+  if (value.length <= limit) return value
+  return `${value.slice(0, limit - 1)}…`
+}
+
+function itemTitle(item: ParsedOrder["items"][number]): string {
+  const size = item.sizeLabel ? ` (${item.sizeLabel})` : ""
+  return `${item.name}${size}`
+}
+
+function itemComposition(item: ParsedOrder["items"][number]): string {
+  return item.composition?.trim() || "не указан"
+}
+
+function itemSum(item: ParsedOrder["items"][number]): string {
+  return (item.price * item.quantity).toLocaleString("ru-RU")
+}
+
+function buildPhotoCaption(item: ParsedOrder["items"][number]): string {
+  return truncateCaption(
+    [
+      `📷 ${itemTitle(item)}`,
+      `Состав: ${itemComposition(item)}`,
+      `Количество: ${item.quantity}`,
+      `Сумма: ${itemSum(item)} ₽`,
+    ].join("\n")
+  )
+}
+
+function formatOrderForTelegram(
+  data: ParsedOrder,
+  requestUrl?: string
+): { text: string; photos: TelegramOrderPhoto[] } {
   const lines: string[] = []
   const isQuick = data.type === "quick"
+  const photos: TelegramOrderPhoto[] = []
 
   lines.push(isQuick ? "🌸 БЫСТРЫЙ ЗАКАЗ" : "🌸 НОВЫЙ ЗАКАЗ")
   lines.push("")
@@ -66,11 +154,30 @@ function formatOrderForTelegram(data: z.infer<typeof bodySchema>): string {
   lines.push(`📞 ${data.phone}`)
   if (data.comment) lines.push(`💬 ${data.comment}`)
   lines.push("")
-  lines.push("📦 Состав:")
-  for (const item of data.items) {
-    const size = item.sizeLabel ? ` (${item.sizeLabel})` : ""
-    lines.push(`  • ${item.name}${size} × ${item.quantity} — ${(item.price * item.quantity).toLocaleString("ru-RU")} ₽`)
+
+  lines.push("📦 Фактура:")
+  data.items.forEach((item, index) => {
+    const photoUrl = resolveTelegramPhotoUrl(item.image, requestUrl)
+    lines.push(`${index + 1}. Название: ${itemTitle(item)}`)
+    lines.push(`   Состав: ${itemComposition(item)}`)
+    lines.push(`   Количество: ${item.quantity}`)
+    lines.push(`   Сумма: ${itemSum(item)} ₽`)
+    lines.push(`   Фото: ${photoUrl ? "см. фото ниже" : "нет фото"}`)
+    lines.push("")
+
+    if (photoUrl) {
+      photos.push({
+        url: photoUrl,
+        caption: buildPhotoCaption(item),
+      })
+    }
+  })
+
+  if (data.items.length === 0) {
+    lines.push("—")
+    lines.push("")
   }
+
   lines.push(`💰 Итого: ${data.totalPrice.toLocaleString("ru-RU")} ₽`)
   lines.push("")
 
@@ -94,10 +201,13 @@ function formatOrderForTelegram(data: z.infer<typeof bodySchema>): string {
     lines.push("⚠️ Нужно уточнить адрес и дату доставки по телефону.")
   }
 
-  return lines.join("\n")
+  return { text: lines.join("\n"), photos }
 }
 
-async function sendToTelegram(text: string): Promise<{ ok: boolean; reason?: string }> {
+async function sendToTelegram(
+  text: string,
+  photos: TelegramOrderPhoto[]
+): Promise<{ ok: boolean; reason?: string }> {
   const token = process.env.TELEGRAM_BOT_TOKEN?.trim()
   const chatId = process.env.TELEGRAM_CHAT_ID?.trim()
   if (!token || !chatId) {
@@ -107,7 +217,7 @@ async function sendToTelegram(text: string): Promise<{ ok: boolean; reason?: str
   }
   try {
     const chatIdParam = /^-?\d+$/.test(chatId) ? Number(chatId) : chatId
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const textRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -115,12 +225,41 @@ async function sendToTelegram(text: string): Promise<{ ok: boolean; reason?: str
         text,
       }),
     })
-    if (!res.ok) {
-      const body = await res.text().catch(() => "")
-      const reason = `Telegram API: ${res.status} ${body}`
+    if (!textRes.ok) {
+      const body = await textRes.text().catch(() => "")
+      const reason = `Telegram API: ${textRes.status} ${body}`
       console.error("[orders]", reason)
       return { ok: false, reason }
     }
+
+    for (const photo of photos) {
+      const photoRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatIdParam,
+          photo: photo.url,
+          caption: photo.caption,
+        }),
+      })
+
+      if (!photoRes.ok) {
+        const body = await photoRes.text().catch(() => "")
+        const reason = `sendPhoto failed: ${photoRes.status} ${body}`
+        console.error("[orders]", reason)
+
+        // Fallback: чтобы фото все равно можно было открыть, отправим ссылку.
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatIdParam,
+            text: `${photo.caption}\nФото: ${photo.url}`,
+          }),
+        }).catch(() => null)
+      }
+    }
+
     return { ok: true }
   } catch (e) {
     const reason = e instanceof Error ? e.message : String(e)
@@ -157,8 +296,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 })
     }
 
-    const text = formatOrderForTelegram(parsed.data)
-    const result = await sendToTelegram(text)
+    const { text, photos } = formatOrderForTelegram(parsed.data, request.url)
+    const result = await sendToTelegram(text, photos)
 
     if (!result.ok) {
       if (result.reason) console.error("[orders] 502 причина:", result.reason)

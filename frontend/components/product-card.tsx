@@ -16,6 +16,8 @@ export interface ProductCardQuickOrderPayload {
   name: string
   price: number
   image: string
+  composition?: string
+  slug?: string
 }
 
 export interface ProductCardAddToCartPayload {
@@ -23,6 +25,7 @@ export interface ProductCardAddToCartPayload {
   name: string
   price: number
   image: string
+  composition?: string
 }
 
 interface ProductCardProps {
@@ -118,7 +121,7 @@ export function ProductCard({
                     variant="secondary"
                     className="flex-1 bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9"
                     onClick={() =>
-                      slug && onAddToCart?.({ slug, name, price, image })
+                      slug && onAddToCart?.({ slug, name, price, image, composition: flowers })
                     }
                   >
                     <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
@@ -142,7 +145,7 @@ export function ProductCard({
                 variant="secondary"
                 className="w-full bg-white/95 hover:bg-white text-foreground rounded-full text-xs h-9 border border-border/50"
                 onClick={() =>
-                  onQuickOrder?.({ name, price, image })
+                  onQuickOrder?.({ name, price, image, composition: flowers, slug })
                 }
               >
                 <Zap className="h-3.5 w-3.5 mr-1.5" />

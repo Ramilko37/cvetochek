@@ -21,6 +21,7 @@ export interface QuickOrderProduct {
   name: string
   price: number
   image: string
+  composition?: string
   /** для отправки в API (если есть) */
   slug?: string
 }
@@ -165,6 +166,8 @@ export function QuickOrderDialog({
               name: product.name,
               price: product.price,
               quantity: 1,
+              image: product.image,
+              composition: product.composition,
             },
           ],
           totalPrice: product.price,
