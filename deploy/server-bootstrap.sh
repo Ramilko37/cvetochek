@@ -42,6 +42,56 @@ if [ ! -f deploy/frontend.env ]; then
   echo "Created deploy/frontend.env from example. Fill secrets before first production use."
 fi
 
+ensure_env_var() {
+  local env_file="$1"
+  local key="$2"
+  local value="$3"
+
+  if grep -qE "^${key}=" "$env_file"; then
+    return 0
+  fi
+
+  printf '%s=%s\n' "$key" "$value" >> "$env_file"
+}
+
+replace_env_var_if_equals() {
+  local env_file="$1"
+  local key="$2"
+  local expected="$3"
+  local replacement="$4"
+
+  if grep -Fxq "${key}=${expected}" "$env_file"; then
+    sed -i "s#^${key}=.*#${key}=${replacement}#" "$env_file"
+  fi
+}
+
+# Auto-migrate legacy defaults so production build picks correct CMS endpoints.
+ensure_env_var deploy/frontend.env NEXT_PUBLIC_STRAPI_URL https://admin.cvetipolubvi.ru
+ensure_env_var deploy/frontend.env NEXT_PUBLIC_CATALOG_PUBLIC_URL https://admin.cvetipolubvi.ru/api/catalog/public
+replace_env_var_if_equals deploy/frontend.env NEXT_PUBLIC_STRAPI_URL http://155.212.218.145:1337 https://admin.cvetipolubvi.ru
+replace_env_var_if_equals deploy/frontend.env NEXT_PUBLIC_ROBOKASSA_INIT_URL http://155.212.218.145:1337/api/payments/robokassa/init /api/payments/robokassa/init
+ensure_env_var deploy/backend.env STRAPI_PUBLIC_URL https://admin.cvetipolubvi.ru
+
+load_env_file() {
+  local env_file="$1"
+  [ -f "$env_file" ] || return 0
+
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ''|\#*) continue
+        ;;
+    esac
+
+    local key="${line%%=*}"
+    local value="${line#*=}"
+    export "${key}=${value}"
+  done < "$env_file"
+}
+
+# Build-time vars for frontend must be exported before docker compose build.
+load_env_file deploy/frontend.env
+load_env_file deploy/backend.env
+
 if ! command -v nginx >/dev/null 2>&1; then
   apt-get update
   apt-get install -y nginx

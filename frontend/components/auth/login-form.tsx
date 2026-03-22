@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { formatPhoneMask, isValidRussianPhone } from "@/lib/phone"
 import { useAuth } from "@/store/auth-store"
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL?.replace(/\/$/, "") || ""
 
 interface LoginFormProps {
   /** Без карточки — для встраивания в модалку */
@@ -46,6 +46,9 @@ export function LoginForm({ embedded, onSuccess }: LoginFormProps) {
     }
     setIsLoading(true)
     try {
+      if (!STRAPI_URL) {
+        throw new Error("Сервис авторизации временно недоступен")
+      }
       const res = await fetch(`${STRAPI_URL}/api/phone-auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -73,6 +76,9 @@ export function LoginForm({ embedded, onSuccess }: LoginFormProps) {
     }
     setIsLoading(true)
     try {
+      if (!STRAPI_URL) {
+        throw new Error("Сервис авторизации временно недоступен")
+      }
       const res = await fetch(`${STRAPI_URL}/api/phone-auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

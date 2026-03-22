@@ -19,6 +19,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH:-}
+        NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL:-}
+        NEXT_PUBLIC_CATALOG_PUBLIC_URL: ${NEXT_PUBLIC_CATALOG_PUBLIC_URL:-}
+        NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${NEXT_PUBLIC_YANDEX_MAPS_API_KEY:-}
+        NEXT_PUBLIC_MIXPANEL_TOKEN: ${NEXT_PUBLIC_MIXPANEL_TOKEN:-}
+        NEXT_PUBLIC_MIXPANEL_API_HOST: ${NEXT_PUBLIC_MIXPANEL_API_HOST:-}
+        NEXT_PUBLIC_ROBOKASSA_INIT_URL: ${NEXT_PUBLIC_ROBOKASSA_INIT_URL:-}
     container_name: cvetochek-frontend
     restart: unless-stopped
     env_file:
