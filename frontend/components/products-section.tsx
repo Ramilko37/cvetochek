@@ -48,13 +48,15 @@ export function ProductsSection() {
     name,
     price,
     image,
+    composition,
   }: {
     slug: string
     name: string
     price: number
     image: string
+    composition?: string
   }) => {
-    addItem({ slug, name, price, image })
+    addItem({ slug, name, price, image, composition })
   }
 
   return (

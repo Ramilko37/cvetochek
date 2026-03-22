@@ -13,6 +13,7 @@ export interface AddToCartPayload {
   name: string
   price: number
   image: string
+  composition?: string
   sizeId?: string
   sizeLabel?: string
 }
@@ -59,6 +60,7 @@ export const useCartStore = create<CartState>()(
                   name: payload.name,
                   price: payload.price,
                   image: payload.image,
+                  composition: payload.composition,
                   quantity,
                   sizeId: payload.sizeId,
                   sizeLabel: payload.sizeLabel,

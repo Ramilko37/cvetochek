@@ -29,6 +29,8 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
     name,
     price,
     image,
+    composition: product.composition,
+    slug: href,
   }
 
   const content = (
@@ -64,6 +66,7 @@ export function ValentineProductCard({ product, href, onQuickOrder }: ValentineP
                         name,
                         price,
                         image,
+                        composition: product.composition,
                         sizeId: size?.id,
                         sizeLabel: size?.label,
                       })

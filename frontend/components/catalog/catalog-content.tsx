@@ -572,8 +572,8 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                             : undefined
                         }
                         href={`/item/${product.slug}`}
-                        onAddToCart={({ slug, name, price, image }) => {
-                          addItem({ slug, name, price, image })
+                        onAddToCart={({ slug, name, price, image, composition }) => {
+                          addItem({ slug, name, price, image, composition })
                           openCart("catalog_grid")
                         }}
                         onQuickOrder={(payload) => {
@@ -605,8 +605,8 @@ export function CatalogContent({ products, pageTitle }: CatalogContentProps) {
                         : undefined
                     }
                     href={`/item/${product.slug}`}
-                    onAddToCart={({ slug, name, price, image }) => {
-                      addItem({ slug, name, price, image })
+                    onAddToCart={({ slug, name, price, image, composition }) => {
+                      addItem({ slug, name, price, image, composition })
                       openCart("catalog_grid")
                     }}
                     onQuickOrder={(payload) => {

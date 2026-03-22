@@ -35,6 +35,7 @@ export function ProductInfoAb({
     product.options?.filter((o) => selectedOptionIds.includes(o.id)).reduce((sum, o) => sum + o.price, 0) ?? 0
   const displayPrice = basePrice + optionsTotal
   const canAddToCart = product.inStock
+  const composition = product.composition.flowers.join(", ")
 
   return (
     <div className="space-y-8">
@@ -183,6 +184,7 @@ export function ProductInfoAb({
           name: product.name,
           price: displayPrice,
           image: product.images?.[0] ?? "/placeholder.svg",
+          composition,
           slug: product.slug,
         }}
       />

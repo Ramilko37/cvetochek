@@ -26,6 +26,7 @@ export function ProductInfoWithCartAb({ product }: ProductInfoWithCartAbProps) {
       name: product.name,
       price: totalPrice,
       image: product.images?.[0] ?? "/placeholder.svg",
+      composition: product.composition.flowers.join(", "),
       sizeId: size?.id,
       sizeLabel: size?.label,
     })

@@ -34,6 +34,8 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
     name: selectedSize ? `${name} (${selectedSize.label})` : name,
     price: displayPrice,
     image,
+    composition: product.composition,
+    slug,
   }
 
   const handleAddToCart = () => {
@@ -43,6 +45,7 @@ export function ValentineProductDetail({ product, productId }: ValentineProductD
       name: selectedSize ? `${name} (${selectedSize.label})` : name,
       price: displayPrice,
       image,
+      composition: product.composition,
       sizeId: selectedSize?.id,
       sizeLabel: selectedSize?.label,
     })

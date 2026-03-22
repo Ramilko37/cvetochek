@@ -213,6 +213,8 @@ export function CheckoutForm() {
             price: i.price,
             quantity: i.quantity,
             sizeLabel: i.sizeLabel,
+            image: i.image,
+            composition: i.composition,
           })),
           totalPrice,
           name: trimmedName,
