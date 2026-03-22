@@ -167,7 +167,7 @@ export function ProductCard({
           <span className="text-foreground font-medium">
             {price.toLocaleString("ru-RU")} ₽
           </span>
-          {originalPrice && (
+          {typeof originalPrice === "number" && originalPrice > price && (
             <span className="text-sm text-muted-foreground line-through">
               {originalPrice.toLocaleString("ru-RU")} ₽
             </span>

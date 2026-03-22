@@ -132,6 +132,8 @@ function normalizeCatalogProduct(value: unknown, index: number): Product | null 
   const name = String(row.name ?? "").trim()
   const sku = String(row.sku ?? "").trim() || `CAT-${String(index).padStart(4, "0")}`
   const originalPrice = toNumber(row.originalPrice, NaN)
+  const normalizedOriginalPrice =
+    Number.isFinite(originalPrice) && originalPrice > 0 ? originalPrice : undefined
 
   if (!name) return null
 
@@ -200,7 +202,7 @@ function normalizeCatalogProduct(value: unknown, index: number): Product | null 
     name,
     sku,
     price: toNumber(row.price),
-    ...(Number.isFinite(originalPrice) ? { originalPrice } : {}),
+    ...(normalizedOriginalPrice !== undefined ? { originalPrice: normalizedOriginalPrice } : {}),
     inStock: Boolean(row.inStock ?? true),
     images: images.length > 0 ? images : [getImagePath("/placeholder.webp")],
     sizes: sizes && sizes.length > 0 ? sizes : undefined,

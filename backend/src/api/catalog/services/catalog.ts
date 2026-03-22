@@ -9,6 +9,8 @@ const PAGE_UID = 'api::page.page' as any;
 const SETTINGS_UID = 'api::site-settings.site-settings' as any;
 
 const parseNumber = (value: unknown) => {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'string' && value.trim() === '') return null;
   const n = typeof value === 'number' ? value : Number(value);
   return Number.isFinite(n) ? n : null;
 };
