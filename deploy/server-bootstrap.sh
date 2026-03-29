@@ -124,4 +124,18 @@ else
   systemctl enable --now nginx
 fi
 
+# Free disk space before build: removes only caches/unused artifacts.
+if command -v docker >/dev/null 2>&1; then
+  echo "Docker disk usage before cleanup:"
+  docker system df || true
+
+  docker builder prune -af || true
+  docker image prune -af || true
+  docker container prune -f || true
+  docker volume prune -f || true
+
+  echo "Docker disk usage after cleanup:"
+  docker system df || true
+fi
+
 docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
