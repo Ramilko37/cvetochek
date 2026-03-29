@@ -56,10 +56,6 @@ const bodySchema = z.discriminatedUnion("type", [
 ])
 
 type ParsedOrder = z.infer<typeof bodySchema>
-type TelegramOrderPhoto = {
-  url: string
-  caption: string
-}
 
 function resolveSiteUrl(requestUrl?: string): string {
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL
@@ -126,24 +122,13 @@ function itemSum(item: ParsedOrder["items"][number]): string {
   return (item.price * item.quantity).toLocaleString("ru-RU")
 }
 
-function buildPhotoCaption(item: ParsedOrder["items"][number]): string {
-  return truncateCaption(
-    [
-      `📷 ${itemTitle(item)}`,
-      `Состав: ${itemComposition(item)}`,
-      `Количество: ${item.quantity}`,
-      `Сумма: ${itemSum(item)} ₽`,
-    ].join("\n")
-  )
-}
-
 function formatOrderForTelegram(
   data: ParsedOrder,
   requestUrl?: string
-): { text: string; photos: TelegramOrderPhoto[] } {
+): { text: string; firstPhotoUrl: string | null } {
   const lines: string[] = []
   const isQuick = data.type === "quick"
-  const photos: TelegramOrderPhoto[] = []
+  let firstPhotoUrl: string | null = null
 
   lines.push(isQuick ? "🌸 БЫСТРЫЙ ЗАКАЗ" : "🌸 НОВЫЙ ЗАКАЗ")
   lines.push("")
@@ -158,19 +143,14 @@ function formatOrderForTelegram(
   lines.push("📦 Фактура:")
   data.items.forEach((item, index) => {
     const photoUrl = resolveTelegramPhotoUrl(item.image, requestUrl)
+    if (!firstPhotoUrl && photoUrl) {
+      firstPhotoUrl = photoUrl
+    }
     lines.push(`${index + 1}. Название: ${itemTitle(item)}`)
     lines.push(`   Состав: ${itemComposition(item)}`)
     lines.push(`   Количество: ${item.quantity}`)
     lines.push(`   Сумма: ${itemSum(item)} ₽`)
-    lines.push(`   Фото: ${photoUrl ? "см. фото ниже" : "нет фото"}`)
     lines.push("")
-
-    if (photoUrl) {
-      photos.push({
-        url: photoUrl,
-        caption: buildPhotoCaption(item),
-      })
-    }
   })
 
   if (data.items.length === 0) {
@@ -178,6 +158,8 @@ function formatOrderForTelegram(
     lines.push("")
   }
 
+  lines.push(`🖼️ Фото: ${firstPhotoUrl ? "прикреплено к сообщению (1 шт.)" : "нет фото"}`)
+  lines.push("")
   lines.push(`💰 Итого: ${data.totalPrice.toLocaleString("ru-RU")} ₽`)
   lines.push("")
 
@@ -194,19 +176,16 @@ function formatOrderForTelegram(
       .join(", ")
     lines.push(`📍 ${addr}`)
     if (data.recipientName) lines.push(`🎁 Получатель: ${data.recipientName}`)
-    lines.push("")
-    lines.push("💵 Оплата: при получении (наличными)")
   } else {
-    lines.push("💵 Оплата: при получении (наличными)")
     lines.push("⚠️ Нужно уточнить адрес и дату доставки по телефону.")
   }
 
-  return { text: lines.join("\n"), photos }
+  return { text: lines.join("\n"), firstPhotoUrl }
 }
 
 async function sendToTelegram(
   text: string,
-  photos: TelegramOrderPhoto[]
+  firstPhotoUrl: string | null
 ): Promise<{ ok: boolean; reason?: string }> {
   const token = process.env.TELEGRAM_BOT_TOKEN?.trim()
   const chatId = process.env.TELEGRAM_CHAT_ID?.trim()
@@ -217,6 +196,44 @@ async function sendToTelegram(
   }
   try {
     const chatIdParam = /^-?\d+$/.test(chatId) ? Number(chatId) : chatId
+    if (firstPhotoUrl) {
+      const photoRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatIdParam,
+          photo: firstPhotoUrl,
+          caption: truncateCaption(text, 1000),
+        }),
+      })
+
+      if (!photoRes.ok) {
+        const body = await photoRes.text().catch(() => "")
+        const reason = `Telegram API sendPhoto failed: ${photoRes.status} ${body}`
+        console.error("[orders]", reason)
+
+        // Fallback: одно текстовое сообщение со ссылкой на фото.
+        const fallbackRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatIdParam,
+            text: `${text}\n\nФото: ${firstPhotoUrl}`,
+          }),
+        })
+
+        if (!fallbackRes.ok) {
+          const fallbackBody = await fallbackRes.text().catch(() => "")
+          return {
+            ok: false,
+            reason: `Fallback sendMessage failed: ${fallbackRes.status} ${fallbackBody}`,
+          }
+        }
+      }
+
+      return { ok: true }
+    }
+
     const textRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -227,37 +244,9 @@ async function sendToTelegram(
     })
     if (!textRes.ok) {
       const body = await textRes.text().catch(() => "")
-      const reason = `Telegram API: ${textRes.status} ${body}`
+      const reason = `Telegram API sendMessage failed: ${textRes.status} ${body}`
       console.error("[orders]", reason)
       return { ok: false, reason }
-    }
-
-    for (const photo of photos) {
-      const photoRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatIdParam,
-          photo: photo.url,
-          caption: photo.caption,
-        }),
-      })
-
-      if (!photoRes.ok) {
-        const body = await photoRes.text().catch(() => "")
-        const reason = `sendPhoto failed: ${photoRes.status} ${body}`
-        console.error("[orders]", reason)
-
-        // Fallback: чтобы фото все равно можно было открыть, отправим ссылку.
-        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: chatIdParam,
-            text: `${photo.caption}\nФото: ${photo.url}`,
-          }),
-        }).catch(() => null)
-      }
     }
 
     return { ok: true }
@@ -296,8 +285,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 })
     }
 
-    const { text, photos } = formatOrderForTelegram(parsed.data, request.url)
-    const result = await sendToTelegram(text, photos)
+    const { text, firstPhotoUrl } = formatOrderForTelegram(parsed.data, request.url)
+    const result = await sendToTelegram(text, firstPhotoUrl)
 
     if (!result.ok) {
       if (result.reason) console.error("[orders] 502 причина:", result.reason)
